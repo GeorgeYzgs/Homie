@@ -33,6 +33,8 @@ public class Property {
     @ManyToOne
     private User owner;
 
+    //TODO ADD ANOTHER ENUMERATION FOR RENT / SALE / AIRBNB ??
+
     public Property() {
     }
 
