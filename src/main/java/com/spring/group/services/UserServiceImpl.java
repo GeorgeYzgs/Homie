@@ -4,6 +4,7 @@ import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -11,10 +12,11 @@ import java.util.Optional;
  * @author George.Giazitzis
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserServiceInterface {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public User insertUser(User user) {

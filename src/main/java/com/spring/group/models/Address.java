@@ -12,6 +12,15 @@ public class Address {
     private int number;
     private String city;
     private String state;
+    private int zipCode;
+
+    public int getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(int zipCode) {
+        this.zipCode = zipCode;
+    }
 
     public String getStreet() {
         return street;
