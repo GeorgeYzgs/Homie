@@ -5,7 +5,7 @@ package com.spring.group.models.property;
  */
 public enum Category {
     FLAT,
-    HOUSE,
+    DETACHED_HOUSE,
     WORK_PLACE,
     PLOT;
 
