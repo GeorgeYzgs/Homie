@@ -57,3 +57,7 @@ hs_err_pid*
 
 # *.properties
 
+#!/src/main/resources/application.properties
+
+
+
