@@ -5,7 +5,9 @@ import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.sun.istack.NotNull;
 
+
 import javax.persistence.*;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;

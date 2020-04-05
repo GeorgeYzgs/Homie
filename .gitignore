@@ -55,5 +55,5 @@ build/
 hs_err_pid*
 
 
-*.properties
+# *.properties
 
