@@ -2,7 +2,7 @@ package com.spring.group.models.rental;
 
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 import javax.persistence.*;
 import java.util.Collection;

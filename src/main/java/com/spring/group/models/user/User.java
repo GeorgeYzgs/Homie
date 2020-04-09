@@ -3,7 +3,7 @@ package com.spring.group.models.user;
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
-import com.sun.istack.NotNull;
+
 
 
 import javax.persistence.*;
@@ -20,27 +20,36 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+   @Basic
+   @Column(nullable = false , length = 25)
     private String username;
-    @NotNull
+    @Basic
+    @Column(nullable = false, length = 45)
     private String email;
-    @NotNull
+    @Basic
+    @Column(nullable = false, length = 255)
     private String password;
-    @NotNull
+    @Basic
+    @Column(nullable = false , length = 25)
     private String firstName;
-    @NotNull
+    @Basic
+    @Column(nullable = false , length = 25)
     private String lastName;
+
     private Date creation;
+    private Date updated;
+    @Basic
+    @Column(nullable = false , length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
     private boolean isEnabled;
     private boolean isLocked;
-    @Embedded
+    @OneToOne
     private Address address;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
     private Collection<Property> propertyCollection;
 
     public User() {
@@ -98,8 +107,8 @@ public class User {
         return creation;
     }
 
-    public void setCreation(Date creation) {
-        this.creation = creation;
+    public Date getUpdated() {
+        return updated;
     }
 
     public Address getAddress() {
