@@ -2,7 +2,7 @@ package com.spring.group.models.rental;
 
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
-import javax.validation.constraints.NotNull;
+
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,15 +17,17 @@ public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+    @Basic
+    @Column(nullable = false )
     private int agreedPrice;
+
     private Date startDate;
     private Date endDate;
     @ManyToOne()
     private Property residence;
     @ManyToOne()
     private User user;
-    @OneToMany(mappedBy = "rental")
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private Collection<PaymentLog> paymentLogs;
 
     public Rental() {

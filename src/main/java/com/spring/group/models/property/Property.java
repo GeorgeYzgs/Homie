@@ -22,7 +22,7 @@ public class Property {
     private String description;
     @Column(nullable = false, precision = 2)
     private BigDecimal price;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     @Enumerated(EnumType.STRING)   //Να γίνει boolean isListed σταδιάλα με τα ηναμ
     private ListingStatus listingStatus;
