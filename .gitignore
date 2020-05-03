@@ -59,5 +59,8 @@ hs_err_pid*
 
 #!/src/main/resources/application.properties
 
+# Config file with application.properties local credentials
+/config
+
 
 
