@@ -16,7 +16,7 @@ public class UserController {
 
 
     @GetMapping(path = "")
-    public void testToBeDeleted(){
-
+    public String testToBeDeleted() {
+        return "fragments";
     }
 }
