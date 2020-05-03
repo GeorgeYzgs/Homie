@@ -15,8 +15,21 @@ public class UserController {
     UserServiceImpl userServiceImpl;
 
 
-    @GetMapping(path = "")
+    @GetMapping("/fragment")
     public String testToBeDeleted() {
-        return "fragments";
+        return "fragments.html";
+    }
+
+    @GetMapping("/")
+    public String getHomePage() {
+        return "basic-search.html";
+    }
+
+    @GetMapping("/search")
+    public String getSearchPage() {
+        return "full-search.html";
     }
 }
+
+
+

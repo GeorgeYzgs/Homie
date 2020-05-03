@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Properties</title>
+    <th:block th:include="fragments :: headerfiles">
+    </th:block>
+</head>
+<body>
+<header th:include="fragments :: body_header"></header>
+<section class="container pt-4 bg-light">
+    <div class="row pl-3">
+        <div class="col-sm-1">
+            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+        </div>
+        <div class="col-sm-3 pl-1">
+            <h1 style="color:#80ea6e"> Homie </h1>
+            <h6 class="text-secondary">Your land companion</h6>
+        </div>
+    </div>
+    <!-- Toolbar -->
+    <div class="py-3">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <form>
+                    <div class="row pb-2">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                            <span class="input-group-prepend ">
+                                <i class="fa fa-map-marker input-group-text bg-secondary text-white"></i>
+                            </span>
+                                <input class="form-control" id="inputDestination"
+                                       placeholder="Εισάγετε μια τοποθεσία, πχ. Ζωγράφος"
+                                       type="text">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                        <span class="input-group">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text bg-secondary text-white">&euro;</span>
+                            </span>
+                            <input class="form-control" id="inputStartingPrice" placeholder="Από"
+                                   type="number">
+                            <input class="form-control" id="inputEndingPrice" placeholder="Έως"
+                                   type="number">
+                            <span class="input-group-prepend pl-3">
+                                <span class="input-group-text bg-secondary text-white">&#x33A1;</span>
+                            </span>
+                            <input class="form-control" id="inputStartingArea" placeholder="Από"
+                                   type="number">
+                            <input class="form-control" id="inputEndingArea" placeholder="Έως"
+                                   type="number">
+                            <div class="col-sm-2">
+                            <button class="btn bg-green text-white font-weight-bold" id="searchButton">
+                                Αναζήτηση
+                            </button>
+                        </div>
+                        </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Main body -->
+    <main class="container bg-light" id="hotelsParentMain">
+        <p class="text-center">
+            Nothing Found
+        </p>
+    </main>
+    <a class="text-secondary text-decoration-none" th:href="@{/search}"> Advanced Search </a>
+</section>
+<footer th:include="fragments :: body_footer"></footer>
+<th:block th:include="fragments :: scripts">
+</th:block>
+</body>
+</html>
