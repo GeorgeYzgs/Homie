@@ -8,23 +8,19 @@ import javax.validation.constraints.Size;
 /**
  * @author George.Giazitzis
  */
-@PasswordMatches
+@PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
 public class RegisterUserDto {
 
-    @NotBlank
-    @Size(min = 4, max = 25)
+    @NotBlank(groups = {RegistrationValidator.class})
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class})
     private String username;
-    @ValidEmail
+    @ValidEmail(groups = {RegistrationValidator.class})
     private String email;
-    @NotBlank
-    @Size(min = 4, max = 25)
+    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class})
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class})
     private String password;
     private String password2;
-
-    public RegisterUserDto(MyUserDetails loggedUser) {
-        this.username = loggedUser.getUsername();
-        this.email = loggedUser.getEmail();
-    }
+    private String oldPassword;
 
     public RegisterUserDto() {
     }
@@ -61,4 +57,11 @@ public class RegisterUserDto {
         this.password2 = password2;
     }
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
 }

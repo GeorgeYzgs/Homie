@@ -15,19 +15,15 @@
                 <div class="card-body">
                     <form method="post" th:action="@{/changePass}" th:object="${changeUserPass}">
                         <fieldset>
-                            <div class="alert alert-danger" th:errors="*{global}"
-                                 th:if="${#fields.hasErrors('global')}">
+                            <div class="alert alert-danger" th:if="${message}">
+                                <p class="text text-center" th:text="${message}"></p>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" id="username" th:field="*{username}" th:hidden="hidden"
-                                       th:value="${changeUserPass.username}" type="text"/>
+                                <label class="form-control-label" for="oldPassword">Old Password</label>
+                                <input class="form-control" id="oldPassword" th:field="*{oldPassword}" type="password"/>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" id="email" th:field="*{email}" th:hidden="hidden"
-                                       th:value="${changeUserPass.email}" type="text"/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label" for="password">Password</label>
+                                <label class="form-control-label" for="password">New Password</label>
                                 <input class="form-control" id="password" th:field="*{password}" type="password"/>
                                 <div class="text text-danger"
                                      th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
