@@ -24,10 +24,13 @@ public class Property {
     private BigDecimal price;
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
+
     @Enumerated(EnumType.STRING)   //Να γίνει boolean isListed σταδιάλα με τα ηναμ
     private ListingStatus listingStatus;
+
     @Enumerated(EnumType.STRING)  //Θα γίνει λουκ-απ σταδιάλα με τα ηναμ
     private Category category;
+
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private Collection<Photo> photoCollection;
     @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)

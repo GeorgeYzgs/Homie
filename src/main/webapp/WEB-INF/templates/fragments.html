@@ -74,7 +74,9 @@
 
 <footer th:fragment="body_footer" class="footer mt-auto py-3">
     <div class="container">
-        <span class="text-muted">Place sticky footer content here.</span>
+        <p>
+            Today is: <span th:text="${#dates.createToday()}">13 May 2011</span>
+        </p>
     </div>
 </footer>
 

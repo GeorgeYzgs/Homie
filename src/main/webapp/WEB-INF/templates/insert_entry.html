@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:include="fragments :: headerfiles">
+    </th:block>
+    <title>Insert New Property</title>
+</head>
+<body>
+
+<div class="container">
+
+    <form action="#" th:action="@{/}" th:object="${com.spring.group.models.property.Property}" th:method="post">
+        <input type="text" th:field="*{description}"/>
+        <!--<input type="radio" list="listing_enum" th:field="*{listingStatus}"/>-->
+        <!--        <input list="category_lookup" th:field="*{category}"/>}-->
+        <span th:with="tempAdress=${com.spring.group.models.Address}">
+                <input type="text" th:value="${tempAdress.street}"/>
+        <input th:value="${tempAdress}" th:field="*{address}" th:hidden=""/>
+</span>
+    </form>
+
+</div>
+
+<footer th:include="fragments :: body_footer"></footer>
+<th:block th:include="fragments :: scripts">
+</th:block>
+
+</body>
+</html>
