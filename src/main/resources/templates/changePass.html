@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Password</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+<div class="container pt-4">
+    <h1 class="text-center">Change your Password</h1>
+    <div class="row justify-content-md-center">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" th:action="@{/changePass}" th:object="${changeUserPass}">
+                        <fieldset>
+                            <div class="alert alert-danger" th:errors="*{global}"
+                                 th:if="${#fields.hasErrors('global')}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="username" th:field="*{username}" th:hidden="hidden"
+                                       th:value="${changeUserPass.username}" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="email" th:field="*{email}" th:hidden="hidden"
+                                       th:value="${changeUserPass.email}" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="password">Password</label>
+                                <input class="form-control" id="password" th:field="*{password}" type="password"/>
+                                <div class="text text-danger"
+                                     th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="password2">Retype Password</label>
+                                <input class="form-control" id="password2" th:field="*{password2}" type="password"/>
+                                <div class="text text-danger"
+                                     th:errors="*{global}" th:if="${#fields.hasErrors('global')}"></div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Change Password</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -14,12 +14,10 @@
             <h4 class="text-center pt-2">Register</h4>
             <div class="card">
                 <div class="card-body">
-                    <div class="alert alert-danger" th:if="${emailExists} or ${usernameExists}">
-                        <p class="text text-center" th:if="${emailExists}">This email address is unavailable</p>
-                        <p class="text text-center" th:if="${usernameExists}">This username is unavailable</p>
+                    <div class="alert alert-danger" th:if="${message}">
+                        <p class="text text-center" th:text="${message}"></p>
                     </div>
                     <form method="post" th:action="@{/register}" th:object="${registerUser}">
-
                         <div class="form-group">
                             <label class="form-control-label" for="username">Username</label>
                             <input class="form-control" id="username" th:field="*{username}" type="text"/>

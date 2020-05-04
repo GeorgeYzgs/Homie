@@ -16,6 +16,7 @@ public class MyUserDetails implements UserDetails {
 
     private String username;
     private String password;
+    private String email;
     private boolean isEnabled;
     private boolean isNonLocked;
     private List<GrantedAuthority> authorities;
@@ -25,7 +26,12 @@ public class MyUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.isEnabled = user.isEnabled();
         this.isNonLocked = user.isNonLocked();
+        this.email = user.getEmail();
         this.authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().toString()));
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
@@ -61,5 +67,16 @@ public class MyUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    @Override
+    public String toString() {
+        return "MyUserDetails{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", isEnabled=" + isEnabled +
+                ", isNonLocked=" + isNonLocked +
+                ", authorities=" + authorities +
+                '}';
     }
 }

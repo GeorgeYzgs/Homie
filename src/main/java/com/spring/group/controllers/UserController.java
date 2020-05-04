@@ -4,8 +4,10 @@ import com.spring.group.dto.RegisterUserDto;
 import com.spring.group.models.user.ConfirmationToken;
 import com.spring.group.models.user.User;
 import com.spring.group.services.ConfirmationTokenService;
+import com.spring.group.services.MyUserDetails;
 import com.spring.group.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -50,6 +52,7 @@ public class UserController {
         return "register";
     }
 
+    //TODO rewrite / move to service.
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("registerUser") RegisterUserDto dto,
                                BindingResult bindingResult, ModelMap mm) {
@@ -57,11 +60,11 @@ public class UserController {
             return "register";
         }
         if (userServiceImpl.checkUserName(dto.getUsername()).isPresent()) {
-            mm.addAttribute("usernameExists", true);
+            mm.addAttribute("message", "This username is unavailable");
             return "register";
         }
         if (userServiceImpl.checkEmail(dto.getEmail()).isPresent()) {
-            mm.addAttribute("emailExists", true);
+            mm.addAttribute("message", "This email is unavailable");
             return "register";
         }
         User user = new User(dto);
@@ -70,6 +73,7 @@ public class UserController {
         return "redirect:/login?register";
     }
 
+    //TODO rewrite / move to service?
     @GetMapping("/confirm-account")
     public String confirmUserAccount(@RequestParam("token") String confirmationToken) {
         Optional<ConfirmationToken> token = confirmationTokenService.checkToken(confirmationToken);
@@ -80,5 +84,22 @@ public class UserController {
             userServiceImpl.insertUser(user);
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/changePass")
+    public String changePass(ModelMap mm, Authentication loggedUser) {
+        mm.addAttribute("changeUserPass", new RegisterUserDto((MyUserDetails) loggedUser.getPrincipal()));
+        return "changePass";
+    }
+
+    //TODO Finish this...
+    @PostMapping("/changePass")
+    public String changeUserPass(@Valid @ModelAttribute("changeUserPass") RegisterUserDto dto,
+                                 BindingResult bindingResult, ModelMap mm) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(System.out::println);
+            return "changePass";
+        }
+        return "index";
     }
 }

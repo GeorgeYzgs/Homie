@@ -27,13 +27,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.eraseCredentials(false).userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/index").authenticated()
+                .antMatchers("/changePass").authenticated()
                 .and().formLogin()
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/index")

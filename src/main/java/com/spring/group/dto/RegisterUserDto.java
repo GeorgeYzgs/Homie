@@ -1,10 +1,9 @@
 package com.spring.group.dto;
 
-import com.spring.group.models.Address;
+import com.spring.group.services.MyUserDetails;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * @author George.Giazitzis
@@ -12,8 +11,6 @@ import java.util.Date;
 @PasswordMatches
 public class RegisterUserDto {
 
-    private String firstName;
-    private String lastName;
     @NotBlank
     @Size(min = 4, max = 25)
     private String username;
@@ -23,24 +20,13 @@ public class RegisterUserDto {
     @Size(min = 4, max = 25)
     private String password;
     private String password2;
-    private Date creation;
-    private String iban;
-    private Address address;
 
-    public String getFirstName() {
-        return firstName;
+    public RegisterUserDto(MyUserDetails loggedUser) {
+        this.username = loggedUser.getUsername();
+        this.email = loggedUser.getEmail();
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public RegisterUserDto() {
     }
 
     public String getUsername() {
@@ -75,27 +61,4 @@ public class RegisterUserDto {
         this.password2 = password2;
     }
 
-    public Date getCreation() {
-        return creation;
-    }
-
-    public void setCreation(Date creation) {
-        this.creation = creation;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 }

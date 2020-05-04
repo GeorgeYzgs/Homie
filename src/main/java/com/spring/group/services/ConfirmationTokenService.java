@@ -3,7 +3,6 @@ package com.spring.group.services;
 import com.spring.group.models.user.ConfirmationToken;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.ConfirmationTokenRepository;
-import com.spring.group.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,8 +19,6 @@ public class ConfirmationTokenService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
