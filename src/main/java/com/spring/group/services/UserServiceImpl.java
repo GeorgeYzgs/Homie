@@ -28,6 +28,10 @@ public class UserServiceImpl implements UserServiceInterface {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public Optional<User> checkEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     @Override
     public User getUserByID(Integer userID) {

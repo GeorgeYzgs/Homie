@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+
+<div class="container pt-4">
+    <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
+        <button class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+    </form>
+</div>
+</body>
+</html>

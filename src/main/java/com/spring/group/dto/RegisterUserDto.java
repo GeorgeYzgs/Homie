@@ -2,17 +2,25 @@ package com.spring.group.dto;
 
 import com.spring.group.models.Address;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
  * @author George.Giazitzis
  */
+@PasswordMatches
 public class RegisterUserDto {
 
     private String firstName;
     private String lastName;
+    @NotBlank
+    @Size(min = 4, max = 25)
     private String username;
+    @ValidEmail
     private String email;
+    @NotBlank
+    @Size(min = 4, max = 25)
     private String password;
     private String password2;
     private Date creation;

@@ -3,9 +3,9 @@ package com.spring.group.models.property;
 import com.spring.group.models.Address;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
-import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -13,22 +13,24 @@ import java.util.Collection;
  */
 @Entity
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+    @Basic
+    @Column(nullable = false)
     private String description;
-    @NotNull
-    private int price;
-    @Embedded
+    @Column(nullable = false, precision = 2)
+    private BigDecimal price;
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     @Enumerated(EnumType.STRING)
     private ListingStatus listingStatus;
     @Enumerated(EnumType.STRING)
     private Category category;
-    @OneToMany(mappedBy = "property")
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private Collection<Photo> photoCollection;
-    @OneToMany(mappedBy = "residence")
+    @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
     @ManyToOne
     private User owner;
@@ -54,11 +56,11 @@ public class Property {
         this.description = description;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

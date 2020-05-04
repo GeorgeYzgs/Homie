@@ -1,9 +1,8 @@
 package com.spring.group.models.user;
 
-import com.spring.group.models.Address;
+import com.spring.group.dto.RegisterUserDto;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
-import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,33 +14,50 @@ import java.util.Objects;
  */
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+    @Basic
+    @Column(nullable = false, length = 25)
     private String username;
-    @NotNull
+    @Basic
+    @Column(nullable = false, length = 45)
     private String email;
-    @NotNull
+    @Basic
+    @Column(nullable = false, length = 60)
     private String password;
-    @NotNull
+    @Basic
+    @Column(length = 25)
     private String firstName;
-    @NotNull
+    @Basic
+    @Column(length = 25)
     private String lastName;
-    private Date creation;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+    private Date updatedDate;
+    @Basic
+    @Column(length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
     private boolean isEnabled;
-    private boolean isLocked;
-    @Embedded
-    private Address address;
+    private boolean isNonLocked; //spring security has it like that.
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Collection<Property> propertyCollection;
 
     public User() {
+    }
+
+    public User(RegisterUserDto dto) {
+        this.username = dto.getUsername().toLowerCase().trim();
+        this.password = dto.getPassword();
+        this.email = dto.getEmail().toLowerCase().trim();
+        this.userRole = UserRole.USER;
+        this.creationDate = new Date();
+        this.isNonLocked = true;
     }
 
     public int getId() {
@@ -92,20 +108,16 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getCreation() {
-        return creation;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation(Date creation) {
-        this.creation = creation;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     public UserRole getUserRole() {
@@ -132,12 +144,12 @@ public class User {
         isEnabled = enabled;
     }
 
-    public boolean isLocked() {
-        return isLocked;
+    public boolean isNonLocked() {
+        return isNonLocked;
     }
 
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public void setNonLocked(boolean nonLocked) {
+        isNonLocked = nonLocked;
     }
 
     public Collection<Rental> getRentalCollection() {
@@ -178,8 +190,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", creation=" + creation +
-                ", address=" + address +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", Iban='" + Iban + '\'' +
+                ", isEnabled=" + isEnabled +
+                ", isNonLocked=" + isNonLocked +
                 ", userRole=" + userRole +
                 '}';
     }

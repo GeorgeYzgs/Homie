@@ -11,7 +11,9 @@ public interface UserServiceInterface {
 
     User insertUser(User user);
 
-    public Optional<User> checkUserName(String username);
+    Optional<User> checkUserName(String username);
 
-    public User getUserByID(Integer userID);
+    Optional<User> checkEmail(String email);
+
+    User getUserByID(Integer userID);
 }
