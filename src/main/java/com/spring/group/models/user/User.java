@@ -5,8 +5,8 @@ import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -33,9 +33,8 @@ public class User {
     @Basic
     @Column(length = 25)
     private String lastName;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
-    private Date updatedDate;
+    private Instant creationDate;
+    private Instant updatedDate;
     @Basic
     @Column(length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
@@ -56,7 +55,7 @@ public class User {
         this.password = dto.getPassword();
         this.email = dto.getEmail().toLowerCase().trim();
         this.userRole = UserRole.USER;
-        this.creationDate = new Date();
+        this.creationDate = Instant.now();
         this.isNonLocked = true;
     }
 
@@ -108,16 +107,20 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getUpdatedDate() {
+    public Instant getUpdatedDate() {
         return updatedDate;
+    }
+
+    public void setUpdatedDate(Instant updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public UserRole getUserRole() {

@@ -1,7 +1,5 @@
 package com.spring.group.dto;
 
-import com.spring.group.services.MyUserDetails;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -14,10 +12,10 @@ public class RegisterUserDto {
     @NotBlank(groups = {RegistrationValidator.class})
     @Size(min = 4, max = 25, groups = {RegistrationValidator.class})
     private String username;
-    @ValidEmail(groups = {RegistrationValidator.class})
+    @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class})
     private String email;
-    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class})
-    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class})
+    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
     private String password;
     private String password2;
     private String oldPassword;
@@ -63,5 +61,16 @@ public class RegisterUserDto {
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "RegisterUserDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", password2='" + password2 + '\'' +
+                ", oldPassword='" + oldPassword + '\'' +
+                '}';
     }
 }

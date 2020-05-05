@@ -9,15 +9,15 @@ import java.util.UUID;
  * @author George.Giazitzis
  */
 @Entity
-public class ConfirmationToken {
+public class ResetPassToken {
 
     @Transient
-    private static final int EXPIRATION_HOURS = 24;
+    private static final int EXPIRATION_HOURS = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String confirmationToken;
+    private String resetPassToken;
     private Instant creationDate;
     private Instant expirationDate;
 
@@ -25,14 +25,14 @@ public class ConfirmationToken {
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public ConfirmationToken(User user) {
+    public ResetPassToken(User user) {
         this.user = user;
         this.creationDate = Instant.now();
         this.expirationDate = creationDate.plus(EXPIRATION_HOURS, ChronoUnit.HOURS);
-        this.confirmationToken = UUID.randomUUID().toString();
+        this.resetPassToken = UUID.randomUUID().toString();
     }
 
-    public ConfirmationToken() {
+    public ResetPassToken() {
     }
 
     public int getId() {
@@ -43,12 +43,12 @@ public class ConfirmationToken {
         this.id = id;
     }
 
-    public String getConfirmationToken() {
-        return confirmationToken;
+    public String getResetPassToken() {
+        return resetPassToken;
     }
 
-    public void setConfirmationToken(String confirmationToken) {
-        this.confirmationToken = confirmationToken;
+    public void setResetPassToken(String resetPassToken) {
+        this.resetPassToken = resetPassToken;
     }
 
     public User getUser() {

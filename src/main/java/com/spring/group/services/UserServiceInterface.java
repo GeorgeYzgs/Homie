@@ -11,6 +11,8 @@ public interface UserServiceInterface {
 
     User insertUser(User user);
 
+    User updateUser(User user);
+
     Optional<User> checkUserName(String username);
 
     Optional<User> checkEmail(String email);

@@ -11,9 +11,10 @@
     <h1 class="text-center">Reset Your Password</h1>
     <div class="row justify-content-md-center">
         <div class="col-4">
+            <h4 class="text-center pt-2">Enter your email below</h4>
             <div class="card">
                 <div class="card-body">
-                    <form method="post" th:action="@{/forgotPpass}" th:object="${resetUserPass}">
+                    <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
                         <fieldset>
                             <div class="form-group">
                                 <label class="form-control-label" for="email">Email</label>
@@ -21,7 +22,7 @@
                                 <div class="text text-danger" th:errors="*{email}"
                                      th:if="${#fields.hasErrors('email')}"></div>
                             </div>
-                            <button class="btn btn-primary" type="submit">Change Password</button>
+                            <button class="btn btn-primary" type="submit">Reset Password</button>
                         </fieldset>
                     </form>
                 </div>
