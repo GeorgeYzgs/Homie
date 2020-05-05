@@ -60,8 +60,8 @@ public class UserController {
     }
 
     @GetMapping("/confirm-account/{token}")
-    public ModelAndView confirmUserAccount(@PathVariable("token") String confirmationToken) {
-        String attempt = tokenService.validateConfirmationToken(confirmationToken);
+    public ModelAndView confirmUserAccount(@PathVariable String token) {
+        String attempt = tokenService.validateConfirmationToken(token);
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("login", "messageDanger", attempt);
         }
@@ -110,8 +110,8 @@ public class UserController {
     }
 
     @GetMapping("/reset-password/{token}")
-    public ModelAndView resetUserPassword(@PathVariable("token") String resetPassToken) {
-        String attempt = tokenService.validateResetToken(resetPassToken);
+    public ModelAndView resetUserPassword(@PathVariable String token) {
+        String attempt = tokenService.validateResetToken(token);
         if (!attempt.contains("@")) {
             return new ModelAndView("login", "messageDanger", attempt);
         }
