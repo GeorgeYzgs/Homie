@@ -3,7 +3,6 @@ package com.spring.group.models.rental;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -14,13 +13,13 @@ import java.util.Date;
  */
 @Entity
 public class Rental {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Basic
-    @Column(nullable = false )
+    @Column(nullable = false)
     private int agreedPrice;
-
     private Date startDate;
     private Date endDate;
     @ManyToOne()

@@ -10,4 +10,5 @@ public class GroupProjectApplication {
 		SpringApplication.run(GroupProjectApplication.class, args);
 	}
 
+	//TODO MESSAGES FOR LOCKED / NON VERIFIED ACCOUNTS!
 }

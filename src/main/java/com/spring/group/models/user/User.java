@@ -1,15 +1,12 @@
 package com.spring.group.models.user;
 
-import com.spring.group.models.Address;
+import com.spring.group.dto.RegisterUserDto;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 
-
-
 import javax.persistence.*;
-
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,42 +14,49 @@ import java.util.Objects;
  */
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-   @Basic
-   @Column(nullable = false , length = 25)
+    @Basic
+    @Column(nullable = false, length = 25)
     private String username;
     @Basic
     @Column(nullable = false, length = 45)
     private String email;
     @Basic
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 60)
     private String password;
     @Basic
-    @Column(nullable = false , length = 25)
+    @Column(length = 25)
     private String firstName;
     @Basic
-    @Column(nullable = false , length = 25)
+    @Column(length = 25)
     private String lastName;
-
-    private Date creation;
-    private Date updated;
+    private Instant creationDate;
+    private Instant updatedDate;
     @Basic
-    @Column(nullable = false , length = 27)
+    @Column(length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
     private boolean isEnabled;
-    private boolean isLocked;
-    @OneToOne
-    private Address address;
+    private boolean isNonLocked; //spring security has it like that.
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
-    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Collection<Property> propertyCollection;
 
     public User() {
+    }
+
+    public User(RegisterUserDto dto) {
+        this.username = dto.getUsername().toLowerCase().trim();
+        this.password = dto.getPassword();
+        this.email = dto.getEmail().toLowerCase().trim();
+        this.userRole = UserRole.USER;
+        this.creationDate = Instant.now();
+        this.isNonLocked = true;
     }
 
     public int getId() {
@@ -103,20 +107,20 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getCreation() {
-        return creation;
+    public Instant getCreationDate() {
+        return creationDate;
     }
 
-    public Date getUpdated() {
-        return updated;
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Address getAddress() {
-        return address;
+    public Instant getUpdatedDate() {
+        return updatedDate;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setUpdatedDate(Instant updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public UserRole getUserRole() {
@@ -143,12 +147,12 @@ public class User {
         isEnabled = enabled;
     }
 
-    public boolean isLocked() {
-        return isLocked;
+    public boolean isNonLocked() {
+        return isNonLocked;
     }
 
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public void setNonLocked(boolean nonLocked) {
+        isNonLocked = nonLocked;
     }
 
     public Collection<Rental> getRentalCollection() {
@@ -189,8 +193,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", creation=" + creation +
-                ", address=" + address +
+                ", creationDate=" + creationDate +
+                ", updatedDate=" + updatedDate +
+                ", Iban='" + Iban + '\'' +
+                ", isEnabled=" + isEnabled +
+                ", isNonLocked=" + isNonLocked +
                 ", userRole=" + userRole +
                 '}';
     }

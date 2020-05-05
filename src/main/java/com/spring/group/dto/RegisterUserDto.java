@@ -1,38 +1,26 @@
 package com.spring.group.dto;
 
-import com.spring.group.models.Address;
-
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * @author George.Giazitzis
  */
+@PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
 public class RegisterUserDto {
 
-    private String firstName;
-    private String lastName;
+    @NotBlank(groups = {RegistrationValidator.class})
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class})
     private String username;
+    @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class})
     private String email;
+    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
     private String password;
     private String password2;
-    private Date creation;
-    private String iban;
-    private Address address;
+    private String oldPassword;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public RegisterUserDto() {
     }
 
     public String getUsername() {
@@ -67,27 +55,22 @@ public class RegisterUserDto {
         this.password2 = password2;
     }
 
-    public Date getCreation() {
-        return creation;
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    public void setCreation(Date creation) {
-        this.creation = creation;
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    @Override
+    public String toString() {
+        return "RegisterUserDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", password2='" + password2 + '\'' +
+                ", oldPassword='" + oldPassword + '\'' +
+                '}';
     }
 }

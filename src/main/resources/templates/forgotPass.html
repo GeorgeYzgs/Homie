@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Password</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+<div class="container pt-4">
+    <h1 class="text-center">Reset Your Password</h1>
+    <div class="row justify-content-md-center">
+        <div class="col-4">
+            <h4 class="text-center pt-2">Enter your email below</h4>
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="form-control-label" for="email">Email</label>
+                                <input class="form-control" id="email" th:field="*{email}" type="text"/>
+                                <div class="text text-danger" th:errors="*{email}"
+                                     th:if="${#fields.hasErrors('email')}"></div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Reset Password</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

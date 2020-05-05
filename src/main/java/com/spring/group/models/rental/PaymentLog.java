@@ -8,6 +8,7 @@ import java.util.Date;
  */
 @Entity
 public class PaymentLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

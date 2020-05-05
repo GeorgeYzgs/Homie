@@ -4,7 +4,6 @@ import com.spring.group.models.Address;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -14,6 +13,7 @@ import java.util.Collection;
  */
 @Entity
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,9 +24,9 @@ public class Property {
     private BigDecimal price;
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-    @Enumerated(EnumType.STRING)   //Να γίνει boolean isListed σταδιάλα με τα ηναμ
+    @Enumerated(EnumType.STRING)
     private ListingStatus listingStatus;
-    @Enumerated(EnumType.STRING)  //Θα γίνει λουκ-απ σταδιάλα με τα ηναμ
+    @Enumerated(EnumType.STRING)
     private Category category;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private Collection<Photo> photoCollection;
