@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @author George.Giazitzis
  */
 @Service
+@Transactional
 public class TokenService {
 
     @Autowired
@@ -88,9 +90,14 @@ public class TokenService {
             return "This is an invalid token";
         }
         ResetPassToken validToken = token.get();
+        if (validToken.isUsed()) {
+            return "This token has already been used";
+        }
         if (validToken.getExpirationDate().isBefore(Instant.now())) {
             return "This token has expired, please request another token";
         }
+        validToken.setUsed(true);
+        resetPassTokenRepository.save(validToken);
         return validToken.getUser().getEmail();
     }
 }
