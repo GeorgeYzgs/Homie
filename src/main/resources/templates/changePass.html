@@ -13,11 +13,11 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-body">
+                    <div class="alert alert-danger" th:if="${messageDanger}">
+                        <p class="text text-center" th:text="${messageDanger}"></p>
+                    </div>
                     <form method="post" th:action="@{/changePass}" th:object="${changeUserPass}">
                         <fieldset>
-                            <div class="alert alert-danger" th:if="${messageDanger}">
-                                <p class="text text-center" th:text="${messageDanger}"></p>
-                            </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="oldPassword">Old Password</label>
                                 <input class="form-control" id="oldPassword" th:field="*{oldPassword}" type="password"/>

@@ -20,6 +20,7 @@ public class ResetPassToken {
     private String resetPassToken;
     private Instant creationDate;
     private Instant expirationDate;
+    private boolean isUsed;
 
     @OneToOne
     @JoinColumn(nullable = false, name = "user_id")
@@ -73,5 +74,13 @@ public class ResetPassToken {
 
     public void setExpirationDate(Instant expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
     }
 }

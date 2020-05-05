@@ -1,8 +1,6 @@
 package com.spring.group.controllers;
 
 import com.spring.group.dto.*;
-import com.spring.group.models.user.ConfirmationToken;
-import com.spring.group.models.user.ResetPassToken;
 import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
 import com.spring.group.services.UserServiceImpl;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -54,39 +51,21 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
-        if (userServiceImpl.checkUserName(dto.getUsername()).isPresent()) {
-            return new ModelAndView("register",
-                    "messageDanger", "This username is unavailable");
+        String attempt = userServiceImpl.registerUser(dto);
+        if (!attempt.equals("SUCCESS")) {
+            return new ModelAndView("register", "messageDanger", attempt);
         }
-        if (userServiceImpl.checkEmail(dto.getEmail()).isPresent()) {
-            return new ModelAndView("register",
-                    "messageDanger", "This email is unavailable");
-        }
-        User user = new User(dto);
-        userServiceImpl.insertUser(user);
-        tokenService.createConfirmEmail(user);
         return new ModelAndView("login", "messageSuccess",
                 "Registered successfully, a confirmation email has been sent to your email address!");
     }
 
     @GetMapping("/confirm-account/{token}")
-    public ModelAndView confirmUserAccount(@PathVariable("token") String confirmationToken) {
-        Optional<ConfirmationToken> token = tokenService.checkConfirmationToken(confirmationToken);
-        if (!token.isPresent()) {
-            return new ModelAndView("login",
-                    "messageDanger", "This is an invalid token");
+    public ModelAndView confirmUserAccount(@PathVariable String token) {
+        String attempt = tokenService.validateConfirmationToken(token);
+        if (!attempt.equals("SUCCESS")) {
+            return new ModelAndView("login", "messageDanger", attempt);
         }
-        ConfirmationToken validToken = token.get();
-        User user = userServiceImpl.checkEmail(validToken.getUser().getEmail()).get();
-        if (validToken.getExpirationDate().isBefore(Instant.now())) {
-            tokenService.createConfirmEmail(user);
-            return new ModelAndView("login",
-                    "messageDanger", "This token has expired, a new token has been emailed to you");
-        }
-        user.setEnabled(true);
-        userServiceImpl.updateUser(user);
-        return new ModelAndView("login",
-                "messageSuccess", "Your account has been activated!");
+        return new ModelAndView("login", "messageSuccess", "Your account has been activated!");
     }
 
     @GetMapping("/changePass")
@@ -102,10 +81,10 @@ public class UserController {
             return new ModelAndView("changePass");
         }
         String attempt = userServiceImpl.changePass(dto, loggedUser.getName());
-        if (!attempt.equals("Password changed successfully!")) {
+        if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("changePass", "messageDanger", attempt);
         }
-        return new ModelAndView("index", "messageSuccess", attempt);
+        return new ModelAndView("index", "messageSuccess", "Password changed successfully!");
     }
 
     @GetMapping("/forgotPass")
@@ -120,26 +99,24 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("forgotPass");
         }
-        User user = userServiceImpl.checkEmail(dto.getEmail()).get();
-        tokenService.createResetEmail(user);
+        Optional<User> user = userServiceImpl.checkEmail(dto.getEmail());
+        if (!user.isPresent()) {
+            return new ModelAndView("forgotPass",
+                    "messageDanger", "There is no account linked to that email");
+        }
+        tokenService.createResetEmail(user.get());
         return new ModelAndView("login", "messageSuccess",
                 "An email to reset your password has been sent to your account!");
     }
 
     @GetMapping("/reset-password/{token}")
-    public ModelAndView resetUserPassword(@PathVariable("token") String confirmationToken) {
-        Optional<ResetPassToken> token = tokenService.checkResetPassToken(confirmationToken);
-        if (!token.isPresent()) {
-            return new ModelAndView("login",
-                    "messageDanger", "This is an invalid token");
-        }
-        ResetPassToken validToken = token.get();
-        if (validToken.getExpirationDate().isBefore(Instant.now())) {
-            return new ModelAndView("login",
-                    "messageDanger", "This token has expired, please request another token");
+    public ModelAndView resetUserPassword(@PathVariable String token) {
+        String attempt = tokenService.validateResetToken(token);
+        if (!attempt.contains("@")) {
+            return new ModelAndView("login", "messageDanger", attempt);
         }
         RegisterUserDto dto = new RegisterUserDto();
-        dto.setEmail(validToken.getUser().getEmail());
+        dto.setEmail(attempt);
         return new ModelAndView("resetPass", "resetUserPass", dto);
     }
 
@@ -153,7 +130,6 @@ public class UserController {
         User user = userServiceImpl.checkEmail(dto.getEmail()).get();
         user.setPassword(dto.getPassword());
         userServiceImpl.insertUser(user);
-        return new ModelAndView("login", "messageSuccess",
-                "Your new password has been set!");
+        return new ModelAndView("login", "messageSuccess", "Your new password has been set!");
     }
 }

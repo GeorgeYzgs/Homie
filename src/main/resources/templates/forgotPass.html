@@ -14,6 +14,9 @@
             <h4 class="text-center pt-2">Enter your email below</h4>
             <div class="card">
                 <div class="card-body">
+                    <div class="alert alert-danger" th:if="${messageDanger}">
+                        <p class="text text-center" th:text="${messageDanger}"></p>
+                    </div>
                     <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
                         <fieldset>
                             <div class="form-group">
