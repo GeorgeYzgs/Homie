@@ -40,7 +40,17 @@ public class Property {
 
     //TODO ADD ANOTHER ENUMERATION FOR RENT / SALE / AIRBNB ??
 
+
     public Property() {
+    }
+
+    public Property(String description, BigDecimal price, Address address, ListingStatus listingStatus, Category category, User owner){
+      this.description=description;
+      this.price=price;
+      this.address=address;
+      this.listingStatus=listingStatus;
+      this.category=category;
+      this.owner=owner;
     }
 
     public int getId() {
@@ -93,6 +103,14 @@ public class Property {
 
     public Collection<Photo> getPhotoCollection() {
         return photoCollection;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public void setPhotoCollection(Collection<Photo> photoCollection) {

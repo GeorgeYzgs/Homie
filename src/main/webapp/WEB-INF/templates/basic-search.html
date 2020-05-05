@@ -8,6 +8,7 @@
 </head>
 <body>
 <header th:include="fragments :: body_header"></header>
+
 <section class="container pt-4 bg-light">
     <div class="row pl-3">
         <div class="col-sm-1">
@@ -70,6 +71,7 @@
     </main>
     <a class="text-secondary text-decoration-none" th:href="@{/search}"> Advanced Search </a>
 </section>
+
 <footer th:include="fragments :: body_footer"></footer>
 <th:block th:include="fragments :: scripts">
 </th:block>

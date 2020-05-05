@@ -10,14 +10,58 @@
 
 <div class="container">
 
-    <form action="#" th:action="@{/}" th:object="${com.spring.group.models.property.Property}" th:method="post">
+    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post">
+        <input th:value="${'currentUser'}" th:hidden th:field="owner"/>
+        <!--        //TODO να τραβήξω τον currentUser για να τον βάλω στο property. Πώς; getAuthentication().getPrincipal() υπάρχει κάτι εδώ(να ρωτήσω GG) αλλιώς να τον βάλουμε στο Model από τον Controller, αλλιώς μόνο id από Controller κ το κάνει στο service....-->
+
         <input type="text" th:field="*{description}"/>
-        <!--<input type="radio" list="listing_enum" th:field="*{listingStatus}"/>-->
-        <!--        <input list="category_lookup" th:field="*{category}"/>}-->
-        <span th:with="tempAdress=${com.spring.group.models.Address}">
-                <input type="text" th:value="${tempAdress.street}"/>
-        <input th:value="${tempAdress}" th:field="*{address}" th:hidden=""/>
-</span>
+        <label th:for="description">Please Provide Description of Property</label>
+        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid Description</p>
+
+        <input type="number" th:field="*{price}"/>
+        <label th:for="price" th:value="Please Provide Renting Price of Property">Please Provide Renting Price of
+            Property</label>
+        <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Invalid Price Value</p>
+
+        <input type="checkbox" th:field="*{listingStatus}" th:checked/>
+        <!--        TODO είπαμε GG να γίνει boolean σταδιάλα με τα enum -->
+        <label th:for="listingStatus" th:value="Make Available for Renting">Check for Renting Availability</label>
+        <p th:if="${#fields.hasErrors('listingStatus')}" th:errors="*{listingStatus}">Invalid Value</p>
+
+        <input list="categories" th:field="category"/>
+        <label th:for="category" th:value="Pick Type of Entry">Pick Category Type</label>
+        <datalist id="categories">
+            <!--            TODO γτ δεν κάνει resolve το values(), σταδιάλα.....-->
+            <option th:each="ctgr:${T(com.spring.group.models.property.Category).values()}" th:value="${ctgr}"
+                    th:text="${ctgr}">Options
+            </option>
+            <!--    GT H GAMIMENI DE DOYLEVEI. TODO-->
+        </datalist>
+
+        <input type="text" th:field="*{address_street}"/>
+        <label th:for="address_street">Please Provide street</label>
+        <p th:if="${#fields.hasErrors('address_street')}" th:errors="*{address_street}">Invalid value</p>
+
+        <input type="number" th:field="*{address_number}"/>
+        <label th:for="address_number">Please Provide street number</label>
+        <p th:if="${#fields.hasErrors('address_number')}" th:errors="*{address_number}">Invalid value</p>
+
+        <input type="text" th:field="*{address_city}"/>
+        <label th:for="address_city">Please Provide city</label>
+        <p th:if="${#fields.hasErrors('address_city')}" th:errors="*{address_city}">Invalid value</p>
+
+        <input type="text" th:field="*{address_state}"/>
+        <label th:for="address_state">Please Provide state</label>
+        <p th:if="${#fields.hasErrors('address_state')}" th:errors="*{address_state}">Invalid value</p>
+
+        <input type="number" th:field="*{address_zipCode}"/>
+        <label th:for="address_zipCode">Please Provide street number</label>
+        <p th:if="${#fields.hasErrors('address_zipCode')}" th:errors="*{address_zipCode}">Invalid value</p>
+
+
+        <!--// TODO να δούμε πώς θα κάνουμε upload εικόνα. δεν το ξέρω. θέλει javascript ή υπάρχει html media για αυτό. Θεωρώ πάντως ότι θα γίνει ίσως σε δύο "δόσεις" να δίδεται το property δηλαδή κ μετά να ανεβαίνουν εικόνες.-->
+
+
     </form>
 
 </div>

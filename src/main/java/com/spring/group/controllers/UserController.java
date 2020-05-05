@@ -1,5 +1,6 @@
 package com.spring.group.controllers;
 
+import com.spring.group.models.property.Category;
 import com.spring.group.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ public class UserController {
 
     @GetMapping("/fragment")
     public String testToBeDeleted() {
+        Category.values();
         return "fragments.html";
     }
 

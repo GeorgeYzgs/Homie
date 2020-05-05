@@ -21,6 +21,16 @@ public class Address {
     private String state;
     private int zipCode;
 
+    public Address() {
+    }
+
+    public Address(String street, int number, String city, String state, int zipCode) {
+                this.street=street;
+        this.number=number;
+        this.city=city;
+        this.state=state;
+        this.zipCode=zipCode;
+    }
 
 
     public int getAddress_id() {
