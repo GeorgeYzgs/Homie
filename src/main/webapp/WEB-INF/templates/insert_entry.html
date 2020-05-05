@@ -10,7 +10,7 @@
 
 <div class="container">
 
-    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post">
+    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post" enctype="multipart/form-data">
         <input th:value="${'currentUser'}" th:hidden th:field="owner"/>
         <!--        //TODO να τραβήξω τον currentUser για να τον βάλω στο property. Πώς; getAuthentication().getPrincipal() υπάρχει κάτι εδώ(να ρωτήσω GG) αλλιώς να τον βάλουμε στο Model από τον Controller, αλλιώς μόνο id από Controller κ το κάνει στο service....-->
 
@@ -60,7 +60,14 @@
 
 
         <!--// TODO να δούμε πώς θα κάνουμε upload εικόνα. δεν το ξέρω. θέλει javascript ή υπάρχει html media για αυτό. Θεωρώ πάντως ότι θα γίνει ίσως σε δύο "δόσεις" να δίδεται το property δηλαδή κ μετά να ανεβαίνουν εικόνες.-->
+<input type="file" th:field="*{photoCollection}"/>
+        <label th:for="photoCollection">Please Provide Photo</label>
+<!--Yπάρχει το input="file" τελίκά. ΕΡΩΤΗΜΑΤΑ, η φόρμα χρειάζεται ένα enctype attribute το οποίο, δεν ξέρω αν δουλευει με τα υπόλοιπα input
+δεν ξέρουμε πώς να κάνουμε bind την εικόνα σε collection. ίσως θέλει αλλάγη στο DTO
+για να βγάζουμε prompt για additional photo αφού μπεί μία, μάλλον το κάνουμε με JS. κ πάλι λογικά η JS πως θα μπορέσει να τις πακετάρει για να σταλούν στον Controller.
+εν ολίγοις, θεωρώ, θα χρειαστεί αλλάγη στο DTO, χειρισμό στον Controller , μάλλον ανεξάρτητη φόρμα για το upload κ JS για να δίδονται περισσότερες από μία φωτό -->
 
+        <input type="submit"/>
 
     </form>
 
