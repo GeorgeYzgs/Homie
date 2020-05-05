@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserServiceInterface {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public User insertUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -49,6 +52,19 @@ public class UserServiceImpl implements UserServiceInterface {
         return userRepository.getOne(userID);
     }
 
+    public String registerUser(RegisterUserDto dto) {
+        if (checkUserName(dto.getUsername()).isPresent()) {
+            return "This username is unavailable";
+        }
+        if (checkEmail(dto.getEmail()).isPresent()) {
+            return "This email is unavailable";
+        }
+        User user = new User(dto);
+        insertUser(user);
+        tokenService.createConfirmEmail(user);
+        return "SUCCESS";
+    }
+
     public String changePass(RegisterUserDto dto, String username) {
         User user = checkUserName(username).get();
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
@@ -59,6 +75,6 @@ public class UserServiceImpl implements UserServiceInterface {
         }
         user.setPassword(dto.getPassword());
         insertUser(user);
-        return "Password changed successfully!";
+        return "SUCCESS";
     }
 }

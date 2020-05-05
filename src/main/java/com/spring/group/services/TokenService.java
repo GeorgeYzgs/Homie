@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -25,6 +26,8 @@ public class TokenService {
     private ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
     private ResetPassTokenRepository resetPassTokenRepository;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @Async
     public void sendEmail(SimpleMailMessage email) {
@@ -61,5 +64,33 @@ public class TokenService {
         mailMessage.setText("To reset your password, please click here : "
                 + "http://localhost:8080/GroupProject/reset-password/" + resetPassToken.getResetPassToken());
         sendEmail(mailMessage);
+    }
+
+    public String validateConfirmationToken(String confirmationToken) {
+        Optional<ConfirmationToken> token = checkConfirmationToken(confirmationToken);
+        if (!token.isPresent()) {
+            return "This is an invalid token";
+        }
+        ConfirmationToken validToken = token.get();
+        User user = userServiceImpl.checkEmail(validToken.getUser().getEmail()).get();
+        if (validToken.getExpirationDate().isBefore(Instant.now())) {
+            createConfirmEmail(user);
+            return "This token has expired, a new token has been emailed to you";
+        }
+        user.setEnabled(true);
+        userServiceImpl.updateUser(user);
+        return "SUCCESS";
+    }
+
+    public String validateResetToken(String resetPassToken) {
+        Optional<ResetPassToken> token = checkResetPassToken(resetPassToken);
+        if (!token.isPresent()) {
+            return "This is an invalid token";
+        }
+        ResetPassToken validToken = token.get();
+        if (validToken.getExpirationDate().isBefore(Instant.now())) {
+            return "This token has expired, please request another token";
+        }
+        return validToken.getUser().getEmail();
     }
 }
