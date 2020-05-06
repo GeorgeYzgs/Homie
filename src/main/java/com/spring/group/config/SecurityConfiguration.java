@@ -24,11 +24,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/templates/**").permitAll()
-                .antMatchers("/css/**").permitAll()
-                .antMatchers("/js/**").permitAll()
-                .antMatchers("/img/**").permitAll()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/css/**", "/js/**", "/img/**").permitAll();
+//                .antMatchers("/**").permitAll();
     }
 
     @Bean
