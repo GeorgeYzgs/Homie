@@ -1,0 +1,164 @@
+.img-wrapper {
+    position: relative;
+}
+
+.img-responsive {
+    width: 100%;
+    height: auto;
+}
+
+.img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.img-overlay:before {
+    content: ' ';
+    display: block;
+    /* adjust 'height' to position overlay content vertically */
+    height: 20%;
+}
+
+/* Rating Stars */
+.checked {
+    color: orange;
+}
+
+.unchecked {
+    color: gray;
+}
+
+/* Change slider color */
+/* Thumb */
+.custom-range::-webkit-slider-thumb {
+    background: white;
+    border: 1px solid gray;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.custom-range::-moz-range-thumb {
+    background: white;
+    border: 1px solid gray;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.custom-range::-ms-thumb {
+    background: white;
+    border: 1px solid gray;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Track */
+.custom-range::-webkit-slider-track {
+    background: #2196F3;
+}
+
+.custom-range::-moz-range-track {
+    background: #2196F3;
+}
+
+.custom-range::-ms-track {
+    background: #2196F3;
+}
+
+/* Modal */
+.modal-content {
+    height: 90vh;
+}
+
+/* Select option */
+.object-fit_cover {
+    object-fit: cover;
+}
+
+
+.bg-pale-success {
+    background-color: #81C784;
+}
+
+.bg-light-success {
+    background-color: #4CAF50;
+}
+
+/* Square responsive thumbnails */
+.square {
+    float: left;
+    position: relative;
+    width: 90%;
+    padding-bottom: 90%; /* = width for a 1:1 aspect ratio */
+    margin: 1.66%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bg-green {
+    background-color: #80ea6e;
+}
+
+.text-green {
+    color: #80ea6e;
+}
+
+/*jQuery autocomplete style*/
+.ui-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+
+.ui-autocomplete > li > div {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+}
+
+.ui-state-hover,
+.ui-state-active,
+.ui-state-focus {
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+
+ 

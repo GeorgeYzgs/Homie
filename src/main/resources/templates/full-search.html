@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Properties</title>
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"-->
+    <!--              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+          rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+</head>
+<body>
+<section class="container pt-4 bg-light">
+    <div class="row pl-3">
+        <div class="col-sm-1">
+            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+        </div>
+        <div class="col-sm-3 pl-1">
+            <h1 class="mb-0" style="color:#80ea6e"> Homie </h1>
+            <h6 class="text-secondary">Your land companion</h6>
+        </div>
+    </div>
+    <!-- Toolbar -->
+
+    <div class="row container pt-4">
+        <!-- Sidebar -->
+        <nav class="col-sm-3 border-right" id="sidebar">
+            <div class="sidebar-header pb-2 border-bottom">
+                <h5>Φίλτρα</h5>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <i class="fa fa-map-marker input-group-text bg-secondary text-white"></i>
+                </div>
+                <input class="form-control" id="inputSearchQuery"
+                       placeholder="πχ. Ζωγράφος"
+                       type="text">
+            </div>
+            <div class="pt-2" id="cityTextArea">
+            </div>
+            <div class="py-3">
+                <label class="mb-0" for="roomTypeSelect">Κατηγορία</label>
+                <select class="custom-select form-control" id="roomTypeSelect">
+                    <option>Όλες οι κατηγορίες</option>
+                    <option>Διαμέρισμα</option>
+                    <option>Μονοκατοικία</option>
+                    <option>Γκαρσονιέρα</option>
+                    <option>Μεζονέτα</option>
+                </select>
+            </div>
+            <div class="pb-2">
+                <label for="priceRangeSelect">Τιμή</label>
+                <div class="input-group" id="priceRangeSelect">
+                    <span class="input-group-prepend">
+                        <span class="input-group-text bg-secondary text-white">&euro;</span>
+                    </span>
+                    <input class="form-control" id="inputStartingPrice" placeholder="Από"
+                           type="number">
+                    <input class="form-control" id="inputEndingPrice" placeholder="Έως"
+                           type="number">
+                </div>
+            </div>
+            <div class="border-bottom pb-3">
+                <label for="areaRangeSelect">Εμβαδόν</label>
+                <div class="input-group" id="areaRangeSelect">
+                <span class="input-group-prepend">
+                    <span class="input-group-text bg-secondary text-white">&#x33A1;</span>
+                </span>
+                    <input class="form-control" id="inputStartingArea" placeholder="Από"
+                           type="number">
+                    <input class="form-control" id="inputEndingArea" placeholder="Έως"
+                           type="number">
+                </div>
+            </div>
+            <div class="py-3">
+                <label for="bedroomsRangeSelect">Υπνοδωμάτια</label>
+                <div class="input-group" id="bedroomsRangeSelect">
+                <span class="input-group-prepend">
+                    <i class="input-group-text bg-secondary text-white fa fa-bed"></i>
+                </span>
+                    <input class="form-control" id="inputStartingBedrooms" placeholder="Από"
+                           type="number">
+                    <input class="form-control" id="inputEndingBedrooms" placeholder="Έως"
+                           type="number">
+                </div>
+            </div>
+            <div class="py-3 border-bottom">
+                <label for="floorsRangeSelect">Όροφος</label>
+                <div class="input-group" id="floorsRangeSelect">
+                <span class="input-group-prepend">
+                    <i class="input-group-text bg-secondary text-white fa fa-building"></i>
+                </span>
+                    <input class="form-control" id="inputStartingFloors" placeholder="Από"
+                           type="number">
+                    <input class="form-control" id="inputEndingFloors" placeholder="Έως"
+                           type="number">
+                </div>
+            </div>
+            <div class="py-3 border-bottom">
+                <label class="mb-0" for="heatingSelect">Θέρμανση</label>
+                <select class="custom-select form-control " id="heatingSelect">
+                    <option>Όλες οι κατηγορίες</option>
+                    <option>Αυτόνομη</option>
+                    <option>Κεντρική</option>
+                    <option>Χωρίς</option>
+                </select>
+            </div>
+            <div class="py-3">
+                <label class="mb-0" for="lastUpdateSelect">Τελευταία Ανανέωση</label>
+                <select class="custom-select form-control " id="lastUpdateSelect">
+                    <option>Οποτεδήποτε</option>
+                    <option>24 ώρες</option>
+                    <option>3 ημέρες</option>
+                    <option>7 ημέρες</option>
+                    <option>30 ημέρες</option>
+                    <option>3 μήνες</option>
+                    <option>6 μήνες</option>
+                    <option>12 μήνες και πάνω</option>
+                </select>
+            </div>
+            <div class="py-3">
+                <label class="mb-0" for="ageSelect">Ηλικία αγγελίας</label>
+                <select class="custom-select form-control " id="ageSelect">
+                    <option>Οποτεδήποτε</option>
+                    <option>24 ώρες</option>
+                    <option>3 ημέρες</option>
+                    <option>7 ημέρες</option>
+                    <option>30 ημέρες</option>
+                    <option>3 μήνες</option>
+                    <option>6 μήνες</option>
+                    <option>12 μήνες και πάνω</option>
+                </select>
+            </div>
+        </nav>
+
+        <!-- Main body -->
+        <main class="col-sm-9 bg-light" id="propertiesParentMain">
+            <div class="row">
+                <div class="col-sm-4 offset-8">
+                    <label class="mb-0" for="sortBySelect">Ταξινόμηση κατά</label>
+                    <select class="custom-select form-control " id="sortBySelect">
+                        <option>Αυτόματη</option>
+                        <option>Τελευταία ενημέρωση</option>
+                        <option>Αύξουσα τιμή</option>
+                        <option>Φθίνουσα τιμή</option>
+                        <option>Αύξων εμβαδόν</option>
+                        <option>Φθίνων εμβαδόν</option>
+                    </select>
+                </div>
+            </div>
+            <div class="btn btn-light ">
+                <div class="row border-top py-3">
+                    <div class="col-sm-4">
+                        <img class="rounded object-fit_cover img-responsive"
+                             height="250" src="https://q-cf.bstatic.com/images/hotel/max1024x768/189/189426432.jpg">
+                    </div>
+                    <div class="col-sm-7 text-left">
+                        <h5 class="font-weight-bold">
+                            Διαμέρισμα 83 τ.μ. προς ενοικίαση
+                        </h5>
+                        <p class="mb-0">
+                            Aθήνα (Κέντρο)
+                        </p>
+                        <p class="pt-0">
+                            03-05-2020
+                        </p>
+                        <p class="pt-1">
+                        <span class="border rounded bg-green text-white p-1 font-weight-bold">
+                        180&euro;/μήνα
+                        </span>
+                            <span class="pl-1">83 τμ</span>
+                            <span class="pl-1">2&euro;/τμ</span>
+                            <span class="pl-1">4 υπνοδωμάτια</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="btn btn-light ">
+                <div class="row border-top py-3">
+                    <div class="col-sm-4">
+                        <img class="rounded object-fit_cover img-responsive"
+                             height="250" src="https://q-cf.bstatic.com/images/hotel/max1024x768/234/234956775.jpg">
+                    </div>
+                    <div class="col-sm-7 text-left">
+                        <h5 class="font-weight-bold">
+                            Διαμέρισμα 90 τ.μ. προς ενοικίαση
+                        </h5>
+                        <p class="mb-0">
+                            Αθήνα (Κέντρο)
+                        </p>
+                        <p class="pt-0">
+                            03-05-2020
+                        </p>
+                        <p class="pt-1">
+                        <span class="border rounded bg-green text-white p-1 font-weight-bold">
+                        200&euro;/μήνα
+                        </span>
+                            <span class="pl-1">90 τμ</span>
+                            <span class="pl-1">2&euro;/τμ</span>
+                            <span class="pl-1">3 υπνοδωμάτια</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</section>
+
+<script crossorigin="anonymous"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script th:src="@{/js/search-functionality.js}"></script>
+</body>
+</html>
