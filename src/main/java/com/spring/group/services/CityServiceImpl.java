@@ -15,6 +15,6 @@ public class CityServiceImpl implements CityServiceInterface {
 
     @Override
     public List<City> getCityNamesAutocomplete(String query) {
-        return cityRepository.findCitiesByCityNameContainingIgnoreCase(query);
+        return cityRepository.findTop10CitiesByCityNameContainingIgnoreCase(query);
     }
 }

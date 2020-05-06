@@ -39,7 +39,19 @@ $(document).ready(function () {
             populateCitiesTextArea();
             $("#inputSearchQuery").val('');
         }
-    });
+    })
+        .on("focus", function () {
+            /* the element with the search results */
+            //
+            let uid = $("#ui-id-" + ($(this).autocomplete("instance").uuid + 1));
+            if (uid.html().length === 0) {
+                /* same as $(this).autocomplete("search", this.value); */
+                $(this).keydown();
+            } else {
+                setTimeout(() => uid.show(), 200)
+
+            }
+        });
 
     $("#inputSearchQuery")
         .on('click', function () {

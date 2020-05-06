@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CityRepository extends JpaRepository<City, Integer> {
 
-    List<City> findCitiesByCityNameContainingIgnoreCase(String query);
+    List<City> findTop10CitiesByCityNameContainingIgnoreCase(String query);
 }
