@@ -60,7 +60,7 @@ public class User {
         this.userRole = UserRole.USER;
         this.creationDate = Instant.now();
         this.isNonLocked = true;
-        this.authProvider = AuthProvider.LOCAL;
+        this.authProvider = AuthProvider.local;
     }
 
     public User(AuthProvider authProvider, OAuth2UserInfo oath) {

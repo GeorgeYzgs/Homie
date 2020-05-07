@@ -14,11 +14,12 @@
             <h4 class="text-center pt-2">Login</h4>
             <div class="card">
                 <div class="card-body">
-                    <div class="alert alert-danger" th:if="${param.error}">
-                        Invalid username or password.
-                    </div>
                     <div class="alert alert-success" th:if="${param.logout}">
                         You have been logged out!
+                    </div>
+                    <div class="alert alert-danger" th:if="${param.error}"
+                         th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                        <span th:text="${errorMsg}">Invalid input</span>
                     </div>
                     <div class="alert alert-success" th:if="${messageSuccess}">
                         <p class="text text-center" th:text="${messageSuccess}"></p>

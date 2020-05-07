@@ -5,8 +5,8 @@ package com.spring.group.models.user;
  */
 public enum AuthProvider {
 
-    LOCAL,
-    FACEBOOK,
-    GITHUB,
-    GOOGLE;
+    local,
+    facebook,
+    github,
+    google;
 }

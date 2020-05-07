@@ -1,5 +1,6 @@
 package com.spring.group.services;
 
+import com.spring.group.exceptions.InvalidAuthProviderException;
 import com.spring.group.models.user.AuthProvider;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
@@ -26,19 +27,13 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
-        OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
-        try {
-            return processOAuth2User(oAuth2UserRequest, oAuth2User);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        return processOAuth2User(oAuth2UserRequest, super.loadUser(oAuth2UserRequest));
     }
 
-    //TODO exception must be handled, allow users to update through social profile.
-    private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) throws Exception {
+    //TODO Allow users to update through social profile.
+    private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
         AuthProvider authProvider = AuthProvider.valueOf(userRequest.getClientRegistration()
-                .getRegistrationId().toUpperCase());
+                .getRegistrationId().toLowerCase());
         Map<String, Object> userAttributes = oAuth2User.getAttributes();
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getUserInfo(authProvider, userAttributes);
         Optional<User> userOptional = userRepository.findByEmail(userInfo.getEmail());
@@ -46,8 +41,9 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         if (userOptional.isPresent()) {
             user = userOptional.get();
             if (!user.getAuthProvider().equals(authProvider)) {
-                throw new Exception("You are signed up with " + user.getAuthProvider() + " account." +
-                        " Please use your " + user.getAuthProvider() + " account to login.");
+                String msg = "You are signed up with " + user.getAuthProvider() + " account." +
+                        " Please use your " + user.getAuthProvider() + " account to login.";
+                throw new InvalidAuthProviderException(msg);
             }
             return new MyUserDetails(user, userAttributes);
         }

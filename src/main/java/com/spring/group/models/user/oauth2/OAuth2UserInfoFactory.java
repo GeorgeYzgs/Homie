@@ -1,6 +1,8 @@
 package com.spring.group.models.user.oauth2;
 
+import com.spring.group.exceptions.InvalidAuthProviderException;
 import com.spring.group.models.user.AuthProvider;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -9,16 +11,16 @@ import java.util.Map;
  */
 public abstract class OAuth2UserInfoFactory {
 
-    public static OAuth2UserInfo getUserInfo(AuthProvider authProvider, Map<String, Object> attributes) throws Exception {
+    public static OAuth2UserInfo getUserInfo(AuthProvider authProvider, Map<String, Object> attributes) throws ResponseStatusException {
         switch (authProvider) {
-            case GOOGLE:
+            case google:
                 return new GoogleOAuth2(attributes);
-            case FACEBOOK:
+            case facebook:
                 return new FacebookOAuth2(attributes);
-            case GITHUB:
+            case github:
                 return new GithubOAuth2(attributes);
             default:
-                throw new Exception("Unsupported OAuth2 Login!");
+                throw new InvalidAuthProviderException("Unsupported OAuth2 Login!");
         }
     }
 }
