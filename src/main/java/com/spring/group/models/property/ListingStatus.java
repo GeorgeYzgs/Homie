@@ -6,5 +6,5 @@ package com.spring.group.models.property;
 public enum ListingStatus {
 
     AVAILABLE,
-    OCCUPIED
+    OCCUPIED;
 }

@@ -9,5 +9,4 @@ public enum Category {
     DETACHED_HOUSE,
     WORK_PLACE,
     PLOT;
-
 }

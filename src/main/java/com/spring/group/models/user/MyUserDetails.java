@@ -1,18 +1,19 @@
-package com.spring.group.services;
+package com.spring.group.models.user;
 
-import com.spring.group.models.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author George.Giazitzis
  */
-public class MyUserDetails implements UserDetails {
+public class MyUserDetails implements OAuth2User, UserDetails {
 
     private String username;
     private String password;
@@ -20,6 +21,7 @@ public class MyUserDetails implements UserDetails {
     private boolean isEnabled;
     private boolean isNonLocked;
     private List<GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
 
     public MyUserDetails(User user) {
         this.username = user.getUsername();
@@ -30,8 +32,28 @@ public class MyUserDetails implements UserDetails {
         this.authorities = Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().toString()));
     }
 
+    public MyUserDetails(User user, Map<String, Object> attributes) {
+        this(user);
+        this.attributes = attributes;
+    }
+
+
     public String getEmail() {
         return email;
+    }
+
+    public boolean isNonLocked() {
+        return isNonLocked;
+    }
+
+    @Override
+    public String getName() {
+        return username;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override

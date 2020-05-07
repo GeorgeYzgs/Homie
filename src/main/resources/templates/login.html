@@ -31,8 +31,7 @@
                             <div class="form-group">
                                 <label class="form-check-label" for="username">Username</label>
                                 <input aria-describedby="usernameHelp" class="form-control" id="username"
-                                       name="username"
-                                       th:required="required" type="text">
+                                       name="username" th:required="required" type="text">
                             </div>
                             <div class="form-group">
                                 <label class="form-check-label" for="password">Password</label>
@@ -50,6 +49,14 @@
                 </div>
             </div>
             <br>
+            Login
+            <br>
+            With GitHub: <a href="oauth2/authorization/github">click here</a>
+            <br>
+            With Facebook: <a href="oauth2/authorization/facebook">click here</a>
+            <br>
+            With Google: <a href="oauth2/authorization/google">click here</a>
+            <hr>
             <a th:href="@{/register}">Click here to register</a>
         </div>
     </div>

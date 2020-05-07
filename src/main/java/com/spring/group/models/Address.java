@@ -20,6 +20,14 @@ public class Address {
     private String state;
     private int zipCode;
 
+    public int getAddress_id() {
+        return address_id;
+    }
+
+    public void setAddress_id(int address_id) {
+        this.address_id = address_id;
+    }
+
     public int getZipCode() {
         return zipCode;
     }

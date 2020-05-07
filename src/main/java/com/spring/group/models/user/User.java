@@ -3,6 +3,8 @@ package com.spring.group.models.user;
 import com.spring.group.dto.RegisterUserDto;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
+import com.spring.group.models.user.oauth2.AuthProvider;
+import com.spring.group.models.user.oauth2.OAuth2UserInfo;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -19,13 +21,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Basic
-    @Column(nullable = false, length = 25)
+    @Column(length = 25)
     private String username;
     @Basic
-    @Column(nullable = false, length = 45)
+    @Column(length = 45)
     private String email;
     @Basic
-    @Column(nullable = false, length = 60)
+    @Column(length = 60)
     private String password;
     @Basic
     @Column(length = 25)
@@ -39,7 +41,9 @@ public class User {
     @Column(length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
     private boolean isEnabled;
-    private boolean isNonLocked; //spring security has it like that.
+    private boolean isNonLocked;
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -57,6 +61,17 @@ public class User {
         this.userRole = UserRole.USER;
         this.creationDate = Instant.now();
         this.isNonLocked = true;
+        this.authProvider = AuthProvider.LOCAL;
+    }
+
+    public User(AuthProvider authProvider, OAuth2UserInfo oath) {
+        this.username = oath.getName();
+        this.email = oath.getEmail();
+        this.userRole = UserRole.USER;
+        this.creationDate = Instant.now();
+        this.isNonLocked = true;
+        this.isEnabled = true;
+        this.authProvider = authProvider;
     }
 
     public int getId() {
@@ -169,6 +184,14 @@ public class User {
 
     public void setPropertyCollection(Collection<Property> propertyCollection) {
         this.propertyCollection = propertyCollection;
+    }
+
+    public AuthProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
     }
 
     @Override
