@@ -1,4 +1,4 @@
-package com.spring.group.models.user.oauth2;
+package com.spring.group.models.user;
 
 /**
  * @author George.Giazitzis

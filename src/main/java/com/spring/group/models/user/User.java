@@ -3,7 +3,6 @@ package com.spring.group.models.user;
 import com.spring.group.dto.RegisterUserDto;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
-import com.spring.group.models.user.oauth2.AuthProvider;
 import com.spring.group.models.user.oauth2.OAuth2UserInfo;
 
 import javax.persistence.*;

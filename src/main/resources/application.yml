@@ -8,12 +8,12 @@ server:
     contextPath: /GroupProject
 spring:
   datasource:
-    username: '******'
-    password: '******'
-    url: '******'
+    username: "**********"
+    password: "**********"
+    url: "**********"
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      #            ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -21,8 +21,8 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   mail:
     host: smtp.gmail.com
-    username: homieafdemp@gmail.com
-    password: '*******'
+    username: "**********"
+    password: "**********"
     port: 587
     properties:
       mail:
@@ -39,20 +39,20 @@ spring:
       client:
         registration:
           github:
-            clientId: '******'
-            clientSecret: '******'
+            clientId: "**********"
+            clientSecret: "**********"
             scope:
               - user:email
               - read:user
           facebook:
-            clientId: '******'
-            clientSecret: '******'
+            clientId: "**********"
+            clientSecret: "**********"
             scope:
               - email
               - public_profile
           google:
-            client-id: '******'
-            client-secret: '******'
+            client-id: "**********"
+            client-secret: "**********"
             scope:
               - email
               - profile

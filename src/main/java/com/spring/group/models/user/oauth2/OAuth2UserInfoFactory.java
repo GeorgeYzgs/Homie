@@ -1,5 +1,7 @@
 package com.spring.group.models.user.oauth2;
 
+import com.spring.group.models.user.AuthProvider;
+
 import java.util.Map;
 
 /**
@@ -7,8 +9,7 @@ import java.util.Map;
  */
 public abstract class OAuth2UserInfoFactory {
 
-    public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) throws Exception {
-        AuthProvider authProvider = AuthProvider.valueOf(registrationId.toUpperCase());
+    public static OAuth2UserInfo getUserInfo(AuthProvider authProvider, Map<String, Object> attributes) throws Exception {
         switch (authProvider) {
             case GOOGLE:
                 return new GoogleOAuth2(attributes);
