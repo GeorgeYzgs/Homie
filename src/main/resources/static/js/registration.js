@@ -160,7 +160,7 @@ $(document).ready(function () {
     let arePasswordMatched = false;
 
     form.submit(function (event) {
-        event.preventDefault();
+        // event.preventDefault();
 
         let isFormValid = isUsernameValid && isEmailValid && isPasswordValid && arePasswordMatched;
         if (!isFormValid) {
@@ -168,7 +168,7 @@ $(document).ready(function () {
         } else {
             $.ajax({
                 type: "POST",
-                url: url + "/validate/check-user",
+                url: url + "/register",
                 timeout: 3000,
                 data: form.serialize(), // serializes the form's elements.
                 success: function (response) {
