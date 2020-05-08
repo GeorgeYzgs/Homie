@@ -1,9 +1,6 @@
 package com.spring.group.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author George.Giazitzis
@@ -13,7 +10,8 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int address_id;
+    @Column(name = "address_id")
+    private int id;
     private String street;
     private int number;
     private String city;
@@ -24,20 +22,19 @@ public class Address {
     }
 
     public Address(String street, int number, String city, String state, int zipCode) {
-                this.street=street;
-        this.number=number;
-        this.city=city;
-        this.state=state;
-        this.zipCode=zipCode;
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
     }
 
-
-    public int getAddress_id() {
-        return address_id;
+    public int getId() {
+        return id;
     }
 
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getZipCode() {

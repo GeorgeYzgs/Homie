@@ -6,12 +6,22 @@ logging:
 server:
   servlet:
     contextPath: /GroupProject
+  port: 8080
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  thymeleaf:
+    cache: false
+    check-template: true
+    suffix: .html
   datasource:
     username: "**********"
     password: "**********"
     url: "**********"
   jpa:
+    show-sql: true
     hibernate:
       #            ddl-auto: create-drop
       naming:

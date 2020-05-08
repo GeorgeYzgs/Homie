@@ -1,6 +1,6 @@
 package com.spring.group.services;
 
-import com.spring.group.dto.RegisterUserDto;
+import com.spring.group.dto.user.RegisterUserDto;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,6 @@ import com.spring.group.models.Address;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -12,8 +11,9 @@ import java.util.Collection;
 /**
  * @author George.Giazitzis
  */
-@Entity(name="properties")
+@Entity(name = "properties")
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "property_id")
@@ -25,12 +25,9 @@ public class Property {
     private BigDecimal price;
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-
-    private boolean isListed;
-
+    private boolean isAvailable;
     @Enumerated(EnumType.STRING)  //Θα γίνει λουκ-απ σταδιάλα με τα ηναμ
     private Category category;
-
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private Collection<Photo> photoCollection;
     @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)
@@ -38,19 +35,16 @@ public class Property {
     @ManyToOne
     private User owner;
 
-
-
-
     public Property() {
     }
 
-    public Property(String description, BigDecimal price, Address address, boolean isListed, Category category, User owner){
-      this.description=description;
-      this.price=price;
-      this.address=address;
-      this.isListed=isListed;
-      this.category=category;
-      this.owner=owner;
+    public Property(String description, BigDecimal price, Address address, boolean isAvailable, Category category, User owner) {
+        this.description = description;
+        this.price = price;
+        this.address = address;
+        this.isAvailable = isAvailable;
+        this.category = category;
+        this.owner = owner;
     }
 
     public int getId() {
@@ -85,12 +79,12 @@ public class Property {
         this.address = address;
     }
 
-    public boolean isListed() {
-        return isListed;
+    public boolean isAvailable() {
+        return isAvailable;
     }
 
-    public void setListed(boolean listed) {
-        isListed = listed;
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     public Category getCategory() {

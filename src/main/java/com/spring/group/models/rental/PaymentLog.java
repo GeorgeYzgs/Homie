@@ -1,7 +1,7 @@
 package com.spring.group.models.rental;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * @author George.Giazitzis
@@ -14,7 +14,7 @@ public class PaymentLog {
     @Column(name = "paymentlog_id")
     private int id;
     private int paidAmount;
-    private Date transactionTimestamp;
+    private Instant transactionTime;
     @ManyToOne
     private Rental rental;
 
@@ -37,12 +37,12 @@ public class PaymentLog {
         this.paidAmount = paidAmount;
     }
 
-    public Date getTransactionTime() {
-        return transactionTimestamp;
+    public Instant getTransactionTime() {
+        return transactionTime;
     }
 
-    public void setTransactionTime(Date transactionTimestamp) {
-        this.transactionTimestamp = transactionTimestamp;
+    public void setTransactionTime(Instant transactionTime) {
+        this.transactionTime = transactionTime;
     }
 
     public Rental getRental() {

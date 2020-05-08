@@ -1,4 +1,4 @@
-package com.spring.group.dto;
+package com.spring.group.dto.user;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
