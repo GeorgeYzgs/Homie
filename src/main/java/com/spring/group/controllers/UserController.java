@@ -34,7 +34,7 @@ public class UserController {
         return "login";
     }
 
-    //TODO Resolve this
+    //TODO Merge index with search html
     @GetMapping("/")
     public String index() {
         return "index";
