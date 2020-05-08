@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+</head>
+<body>
+<div class="container pt-4">
+    <h1 class="text-center">Insert your Credentials</h1>
+    <div class="row justify-content-md-center">
+        <div class="col-4">
+            <h4 class="text-center pt-2">Login</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-success" th:if="${param.logout}">
+                        You have been logged out!
+                    </div>
+                    <div class="alert alert-danger" th:if="${param.error}"
+                         th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                        <span th:text="${errorMsg}">Invalid input</span>
+                    </div>
+                    <div class="alert alert-success" th:if="${messageSuccess}">
+                        <p class="text text-center" th:text="${messageSuccess}"></p>
+                    </div>
+                    <div class="alert alert-danger" th:if="${messageDanger}">
+                        <p class="text text-center" th:text="${messageDanger}"></p>
+                    </div>
+                    <form method="post" th:action="@{/login}">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="form-check-label" for="username">Username</label>
+                                <input aria-describedby="usernameHelp" class="form-control" id="username"
+                                       name="username" th:required="required" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-check-label" for="password">Password</label>
+                                <input class="form-control" id="password" name="password" th:required="required"
+                                       type="password">
+                            </div>
+                            <a th:href="@{/forgotPass}">Forgot Password</a>
+                            <div class="form-check">
+                                <input class="form-check-input" id="rememberMe" name="remember-me" type="checkbox"/>
+                                <label class="form-check-label" for="rememberMe">Remember Me</label>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Log In</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <br>
+            Login
+            <br>
+            With GitHub: <a href="oauth2/authorization/github">click here</a>
+            <br>
+            With Facebook: <a href="oauth2/authorization/facebook">click here</a>
+            <br>
+            With Google: <a href="oauth2/authorization/google">click here</a>
+            <hr>
+            <a th:href="@{/register}">Click here to register</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

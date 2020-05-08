@@ -3,9 +3,10 @@ package com.spring.group.models.user;
 /**
  * @author George.Giazitzis
  */
-public enum UserRole {
+public enum AuthProvider {
 
-    USER,
-    MODERATOR,
-    ADMIN;
+    local,
+    facebook,
+    github,
+    google;
 }
