@@ -38,6 +38,7 @@ function updatePassStrengthBar(event) {
                 errorList.append("<li>" + scoreMessages[i] + '</li>');
             }
         }
+        return true;
     } else if (score > 55) {
         inputField.removeClass("border-danger").addClass("border-success");
         passwordStrengthBar.removeClass("bg-danger").removeClass("bg-success").addClass("bg-warning");
@@ -47,6 +48,7 @@ function updatePassStrengthBar(event) {
                 errorList.append("<li>" + scoreMessages[i] + '</li>');
             }
         }
+        return true;
     } else if (score >= 0) {
         if (!inputField.hasClass("border-danger")) inputField.addClass("border-danger");
         passwordStrengthBar.removeClass("bg-warning").removeClass("bg-success").addClass("bg-danger");
@@ -56,6 +58,7 @@ function updatePassStrengthBar(event) {
                 errorList.append("<li>" + scoreMessages[i] + '</li>');
             }
         }
+        return false;
     }
 }
 
@@ -133,9 +136,11 @@ function showValidationMessages(event, response) {
                 }
             }
         }
+        return true;
     } else {
         inputField.removeClass("border-danger").addClass("border-success");
         errorList.empty();
+        return false;
     }
 }
 
@@ -200,7 +205,7 @@ $(document).ready(function () {
                 "username": $.trim(usernameInput.val())
             },
             success: function (response) {
-                showValidationMessages(event, response);
+                showValidationMessages(event, response) ? isUsernameValid = false : isUsernameValid = true;
             }
         })
     });
@@ -215,7 +220,7 @@ $(document).ready(function () {
                 "email": $.trim(emailInput.val())
             },
             success: function (response) {
-                showValidationMessages(event, response);
+                showValidationMessages(event, response) ? isEmailValid = false : isEmailValid = true;
             }
         })
     })
@@ -223,7 +228,7 @@ $(document).ready(function () {
     passwordInput.on("keyup focusout", function (event) {
         if (passwordInput.val() !== "") {
             password2Input.trigger("keyup");
-            updatePassStrengthBar(event);
+            isPasswordValid = updatePassStrengthBar(event);
         } else {
             resetInputField($(event.currentTarget));
             resetPassStrengthBar($("#passwordStrength"));
@@ -241,11 +246,13 @@ $(document).ready(function () {
                     if (!password2Input.hasClass("border-success")) {
                         password2Input.removeClass("border-danger").addClass("border-success");
                     }
+                    arePasswordMatched = true;
                 } else {
                     if (!password2Input.hasClass("border-danger")) {
                         password2Input.removeClass("border-success").addClass("border-danger");
                     }
                     errorList.append("<li>" + passNotMatch + "</li>");
+                    arePasswordMatched = false;
                 }
             }
         })

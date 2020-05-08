@@ -1,11 +1,11 @@
 package com.spring.group.controllers;
 
-import com.spring.group.dto.RegisterUserDto;
-import com.spring.group.dto.RegistrationValidator;
 import com.spring.group.dto.registration.RegistrationEmailValidator;
 import com.spring.group.dto.registration.RegistrationPassMatchValidator;
 import com.spring.group.dto.registration.RegistrationPasswordValidator;
 import com.spring.group.dto.registration.RegistrationUsernameValidator;
+import com.spring.group.dto.user.RegisterUserDto;
+import com.spring.group.dto.user.RegistrationValidator;
 import com.spring.group.pojo.RegisterJsonResponse;
 import com.spring.group.services.ValidateRegistrationFields;
 import org.springframework.beans.factory.annotation.Autowired;

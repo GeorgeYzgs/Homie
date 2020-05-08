@@ -35,8 +35,8 @@
                                 You have been logged out!
                             </div>
                             <div class="alert alert-danger" th:if="${param.error}"
-                         th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-                        <span th:text="${errorMsg}">Invalid input</span>
+                                 th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                                <span th:text="${errorMsg}">Invalid input</span>
                             </div>
                             <div class="alert alert-success" th:if="${messageSuccess}">
                                 <p class="text text-center" th:text="${messageSuccess}"></p>
@@ -49,10 +49,10 @@
                                     <div class="form-group pb-3">
                                         <label class="form-check-label text-secondary pb-1" for="username"
                                                th:text="#{Username}"></label>
-                                <input aria-describedby="usernameHelp" class="form-control" id="username"
-                                       name="username" th:required="required" type="text">
-                            </div>
-                            <div class="form-grouppb-3">
+                                        <input aria-describedby="usernameHelp" class="form-control" id="username"
+                                               name="username" th:required="required" type="text">
+                                    </div>
+                                    <div class="form-grouppb-3">
                                         <label class="form-check-label text-secondary pb-1"
                                                for="password" th:text="#{Password}"></label>
                                         <input class="form-control" id="password" name="password"
@@ -71,23 +71,24 @@
                                                 type="submit">
                                         </button>
                                     </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-            <br>
-            Login
-            <br>
-            With GitHub: <a href="oauth2/authorization/github">click here</a>
-            <br>
-            With Facebook: <a href="oauth2/authorization/facebook">click here</a>
-            <br>
-            With Google: <a href="oauth2/authorization/google">click here</a>
-            <hr>
+                                </fieldset>
+
+                            </form>
+                        </div>
+                    </div>
                     <a th:href="@{/forgotPass}"><p class="font-weight-lighter text-secondary my-0"
                                                    th:text="#{Password.forget}"></p></a>
                     <a th:href="@{/register}"><p class="font-weight-lighter text-secondary my-0"
                                                  th:text="#{Register}"></p></a>
+                    <br>
+                    Login
+                    <br>
+                    With GitHub: <a href="oauth2/authorization/github">click here</a>
+                    <br>
+                    With Facebook: <a href="oauth2/authorization/facebook">click here</a>
+                    <br>
+                    With Google: <a href="oauth2/authorization/google">click here</a>
+                    <hr>
                 </div>
             </div>
         </div>

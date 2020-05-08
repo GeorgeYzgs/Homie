@@ -35,14 +35,9 @@ public class UserController {
     }
 
     //TODO Resolve this
-//    @GetMapping("/")
-//    public String index() {
-//        return "index";
-//    }
-
     @GetMapping("/")
-    public String getHomePage() {
-        return "basic-search.html";
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/search")
