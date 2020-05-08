@@ -2,7 +2,6 @@ package com.spring.group.dto;
 
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Category;
-import com.spring.group.models.property.ListingStatus;
 import com.spring.group.models.property.Photo;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
@@ -24,7 +23,7 @@ public class PropertyDTO {
     private String address_state;
     private int address_zipCode;
 
-    private ListingStatus listingStatus;
+    private boolean isListed;
     private Category category;
     private Collection<Photo> photoCollection;
     private Collection<Rental> rentalCollection;
@@ -35,7 +34,7 @@ public class PropertyDTO {
 
     public Property unWrapProperty() {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
-        return new Property(description, price, tempAddress, listingStatus, category, owner);
+        return new Property(description, price, tempAddress, isListed, category, owner);
     }
 
     public Address unWrapAddress() {
@@ -99,12 +98,12 @@ public class PropertyDTO {
         this.address_zipCode = address_zipCode;
     }
 
-    public ListingStatus getListingStatus() {
-        return listingStatus;
+    public boolean isListed() {
+        return isListed;
     }
 
-    public void setListingStatus(ListingStatus listingStatus) {
-        this.listingStatus = listingStatus;
+    public void setListed(boolean listed) {
+        isListed = listed;
     }
 
     public Category getCategory() {

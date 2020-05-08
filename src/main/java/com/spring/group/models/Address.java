@@ -9,7 +9,7 @@ import javax.persistence.Id;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name = "addresses")
 public class Address {
 
     @Id

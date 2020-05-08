@@ -12,10 +12,11 @@ import java.util.Date;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name = "rentals")
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rental_id")
     private int id;
     @Basic
     @Column(nullable = false )

@@ -5,13 +5,14 @@ import javax.persistence.*;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name="photos")
 public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="photo_id")
     private int id;
-    private Byte[] image;
+    private Byte[] image;  //μήπως θέλει BLOB;;; java.sql.blob;
     @ManyToOne()
     private Property property;
 

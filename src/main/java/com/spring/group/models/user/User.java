@@ -15,13 +15,14 @@ import java.util.Objects;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private int id;
    @Basic
-   @Column(nullable = false , length = 25)
+   @Column(nullable = false , length = 25 )
     private String username;
     @Basic
     @Column(nullable = false, length = 45)
@@ -39,11 +40,11 @@ public class User {
     private Date creation;
     private Date updated;
     @Basic
-    @Column(nullable = false , length = 27)
+    @Column(nullable = true , length = 27)
     private String Iban;    //intentionally could be null, would be asked and validated upon creating a property.
     private boolean isEnabled;
     private boolean isLocked;
-    @OneToOne
+    @OneToOne(cascade =CascadeType.ALL  )
     private Address address;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;

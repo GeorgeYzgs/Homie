@@ -10,7 +10,8 @@
 
 <div class="container">
 
-    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post" enctype="multipart/form-data">
+    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post"
+          enctype="multipart/form-data">
         <input th:value="${'currentUser'}" th:hidden th:field="owner"/>
         <!--        //TODO να τραβήξω τον currentUser για να τον βάλω στο property. Πώς; getAuthentication().getPrincipal() υπάρχει κάτι εδώ(να ρωτήσω GG) αλλιώς να τον βάλουμε στο Model από τον Controller, αλλιώς μόνο id από Controller κ το κάνει στο service....-->
 
@@ -23,16 +24,17 @@
             Property</label>
         <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Invalid Price Value</p>
 
-        <input type="checkbox" th:field="*{listingStatus}" th:checked/>
-        <!--        TODO είπαμε GG να γίνει boolean σταδιάλα με τα enum -->
-        <label th:for="listingStatus" th:value="Make Available for Renting">Check for Renting Availability</label>
-        <p th:if="${#fields.hasErrors('listingStatus')}" th:errors="*{listingStatus}">Invalid Value</p>
+        <input type="checkbox" th:field="*{isListed}" th:checked/>
+
+        <label th:for="isListed" th:value="Make Available for Renting">Check for Renting Availability</label>
+        <p th:if="${#fields.hasErrors('isListed')}" th:errors="*{isListed}">Invalid Value</p>
 
         <input list="categories" th:field="category"/>
         <label th:for="category" th:value="Pick Type of Entry">Pick Category Type</label>
         <datalist id="categories">
             <!--            TODO γτ δεν κάνει resolve το values(), σταδιάλα.....-->
-            <option th:each="ctgr:${T(com.spring.group.models.property.Category).values()}" th:value="${ctgr}"
+
+            <option th:each="ctgr:${T(com.spring.group.models.property.Category).values() }" th:value="${ctgr}"
                     th:text="${ctgr}">Options
             </option>
             <!--    GT H GAMIMENI DE DOYLEVEI. TODO-->
@@ -60,12 +62,12 @@
 
 
         <!--// TODO να δούμε πώς θα κάνουμε upload εικόνα. δεν το ξέρω. θέλει javascript ή υπάρχει html media για αυτό. Θεωρώ πάντως ότι θα γίνει ίσως σε δύο "δόσεις" να δίδεται το property δηλαδή κ μετά να ανεβαίνουν εικόνες.-->
-<input type="file" th:field="*{photoCollection}"/>
+        <input type="file" th:field="*{photoCollection}"/>
         <label th:for="photoCollection">Please Provide Photo</label>
-<!--Yπάρχει το input="file" τελίκά. ΕΡΩΤΗΜΑΤΑ, η φόρμα χρειάζεται ένα enctype attribute το οποίο, δεν ξέρω αν δουλευει με τα υπόλοιπα input
-δεν ξέρουμε πώς να κάνουμε bind την εικόνα σε collection. ίσως θέλει αλλάγη στο DTO
-για να βγάζουμε prompt για additional photo αφού μπεί μία, μάλλον το κάνουμε με JS. κ πάλι λογικά η JS πως θα μπορέσει να τις πακετάρει για να σταλούν στον Controller.
-εν ολίγοις, θεωρώ, θα χρειαστεί αλλάγη στο DTO, χειρισμό στον Controller , μάλλον ανεξάρτητη φόρμα για το upload κ JS για να δίδονται περισσότερες από μία φωτό -->
+        <!--Yπάρχει το input="file" τελίκά. ΕΡΩΤΗΜΑΤΑ, η φόρμα χρειάζεται ένα enctype attribute το οποίο, δεν ξέρω αν δουλευει με τα υπόλοιπα input
+        δεν ξέρουμε πώς να κάνουμε bind την εικόνα σε collection. ίσως θέλει αλλάγη στο DTO
+        για να βγάζουμε prompt για additional photo αφού μπεί μία, μάλλον το κάνουμε με JS. κ πάλι λογικά η JS πως θα μπορέσει να τις πακετάρει για να σταλούν στον Controller.
+        εν ολίγοις, θεωρώ, θα χρειαστεί αλλάγη στο DTO, χειρισμό στον Controller , μάλλον ανεξάρτητη φόρμα για το upload κ JS για να δίδονται περισσότερες από μία φωτό -->
 
         <input type="submit"/>
 

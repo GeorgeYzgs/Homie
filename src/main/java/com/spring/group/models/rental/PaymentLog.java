@@ -6,13 +6,14 @@ import java.util.Date;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name = "PaymentLogs")
 public class PaymentLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "paymentlog_id")
     private int id;
     private int paidAmount;
-    private Date transactionTime;
+    private Date transactionTimestamp;
     @ManyToOne
     private Rental rental;
 
@@ -36,11 +37,11 @@ public class PaymentLog {
     }
 
     public Date getTransactionTime() {
-        return transactionTime;
+        return transactionTimestamp;
     }
 
-    public void setTransactionTime(Date transactionTime) {
-        this.transactionTime = transactionTime;
+    public void setTransactionTime(Date transactionTimestamp) {
+        this.transactionTimestamp = transactionTimestamp;
     }
 
     public Rental getRental() {

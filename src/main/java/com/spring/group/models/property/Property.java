@@ -12,10 +12,11 @@ import java.util.Collection;
 /**
  * @author George.Giazitzis
  */
-@Entity
+@Entity(name="properties")
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "property_id")
     private int id;
     @Basic
     @Column(nullable = false)
@@ -25,8 +26,7 @@ public class Property {
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
-    @Enumerated(EnumType.STRING)   //Να γίνει boolean isListed σταδιάλα με τα ηναμ
-    private ListingStatus listingStatus;
+    private boolean isListed;
 
     @Enumerated(EnumType.STRING)  //Θα γίνει λουκ-απ σταδιάλα με τα ηναμ
     private Category category;
@@ -38,17 +38,17 @@ public class Property {
     @ManyToOne
     private User owner;
 
-    //TODO ADD ANOTHER ENUMERATION FOR RENT / SALE / AIRBNB ??
+
 
 
     public Property() {
     }
 
-    public Property(String description, BigDecimal price, Address address, ListingStatus listingStatus, Category category, User owner){
+    public Property(String description, BigDecimal price, Address address, boolean isListed, Category category, User owner){
       this.description=description;
       this.price=price;
       this.address=address;
-      this.listingStatus=listingStatus;
+      this.isListed=isListed;
       this.category=category;
       this.owner=owner;
     }
@@ -85,12 +85,12 @@ public class Property {
         this.address = address;
     }
 
-    public ListingStatus getListingStatus() {
-        return listingStatus;
+    public boolean isListed() {
+        return isListed;
     }
 
-    public void setListingStatus(ListingStatus listingStatus) {
-        this.listingStatus = listingStatus;
+    public void setListed(boolean listed) {
+        isListed = listed;
     }
 
     public Category getCategory() {
