@@ -1,50 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <title th:text="#{Login.page.title}">Login</title>
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
+    <!--    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
+    <!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container pt-4">
-    <h1 class="text-center">Insert your Credentials</h1>
-    <div class="row justify-content-md-center">
-        <div class="col-4">
-            <h4 class="text-center pt-2">Login</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-success" th:if="${param.logout}">
-                        You have been logged out!
-                    </div>
-                    <div class="alert alert-danger" th:if="${param.error}"
+<body class="bg-light">
+<section class="container pt-4">
+    <div class="row pl-3">
+        <div class="col-sm-1 col-3">
+            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+        </div>
+        <div class="col-sm-3 col-8 pl-0">
+            <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
+            <h6 class="text-secondary">Your land companion</h6>
+        </div>
+    </div>
+    <!-- Main body -->
+    <main class="bg-light pt-2" id="propertiesParentMain">
+        <div class="col-sm-6 offset-sm-3 col-12">
+            <h3 class="text-center" th:text="#{Sign-in}"></h3>
+            <div class="row">
+                <div class="col-sm-8 offset-sm-2 col-12">
+                    <p class="text-center text-secondary" th:text="#{Sign-in.with.account}"></p>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="alert alert-success" th:if="${param.logout}">
+                                You have been logged out!
+                            </div>
+                            <div class="alert alert-danger" th:if="${param.error}"
                          th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
                         <span th:text="${errorMsg}">Invalid input</span>
-                    </div>
-                    <div class="alert alert-success" th:if="${messageSuccess}">
-                        <p class="text text-center" th:text="${messageSuccess}"></p>
-                    </div>
-                    <div class="alert alert-danger" th:if="${messageDanger}">
-                        <p class="text text-center" th:text="${messageDanger}"></p>
-                    </div>
-                    <form method="post" th:action="@{/login}">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="form-check-label" for="username">Username</label>
+                            </div>
+                            <div class="alert alert-success" th:if="${messageSuccess}">
+                                <p class="text text-center" th:text="${messageSuccess}"></p>
+                            </div>
+                            <div class="alert alert-danger" th:if="${messageDanger}">
+                                <p class="text text-center" th:text="${messageDanger}"></p>
+                            </div>
+                            <form method="post" th:action="@{/login}">
+                                <fieldset>
+                                    <div class="form-group pb-3">
+                                        <label class="form-check-label text-secondary pb-1" for="username"
+                                               th:text="#{Username}"></label>
                                 <input aria-describedby="usernameHelp" class="form-control" id="username"
                                        name="username" th:required="required" type="text">
                             </div>
-                            <div class="form-group">
-                                <label class="form-check-label" for="password">Password</label>
-                                <input class="form-control" id="password" name="password" th:required="required"
-                                       type="password">
-                            </div>
-                            <a th:href="@{/forgotPass}">Forgot Password</a>
-                            <div class="form-check">
-                                <input class="form-check-input" id="rememberMe" name="remember-me" type="checkbox"/>
-                                <label class="form-check-label" for="rememberMe">Remember Me</label>
-                            </div>
-                            <button class="btn btn-primary" type="submit">Log In</button>
+                            <div class="form-grouppb-3">
+                                        <label class="form-check-label text-secondary pb-1"
+                                               for="password" th:text="#{Password}"></label>
+                                        <input class="form-control" id="password" name="password"
+                                               th:required="required"
+                                               type="password">
+                                    </div>
+
+                                    <div class="form-check pb-3">
+                                        <input class="form-check-input" id="rememberMe" name="remember-me"
+                                               type="checkbox"/>
+                                        <label class="form-check-label font-weight-lighter" for="rememberMe"
+                                               th:text="#{Remember.me}"></label>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-green text-white text-center" th:text="#{Sign-in}"
+                                                type="submit">
+                                        </button>
+                                    </div>
                         </fieldset>
                     </form>
                 </div>
@@ -58,9 +84,14 @@
             <br>
             With Google: <a href="oauth2/authorization/google">click here</a>
             <hr>
-            <a th:href="@{/register}">Click here to register</a>
+                    <a th:href="@{/forgotPass}"><p class="font-weight-lighter text-secondary my-0"
+                                                   th:text="#{Password.forget}"></p></a>
+                    <a th:href="@{/register}"><p class="font-weight-lighter text-secondary my-0"
+                                                 th:text="#{Register}"></p></a>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </main>
+</section>
 </body>
 </html>
