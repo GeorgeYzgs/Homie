@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/autocomplete-utility")
-public class RestResponseController {
+public class AutocompleteController {
 
     @Autowired
     CityServiceInterface cityService;

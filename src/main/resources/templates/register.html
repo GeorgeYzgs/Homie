@@ -1,53 +1,109 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
-    <title>Register</title>
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
+    <title th:text="#{Register.page.title}"></title>
+    <!--    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
+    <!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta th:content="#{Password.must.contain}" th:name="password_must_contain">
+    <meta th:content="#{Password.length}" th:name="password_length">
+    <meta th:content="#{Password.digits}" th:name="password_digits">
+    <meta th:content="#{Password.lowercase}" th:name="password_lowercase">
+    <meta th:content="#{Password.uppercase}" th:name="password_uppercase">
+    <meta th:content="#{Password.symbols}" th:name="password_symbols">
+    <meta th:content="#{Passwords.not.match}" th:name="passwords_not_match">
 </head>
-<body>
-<div class="container pt-4">
-    <h1 class="text-center">Create an account</h1>
-    <div class="row justify-content-md-center">
-        <div class="col-4">
-            <h4 class="text-center pt-2">Register</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-danger" th:if="${messageDanger}">
-                        <p class="text text-center" th:text="${messageDanger}"></p>
+<body class="bg-light">
+<section class="container pt-4">
+    <div class="row pl-3">
+        <div class="col-sm-1 col-3">
+            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+        </div>
+        <div class="col-sm-3 col-8 pl-0">
+            <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
+            <h6 class="text-secondary">Your land companion</h6>
+        </div>
+    </div>
+
+    <!-- Main body -->
+    <main class="bg-light pt-2" id="propertiesParentMain">
+        <div class="col-sm-6 offset-sm-3 col-12">
+            <h3 class="text-center" th:text="#{Register}"></h3>
+            <div class="row">
+                <div class="col-sm-8 offset-sm-2 col-12">
+                    <p class="text-center text-secondary" th:text="#{Account.create}"></p>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="alert alert-danger" th:if="${messageDanger}">
+                                <p class="text text-center" th:text="${messageDanger}"></p>
+                            </div>
+                            <form id="registerForm" method="post" th:action="@{/register}" th:object="${registerUser}">
+                                <div class="form-group">
+                                    <label class="form-control-label text-secondary" for="username"
+                                           th:text="#{Username}"></label>
+                                    <input class="form-control" id="username" th:field="*{username}" type="text"/>
+                                    <div class="text text-danger" th:errors="*{username}"
+                                         th:if="${#fields.hasErrors('username')}"></div>
+                                    <ul class="text-danger list-unstyled" data-target="error-list"
+                                        id="usernameErrors"></ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label text-secondary" for="email"
+                                           th:text="#{Email}"></label>
+                                    <input class="form-control" id="email" th:field="*{email}" type="text"/>
+                                    <div class="text text-danger" th:errors="*{email}"
+                                         th:if="${#fields.hasErrors('email')}"></div>
+                                    <ul class="text-danger list-unstyled" data-target="error-list"
+                                        id="emailErrors"></ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label text-secondary" for="password"
+                                           th:text="#{Password}"></label>
+                                    <input class="form-control" id="password" th:field="*{password}" type="password"/>
+                                    <div class="text text-danger"
+                                         th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
+                                    <div class="progress">
+                                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0"
+                                             class="progress-bar" id="passwordStrength" role="progressbar"></div>
+                                    </div>
+
+                                    <ul class="text-danger list-unstyled" data-target="error-list"
+                                        id="passwordErrors"></ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label text-secondary" for="password2"
+                                           th:text="#{Password.verify}"></label>
+                                    <input class="form-control" id="password2" th:field="*{password2}" type="password"/>
+                                    <div class="text text-danger"
+                                         th:errors="*{global}" th:if="${#fields.hasErrors('global')}"></div>
+                                    <ul class="text-danger list-unstyled" data-target="error-list"
+                                        id="password2Errors"></ul>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-green text-white text-center" id="registerButton"
+                                            th:text="#{Register}" type="submit"></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <form method="post" th:action="@{/register}" th:object="${registerUser}">
-                        <div class="form-group">
-                            <label class="form-control-label" for="username">Username</label>
-                            <input class="form-control" id="username" th:field="*{username}" type="text"/>
-                            <div class="text text-danger" th:errors="*{username}"
-                                 th:if="${#fields.hasErrors('username')}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label" for="email">Email</label>
-                            <input class="form-control" id="email" th:field="*{email}" type="text"/>
-                            <div class="text text-danger" th:errors="*{email}"
-                                 th:if="${#fields.hasErrors('email')}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label" for="password">Password</label>
-                            <input class="form-control" id="password" th:field="*{password}" type="password"/>
-                            <div class="text text-danger"
-                                 th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label" for="password2">Retype Password</label>
-                            <input class="form-control" id="password2" th:field="*{password2}" type="password"/>
-                            <div class="text text-danger"
-                                 th:errors="*{global}" th:if="${#fields.hasErrors('global')}"></div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Register</button>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </main>
+</section>
+<!--<script crossorigin="anonymous"-->
+<!--        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="-->
+<!--        src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<!--<script crossorigin="anonymous"-->
+<!--        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="-->
+<!--        src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>-->
+<script th:src="@{/js/jquery_ui-1.12.1.min.js}"></script>
+<script th:src="@{/js/registration.js}"></script>
 </body>
 </html>

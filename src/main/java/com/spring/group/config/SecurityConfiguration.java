@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 /**
@@ -33,17 +32,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").authenticated()
-                .antMatchers("/changePass").authenticated()
-                .antMatchers("/forgotPass").permitAll()
-                .antMatchers("/setNewPass").permitAll()
+//                .antMatchers("/").authenticated()
+//                .antMatchers("/changePass").authenticated()
+//                .antMatchers("/forgotPass").permitAll()
+//                .antMatchers("/setNewPass").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/static/img/favicon.ico").permitAll()
                 .and().formLogin()
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/")
                 .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout")
                 .and().rememberMe();
+
     }
 
     @Bean

@@ -1,21 +1,26 @@
 package com.spring.group.dto;
 
+import com.spring.group.dto.registration.RegistrationEmailValidator;
+import com.spring.group.dto.registration.RegistrationPassMatchValidator;
+import com.spring.group.dto.registration.RegistrationPasswordValidator;
+import com.spring.group.dto.registration.RegistrationUsernameValidator;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
  * @author George.Giazitzis
  */
-@PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
+@PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPassMatchValidator.class})
 public class RegisterUserDto {
 
-    @NotBlank(groups = {RegistrationValidator.class})
-    @Size(min = 4, max = 25, groups = {RegistrationValidator.class})
+    @NotBlank(groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Not.blank}")
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Size}")
     private String username;
-    @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class})
+    @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class, RegistrationEmailValidator.class})
     private String email;
-    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
-    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
+    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class}, message = "{Not.blank}")
+    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPasswordValidator.class}, message = "{Size}")
     private String password;
     private String password2;
     private String oldPassword;

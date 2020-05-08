@@ -103,8 +103,32 @@
     background-color: #80ea6e;
 }
 
+.btn-green {
+    background-color: #57B54A;
+    border-color: #57B54A;
+}
+
+.btn-green:hover {
+    background-color: #80ea6e;
+    border-color: #80ea6e;
+}
+
+.btn-green:focus {
+    background-color: #80ea6e;
+    border-color: #80ea6e;
+    box-shadow: 0 0 0 0.2rem #D4F69B;
+}
+
 .text-green {
     color: #80ea6e;
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #95999c;
+    outline: 0;
+    box-shadow: 0 0 0 0;
 }
 
 /*jQuery autocomplete style*/

@@ -8,7 +8,7 @@ public class DefaultController {
 
     @GetMapping("/")
     public String getHomePage() {
-        return "basic-search.html";
+        return "index";
     }
 
     @GetMapping("/search")
