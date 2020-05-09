@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidatorContext;
 /**
  * @author George.Giazitzis
  */
-public class PasswordValidator implements ConstraintValidator<PasswordMatches, RegisterUserDto> {
+public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, RegisterUserDto> {
 
     @Override
     public void initialize(PasswordMatches constraintAnnotation) {
