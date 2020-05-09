@@ -1,13 +1,9 @@
 package com.spring.group.controllers;
 
-import com.spring.group.dto.registration.RegistrationEmailValidator;
-import com.spring.group.dto.registration.RegistrationPassMatchValidator;
-import com.spring.group.dto.registration.RegistrationPasswordValidator;
-import com.spring.group.dto.registration.RegistrationUsernameValidator;
 import com.spring.group.dto.user.RegisterUserDto;
-import com.spring.group.dto.user.RegistrationValidator;
+import com.spring.group.dto.user.validationgroups.*;
 import com.spring.group.pojo.RegisterJsonResponse;
-import com.spring.group.services.ValidateRegistrationFields;
+import com.spring.group.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -27,7 +23,7 @@ import java.util.stream.Collectors;
 public class RegisterValidatorController {
 
     @Autowired
-    ValidateRegistrationFields validateRegistrationFields;
+    UserServiceImpl userService;
     @Autowired
     MessageSource messageSource;
 
@@ -44,8 +40,7 @@ public class RegisterValidatorController {
     public RegisterJsonResponse validateUser(@Validated({RegistrationValidator.class})
                                              @ModelAttribute("user") RegisterUserDto registerUser,
                                              BindingResult bindingResult) {
-        RegisterJsonResponse response = new RegisterJsonResponse();
-        return getRegisterJsonResponse(bindingResult, response);
+        return getRegisterJsonResponse(bindingResult, new RegisterJsonResponse());
     }
 
     @PostMapping("/check-email")
@@ -54,7 +49,7 @@ public class RegisterValidatorController {
                                               BindingResult bindingResult) {
         RegisterJsonResponse response = new RegisterJsonResponse();
         if (!bindingResult.hasFieldErrors()) {
-            boolean isEmailPresent = validateRegistrationFields.isEmailPresent(user.getEmail());
+            boolean isEmailPresent = userService.isEmailPresent(user.getEmail());
             if (isEmailPresent) {
                 response.setStatus(response.ERROR);
                 response.addFieldErrors("email", new ArrayList<String>() {
@@ -63,10 +58,9 @@ public class RegisterValidatorController {
                     }
                 });
             }
-        } else {
-            return getRegisterJsonResponse(bindingResult, response);
+            return response;
         }
-        return response;
+        return getRegisterJsonResponse(bindingResult, response);
     }
 
     @PostMapping("/check-username")
@@ -75,7 +69,7 @@ public class RegisterValidatorController {
                                                  BindingResult bindingResult) {
         RegisterJsonResponse response = new RegisterJsonResponse();
         if (!bindingResult.hasFieldErrors()) {
-            boolean isUserPresent = validateRegistrationFields.isUsernamePresent(user.getUsername());
+            boolean isUserPresent = userService.isUsernamePresent(user.getUsername());
             if (isUserPresent) {
                 response.setStatus(response.ERROR);
                 response.addFieldErrors("username", new ArrayList<String>() {
@@ -84,18 +78,16 @@ public class RegisterValidatorController {
                     }
                 });
             }
-        } else {
-            return getRegisterJsonResponse(bindingResult, response);
+            return response;
         }
-        return response;
+        return getRegisterJsonResponse(bindingResult, response);
     }
 
     @PostMapping("/check-password")
     public RegisterJsonResponse validatePassword(@Validated({RegistrationPasswordValidator.class})
                                                  @ModelAttribute("user") RegisterUserDto user,
                                                  BindingResult bindingResult) {
-        RegisterJsonResponse response = new RegisterJsonResponse();
-        return getRegisterJsonResponse(bindingResult, response);
+        return getRegisterJsonResponse(bindingResult, new RegisterJsonResponse());
     }
 
     @PostMapping("/check-password-match")

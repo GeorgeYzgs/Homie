@@ -2,6 +2,7 @@ package com.spring.group.services;
 
 import com.spring.group.models.postalcode.City;
 import com.spring.group.repos.CityRepository;
+import com.spring.group.services.bases.CityServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.spring.group.controllers;
 
 import com.spring.group.pojo.AutocompleteResponse;
-import com.spring.group.services.CityServiceInterface;
+import com.spring.group.services.bases.CityServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

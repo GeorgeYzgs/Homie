@@ -1,6 +1,10 @@
 package com.spring.group.controllers;
 
-import com.spring.group.dto.user.*;
+import com.spring.group.dto.user.RegisterUserDto;
+import com.spring.group.dto.user.validationgroups.ChangePassValidator;
+import com.spring.group.dto.user.validationgroups.RegistrationValidator;
+import com.spring.group.dto.user.validationgroups.ResetPassEmailValidator;
+import com.spring.group.dto.user.validationgroups.ResetPassValidator;
 import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
 import com.spring.group.services.UserServiceImpl;

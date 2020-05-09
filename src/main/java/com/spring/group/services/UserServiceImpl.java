@@ -3,6 +3,7 @@ package com.spring.group.services;
 import com.spring.group.dto.user.RegisterUserDto;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
+import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,14 @@ public class UserServiceImpl implements UserServiceInterface {
     @Override
     public User getUserByID(Integer userID) {
         return userRepository.getOne(userID);
+    }
+
+    public boolean isUsernamePresent(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    public boolean isEmailPresent(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     public String registerUser(RegisterUserDto dto) {

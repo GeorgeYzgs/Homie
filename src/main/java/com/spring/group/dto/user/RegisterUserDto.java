@@ -1,9 +1,6 @@
 package com.spring.group.dto.user;
 
-import com.spring.group.dto.registration.RegistrationEmailValidator;
-import com.spring.group.dto.registration.RegistrationPassMatchValidator;
-import com.spring.group.dto.registration.RegistrationPasswordValidator;
-import com.spring.group.dto.registration.RegistrationUsernameValidator;
+import com.spring.group.dto.user.validationgroups.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

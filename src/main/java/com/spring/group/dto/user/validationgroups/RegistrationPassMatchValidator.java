@@ -1,4 +1,4 @@
-package com.spring.group.dto.registration;
+package com.spring.group.dto.user.validationgroups;
 
 public interface RegistrationPassMatchValidator {
 }

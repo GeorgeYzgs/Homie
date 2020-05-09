@@ -1,4 +1,4 @@
-package com.spring.group.services;
+package com.spring.group.services.bases;
 
 import com.spring.group.models.postalcode.City;
 
