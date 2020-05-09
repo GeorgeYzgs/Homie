@@ -1,5 +1,6 @@
 package com.spring.group.services;
 
+import com.spring.group.models.property.Photo;
 import com.spring.group.repos.PhotoRepository;
 import com.spring.group.services.bases.PhotoServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,4 +16,9 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
 
     @Autowired
     private PhotoRepository photoRepository;
+
+    @Override
+    public Photo insertPhoto(Photo photo) {
+        return photoRepository.save(photo);
+    }
 }

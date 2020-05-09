@@ -49,9 +49,7 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public User getUserByID(Integer userID) {
-        return userRepository.getOne(userID);
-    }
+    public User getUserByID(Integer userID) { return userRepository.getOne(userID); }
 
     public boolean isUsernamePresent(String username) {
         return userRepository.findByUsername(username).isPresent();
@@ -68,7 +66,7 @@ public class UserServiceImpl implements UserServiceInterface {
         if (checkEmail(dto.getEmail()).isPresent()) {
             return "This email is unavailable";
         }
-        User user = new User(dto);
+        User user = dto.unwrapDTO();
         insertUser(user);
         tokenService.createConfirmEmail(user);
         return "SUCCESS";

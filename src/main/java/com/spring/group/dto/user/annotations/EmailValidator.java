@@ -1,4 +1,4 @@
-package com.spring.group.dto.user;
+package com.spring.group.dto.user.annotations;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

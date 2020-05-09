@@ -1,6 +1,10 @@
 package com.spring.group.dto.user;
 
+import com.spring.group.dto.user.annotations.PasswordMatches;
+import com.spring.group.dto.user.annotations.ValidEmail;
+import com.spring.group.dto.user.annotations.ValidPassword;
 import com.spring.group.dto.user.validationgroups.*;
+import com.spring.group.models.user.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -24,6 +28,10 @@ public class RegisterUserDto {
     private String oldPassword;
 
     public RegisterUserDto() {
+    }
+
+    public User unwrapDTO() {
+        return new User(username, password, email);
     }
 
     public String getUsername() {

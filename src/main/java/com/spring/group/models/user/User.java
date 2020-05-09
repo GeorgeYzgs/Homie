@@ -1,9 +1,7 @@
 package com.spring.group.models.user;
 
-import com.spring.group.dto.user.RegisterUserDto;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
-import com.spring.group.models.user.oauth2.OAuth2UserInfo;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -54,19 +52,19 @@ public class User {
     public User() {
     }
 
-    public User(RegisterUserDto dto) {
-        this.username = dto.getUsername().toLowerCase().trim();
-        this.password = dto.getPassword();
-        this.email = dto.getEmail().toLowerCase().trim();
+    public User(String username, String password, String email) {
+        this.username = username.toLowerCase().trim();
+        this.password = password;
+        this.email = email.toLowerCase().trim();
         this.userRole = UserRole.USER;
         this.creationDate = Instant.now();
         this.isNonLocked = true;
         this.authProvider = AuthProvider.local;
     }
 
-    public User(AuthProvider authProvider, OAuth2UserInfo oath) {
-        this.username = oath.getName();
-        this.email = oath.getEmail();
+    public User(String username, String email, AuthProvider authProvider) {
+        this.username = username;
+        this.email = email;
         this.userRole = UserRole.USER;
         this.creationDate = Instant.now();
         this.isNonLocked = true;

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
     <th:block th:include="fragments :: headerfiles">
     </th:block>
     <title>Insert New Property</title>
@@ -9,75 +8,67 @@
 <body>
 
 <div class="container">
-
-    <form action="#" th:action="@{/}" th:object="${com.spring.group.dto.PropertyDTO}" th:method="post"
-          enctype="multipart/form-data">
-        <input th:value="${'currentUser'}" th:hidden th:field="owner"/>
-        <!--        //TODO να τραβήξω τον currentUser για να τον βάλω στο property. Πώς; getAuthentication().getPrincipal() υπάρχει κάτι εδώ(να ρωτήσω GG) αλλιώς να τον βάλουμε στο Model από τον Controller, αλλιώς μόνο id από Controller κ το κάνει στο service....-->
-
-        <input type="text" th:field="*{description}"/>
-        <label th:for="description">Please Provide Description of Property</label>
-        <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid Description</p>
-
-        <input type="number" th:field="*{price}"/>
-        <label th:for="price" th:value="Please Provide Renting Price of Property">Please Provide Renting Price of
-            Property</label>
-        <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Invalid Price Value</p>
-
-        <input type="checkbox" th:field="*{isListed}" th:checked/>
-
-        <label th:for="isListed" th:value="Make Available for Renting">Check for Renting Availability</label>
-        <p th:if="${#fields.hasErrors('isListed')}" th:errors="*{isListed}">Invalid Value</p>
-
-        <input list="categories" th:field="category"/>
-        <label th:for="category" th:value="Pick Type of Entry">Pick Category Type</label>
-        <datalist id="categories">
-            <!--            TODO γτ δεν κάνει resolve το values(), σταδιάλα.....-->
-
-            <option th:each="ctgr:${T(com.spring.group.models.property.Category).values() }" th:value="${ctgr}"
-                    th:text="${ctgr}">Options
-            </option>
-            <!--    GT H GAMIMENI DE DOYLEVEI. TODO-->
-        </datalist>
-
-        <input type="text" th:field="*{address_street}"/>
-        <label th:for="address_street">Please Provide street</label>
-        <p th:if="${#fields.hasErrors('address_street')}" th:errors="*{address_street}">Invalid value</p>
-
-        <input type="number" th:field="*{address_number}"/>
-        <label th:for="address_number">Please Provide street number</label>
-        <p th:if="${#fields.hasErrors('address_number')}" th:errors="*{address_number}">Invalid value</p>
-
-        <input type="text" th:field="*{address_city}"/>
-        <label th:for="address_city">Please Provide city</label>
-        <p th:if="${#fields.hasErrors('address_city')}" th:errors="*{address_city}">Invalid value</p>
-
-        <input type="text" th:field="*{address_state}"/>
-        <label th:for="address_state">Please Provide state</label>
-        <p th:if="${#fields.hasErrors('address_state')}" th:errors="*{address_state}">Invalid value</p>
-
-        <input type="number" th:field="*{address_zipCode}"/>
-        <label th:for="address_zipCode">Please Provide street number</label>
-        <p th:if="${#fields.hasErrors('address_zipCode')}" th:errors="*{address_zipCode}">Invalid value</p>
-
-
-        <!--// TODO να δούμε πώς θα κάνουμε upload εικόνα. δεν το ξέρω. θέλει javascript ή υπάρχει html media για αυτό. Θεωρώ πάντως ότι θα γίνει ίσως σε δύο "δόσεις" να δίδεται το property δηλαδή κ μετά να ανεβαίνουν εικόνες.-->
-        <input type="file" th:field="*{photoCollection}"/>
-        <label th:for="photoCollection">Please Provide Photo</label>
-        <!--Yπάρχει το input="file" τελίκά. ΕΡΩΤΗΜΑΤΑ, η φόρμα χρειάζεται ένα enctype attribute το οποίο, δεν ξέρω αν δουλευει με τα υπόλοιπα input
-        δεν ξέρουμε πώς να κάνουμε bind την εικόνα σε collection. ίσως θέλει αλλάγη στο DTO
-        για να βγάζουμε prompt για additional photo αφού μπεί μία, μάλλον το κάνουμε με JS. κ πάλι λογικά η JS πως θα μπορέσει να τις πακετάρει για να σταλούν στον Controller.
-        εν ολίγοις, θεωρώ, θα χρειαστεί αλλάγη στο DTO, χειρισμό στον Controller , μάλλον ανεξάρτητη φόρμα για το upload κ JS για να δίδονται περισσότερες από μία φωτό -->
-
-        <input type="submit"/>
-
-    </form>
-
+    <div class="col-sm-6 offset-sm-3 col-12">
+        <h3 class="text-center" th:text="#{Sign-in}"></h3>
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2 col-12">
+                <p class="text-center text-secondary" th:text="#{Sign-in.with.account}"></p>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-success" th:if="${messageSuccess}">
+                            <p class="text text-center" th:text="${messageSuccess}"></p>
+                        </div>
+                        <div class="alert alert-danger" th:if="${messageDanger}">
+                            <p class="text text-center" th:text="${messageDanger}"></p>
+                        </div>
+                        <form enctype="multipart/form-data" th:action="@{/list}" th:method="post"
+                              th:object="${propertyDTO}">
+                            <label th:for="description">Please Provide Description of Property</label>
+                            <input th:field="*{description}" type="text"/>
+                            <p th:errors="*{description}" th:if="${#fields.hasErrors('description')}">Invalid
+                                Description</p>
+                            <label th:for="price">Please Provide Renting Price of Property</label>
+                            <input step=".01" th:field="*{price}" type="number"/>
+                            <p th:errors="*{price}" th:if="${#fields.hasErrors('price')}">Invalid
+                                value</p>
+                            <label th:for="category">Please Provide Category</label>
+                            <select name="category">
+                                <option th:each="category : ${T(com.spring.group.models.property.Category).values() }"
+                                        th:text="${category}" th:value="${category}"></option>
+                            </select>
+                            <label th:for="address_street">Please Provide street</label>
+                            <input th:field="*{address_street}" type="text"/>
+                            <p th:errors="*{address_street}" th:if="${#fields.hasErrors('address_street')}">Invalid
+                                value</p>
+                            <label th:for="address_number">Please Provide street number</label>
+                            <input th:field="*{address_number}" type="number"/>
+                            <p th:errors="*{address_number}" th:if="${#fields.hasErrors('address_number')}">Invalid
+                                value</p>
+                            <label th:for="address_city">Please Provide city</label>
+                            <input th:field="*{address_city}" type="text"/>
+                            <p th:errors="*{address_city}" th:if="${#fields.hasErrors('address_city')}">Invalid
+                                value</p>
+                            <label th:for="address_state">Please Provide state</label>
+                            <input th:field="*{address_state}" type="text"/>
+                            <p th:errors="*{address_state}" th:if="${#fields.hasErrors('address_state')}">Invalid
+                                value</p>
+                            <label th:for="address_zipCode">Please Provide zip code</label>
+                            <input th:field="*{address_zipCode}" type="number"/>
+                            <p th:errors="*{address_zipCode}" th:if="${#fields.hasErrors('address_zipCode')}">Invalid
+                                value</p>
+                            <label th:for="photoCollection">Please Provide Photos</label>
+                            <input multiple="multiple" name="multipartFilesDocument" th:field="*{photoCollection}"
+                                   type="file" value="multipartFilesDocument"/>
+                            <input type="submit"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 <footer th:include="fragments :: body_footer"></footer>
 <th:block th:include="fragments :: scripts">
 </th:block>
-
 </body>
 </html>
