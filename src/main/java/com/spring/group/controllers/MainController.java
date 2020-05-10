@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
-public class DefaultController {
+public class MainController {
 
     @Autowired
     AddressServiceImpl addressService;

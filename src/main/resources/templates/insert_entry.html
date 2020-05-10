@@ -28,7 +28,7 @@
                             <p th:errors="*{description}" th:if="${#fields.hasErrors('description')}">Invalid
                                 Description</p>
                             <label th:for="price">Please Provide Renting Price of Property</label>
-                            <input step=".01" th:field="*{price}" type="number"/>
+                            <input th:field="*{price}" type="number"/>
                             <p th:errors="*{price}" th:if="${#fields.hasErrors('price')}">Invalid
                                 value</p>
                             <label th:for="category">Please Provide Category</label>

@@ -2,8 +2,8 @@ package com.spring.group.controllers;
 
 import com.spring.group.dto.user.RegisterUserDto;
 import com.spring.group.dto.user.validationgroups.ChangePassValidator;
+import com.spring.group.dto.user.validationgroups.RegistrationEmailValidator;
 import com.spring.group.dto.user.validationgroups.RegistrationValidator;
-import com.spring.group.dto.user.validationgroups.ResetPassEmailValidator;
 import com.spring.group.dto.user.validationgroups.ResetPassValidator;
 import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
@@ -103,7 +103,7 @@ public class UserController {
     }
 
     @PostMapping("/forgotPass")
-    public ModelAndView resetPass(@Validated({ResetPassEmailValidator.class})
+    public ModelAndView resetPass(@Validated({RegistrationEmailValidator.class})
                                   @ModelAttribute("forgotUserPass") RegisterUserDto dto,
                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
