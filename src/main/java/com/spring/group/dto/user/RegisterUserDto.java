@@ -18,7 +18,7 @@ public class RegisterUserDto {
     @NotBlank(groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Not.blank}")
     @Size(min = 4, max = 25, groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Size}")
     private String username;
-    @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class, RegistrationEmailValidator.class})
+    @ValidEmail(groups = {RegistrationValidator.class, RegistrationEmailValidator.class})
     private String email;
     @ValidPassword(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
     @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class}, message = "{Not.blank}")
