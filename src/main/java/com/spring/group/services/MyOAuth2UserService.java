@@ -47,7 +47,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
             }
             return new MyUserDetails(user, userAttributes);
         }
-        user = new User(authProvider, userInfo);
+        user = new User(userInfo.getName(),userInfo.getEmail(), authProvider);
         return new MyUserDetails(userRepository.save(user), userAttributes);
     }
 }

@@ -2,12 +2,11 @@ package com.spring.group.dto;
 
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Category;
-import com.spring.group.models.property.Photo;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 public class PropertyDTO {
@@ -15,7 +14,7 @@ public class PropertyDTO {
 
     //    private int id;
     private String description;
-    private BigDecimal price;
+    private int price;
 
     private String address_street;
     private int address_number;
@@ -23,18 +22,19 @@ public class PropertyDTO {
     private String address_state;
     private int address_zipCode;
 
-    private boolean isListed;
     private Category category;
-    private Collection<Photo> photoCollection;
+    private Collection<MultipartFile> photoCollection;
+
+
     private Collection<Rental> rentalCollection;
     private User owner;
 
     public PropertyDTO() {
     }
 
-    public Property unWrapProperty() {
+    public Property unWrapProperty(User owner) {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
-        return new Property(description, price, tempAddress, isListed, category, owner);
+        return new Property(description, price, tempAddress, category, owner);
     }
 
     public Address unWrapAddress() {
@@ -50,11 +50,11 @@ public class PropertyDTO {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -98,14 +98,6 @@ public class PropertyDTO {
         this.address_zipCode = address_zipCode;
     }
 
-    public boolean isListed() {
-        return isListed;
-    }
-
-    public void setListed(boolean listed) {
-        isListed = listed;
-    }
-
     public Category getCategory() {
         return category;
     }
@@ -114,11 +106,11 @@ public class PropertyDTO {
         this.category = category;
     }
 
-    public Collection<Photo> getPhotoCollection() {
+    public Collection<MultipartFile> getPhotoCollection() {
         return photoCollection;
     }
 
-    public void setPhotoCollection(Collection<Photo> photoCollection) {
+    public void setPhotoCollection(Collection<MultipartFile> photoCollection) {
         this.photoCollection = photoCollection;
     }
 

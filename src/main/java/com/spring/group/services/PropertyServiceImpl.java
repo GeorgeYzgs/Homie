@@ -1,6 +1,7 @@
 package com.spring.group.services;
 
 
+import com.spring.group.models.property.Property;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,4 +17,9 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
 
     @Autowired
     private PropertyRepository propertyRepository;
+
+    @Override
+    public Property insertProperty(Property property) {
+        return propertyRepository.save(property);
+    }
 }

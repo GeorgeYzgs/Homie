@@ -5,7 +5,6 @@ import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -22,11 +21,11 @@ public class Property {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false, precision = 2)
-    private BigDecimal price;
+    private int price;
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     private boolean isAvailable;
-    @Enumerated(EnumType.STRING)  //Θα γίνει λουκ-απ σταδιάλα με τα ηναμ
+    @Enumerated(EnumType.STRING)
     private Category category;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
     private Collection<Photo> photoCollection;
@@ -38,11 +37,11 @@ public class Property {
     public Property() {
     }
 
-    public Property(String description, BigDecimal price, Address address, boolean isAvailable, Category category, User owner) {
+    public Property(String description, int price, Address address, Category category, User owner) {
         this.description = description;
         this.price = price;
+        this.isAvailable = true;
         this.address = address;
-        this.isAvailable = isAvailable;
         this.category = category;
         this.owner = owner;
     }
@@ -63,11 +62,11 @@ public class Property {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
