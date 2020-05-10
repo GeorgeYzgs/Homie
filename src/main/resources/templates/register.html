@@ -19,16 +19,9 @@
 <!--    <meta th:content="#{Passwords.not.match}" th:name="passwords_not_match">-->
 </head>
 <body class="bg-light">
-<section class="container pt-4">
-    <div class="row pl-3">
-        <div class="col-sm-1 col-3">
-            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
-        </div>
-        <div class="col-sm-3 col-8 pl-0">
-            <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
-            <h6 class="text-secondary">Your land companion</h6>
-        </div>
-    </div>
+<section class="px-3 pt-4">
+    <!-- Logo Band    -->
+    <nav th:replace="fragments :: logo_band"></nav>
 
     <!-- Main body -->
     <main class="bg-light pt-2" id="propertiesParentMain">
@@ -59,12 +52,19 @@
                                     <div class="text text-danger" th:errors="*{email}"
                                          th:if="${#fields.hasErrors('email')}"></div>
                                     <ul class="text-danger list-unstyled" data-target="error-list"
-                                        id="emailErrors"></ul>
+                                        id="emailErrors">
+                                    </ul>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label text-secondary" for="password"
                                            th:text="#{Password}"></label>
-                                    <input class="form-control" id="password" th:field="*{password}" type="password"/>
+                                    <div class="input-group">
+                                        <input class="form-control eye-closed" id="password" th:field="*{password}"
+                                               type="password"/>
+                                        <div class="input-group-append" id="showPassword">
+                                            <i class="fa fa-eye input-group-text bg-light pt-2 btn"></i>
+                                        </div>
+                                    </div>
                                     <ul class="text-danger" th:each="error: ${#fields.errors('password')}">
                                         <li th:each="message : ${error.split(',')}">
                                             <p class="error-message" th:text="${message}"></p>
@@ -81,21 +81,24 @@
                                 <div class="form-group">
                                     <label class="form-control-label text-secondary" for="password2"
                                            th:text="#{Password.verify}"></label>
-                                    <input class="form-control" id="password2" th:field="*{password2}" type="password"/>
+                                    <input class="form-control" id="password2" th:field="*{password2}"
+                                           type="password"/>
                                     <div class="text text-danger"
                                          th:errors="*{global}" th:if="${#fields.hasErrors('global')}"></div>
                                     <ul class="text-danger list-unstyled" data-target="error-list"
                                         id="password2Errors"></ul>
                                 </div>
-                                <div class="text-center">
-                                    <button class="btn btn-green text-white text-center" id="registerButton"
-                                            th:text="#{Register}" type="submit"></button>
-                                </div>
-                            </form>
                         </div>
+                        <div class="text-center">
+                            <button class="btn btn-green text-white text-center" id="registerButton"
+                                    th:text="#{Register}" type="submit"></button>
+                        </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </main>
 </section>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Something has been done wrong</title>
@@ -7,6 +7,8 @@
 <body>
 
 <h2>Homie encountered a problem!</h2>
-
+<body th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+<h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1>
+<a th:href="@{/}">Back to Home Page</a>
 </body>
 </html>

@@ -24,7 +24,7 @@ function updatePassStrengthBar(event) {
     let score = scoreList[0];
     let scoreMessages = getStrengthenPasswordMessages(scoreList[1]);
     let passwordStrengthBar = $("#passwordStrength");
-    let errorList = $(event.currentTarget).siblings("[data-target=error-list]");
+    let errorList = $(event.currentTarget).parent().siblings("[data-target=error-list]");
     let messageHeader = passMustContain;
 
     passwordStrengthBar.css("width", ((score > 100) ? 100 : score) + "%").attr("aria-valuenow", ((score > 100) ? 100 : score));
@@ -64,19 +64,22 @@ function updatePassStrengthBar(event) {
 
 function getStrengthenPasswordMessages(variations) {
     let messages = [];
-    if (!variations.length) messages.push(passLength);
-    if (!variations.digits) messages.push(passDigits);
-    if (!variations.lower) messages.push(passLowercase);
-    if (!variations.upper) messages.push(passUppercase);
-    if (!variations.nonWords) messages.push(passSymbols);
+    if (variations === undefined) {
+        messages.push(passLength)
+    } else {
+        if (!variations.length) messages.push(passLength);
+        if (!variations.digits) messages.push(passDigits);
+        if (!variations.lower) messages.push(passLowercase);
+        if (!variations.upper) messages.push(passUppercase);
+        if (!variations.nonWords) messages.push(passSymbols);
+    }
     return messages;
 }
 
 
 function scorePassword(pass) {
     let score = 0;
-    if (!pass)
-        return score;
+
 
     // bonus points for mixing it up
     let variations = {
@@ -86,6 +89,8 @@ function scorePassword(pass) {
         nonWords: /\W/.test(pass),
         length: (pass.length >= 8)
     }
+    if (!pass)
+        return [score, variations];
 
     let variationCount = 0;
     for (let check in variations) {
@@ -104,18 +109,6 @@ function scorePassword(pass) {
         }
         return [score, variations];
     }
-}
-
-function checkPassStrength(pass) {
-    let score = scorePassword(pass);
-    if (score > 80)
-        return "strong";
-    if (score > 60)
-        return "good";
-    if (score >= 30)
-        return "weak";
-
-    return "";
 }
 
 
@@ -152,46 +145,37 @@ $(document).ready(function () {
     let usernameInput = $("#username");
     let passwordInput = $("#password");
     let password2Input = $("#password2");
+    let showPassBtn = $("#showPassword");
     let isPassword2Enabled = false;
+    let submitButton = $("#registerButton");
 
     let isUsernameValid = false
     let isEmailValid = false;
     let isPasswordValid = false;
     let arePasswordMatched = false;
 
-    form.submit(function (event) {
-        // event.preventDefault();
+    showPassBtn.on("click", function (event) {
+        let inputField = $(event.currentTarget).siblings("input");
 
+        if (inputField.hasClass('eye-closed')) {
+            inputField.attr('type', 'text');
+        } else if (inputField.hasClass('eye-open')) {
+            inputField.attr('type', 'password');
+        }
+        inputField.toggleClass("eye-open eye-closed");
+    })
+
+    submitButton.on('click', function (event) {
+        event.preventDefault();
         let isFormValid = isUsernameValid && isEmailValid && isPasswordValid && arePasswordMatched;
         if (!isFormValid) {
             $("#registerButton").effect("shake", {distance: 10, times: 2}, 400);
+            usernameInput.focusout();
+            emailInput.focusout();
+            passwordInput.focusout();
+            password2Input.focusout();
         } else {
-            $.ajax({
-                type: "POST",
-                url: url + "/register",
-                timeout: 3000,
-                data: form.serialize(), // serializes the form's elements.
-                success: function (response) {
-                    // if (response.status === "error") {
-                    //     let emailErrors = response.errors.email;
-                    //     if (emailErrors !== undefined) {
-                    //
-                    //         if (!emailInput.hasClass("border-danger")) {
-                    //             emailInput.addClass("border-danger");
-                    //         }
-                    //         emailErrorList.empty()
-                    //         for (let i = 0; i < emailErrors.length; i++) {
-                    //             if (emailErrors[i] != null) {
-                    //                 emailErrorList.append("<li>" + emailErrors[i] + '</li>');
-                    //             }
-                    //         }
-                    //     } else {
-                    //         emailInput.removeClass("border-danger").addClass("border-success");
-                    //         emailErrorList.empty();
-                    //     }
-                    // }
-                }
-            })
+            form.submit();
         }
     })
 
@@ -225,7 +209,7 @@ $(document).ready(function () {
         })
     })
 
-    passwordInput.on("keyup focusout", function (event) {
+    passwordInput.on("keyup", function (event) {
         if (passwordInput.val() !== "") {
             password2Input.trigger("keyup");
             isPasswordValid = updatePassStrengthBar(event);
@@ -234,11 +218,14 @@ $(document).ready(function () {
             resetPassStrengthBar($("#passwordStrength"));
         }
     })
+        .on("focusout", function (event) {
+            isPasswordValid = updatePassStrengthBar(event);
+        })
 
     password2Input.on("focusin", function () {
         isPassword2Enabled = true
     })
-        .on("keyup", function (event) {
+        .on("keyup focusout", function (event) {
             if (isPassword2Enabled) {
                 let errorList = password2Input.siblings("[data-target=error-list]")
                 errorList.empty()
