@@ -16,20 +16,16 @@
     <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"-->
     <!--          rel="stylesheet">-->
 </head>
-<body>
-
-<header th:include="fragments :: body_header"></header>
-
-<section class="container pt-4 bg-light">
-    <div class="row pl-3">
-        <div class="col-sm-1">
-            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
-        </div>
-        <div class="col-sm-3 pl-1">
-            <h1 class="mb-0" style="color:#80ea6e"> Homie </h1>
-            <h6 class="text-secondary">Your land companion</h6>
-        </div>
-    </div>
+<body class="bg-light">
+<!--<header th:include="fragments :: body_header"></header>-->
+<section class="px-3 pt-4">
+    <!--Logo Navbar-->
+    <header>
+        <!-- Logo band -->
+        <nav th:replace="fragments :: logo_band"></nav>
+        <!-- Navigation Band -->
+        <nav th:replace="fragments :: nav_bar"></nav>
+    </header>
     <!-- Toolbar -->
 
     <div class="row container pt-4">
@@ -40,7 +36,7 @@
             </div>
             <div class="input-group">
                 <div class="input-group-prepend ">
-                    <i class="fa fa-map-marker input-group-text bg-secondary text-white"></i>
+                    <i class="fa fa-map-marker input-group-text bg-secondary text-white py-2"></i>
                 </div>
                 <input class="form-control" id="inputSearchQuery"
                        placeholder="πχ. Ζωγράφος"
