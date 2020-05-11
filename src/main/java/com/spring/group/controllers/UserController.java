@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -57,7 +58,7 @@ public class UserController {
     @PostMapping("/register")
     public ModelAndView registerUser(@Validated({RegistrationValidator.class})
                                      @ModelAttribute("registerUser") RegisterUserDto dto,
-                                     BindingResult bindingResult) {
+                                     BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
@@ -65,8 +66,9 @@ public class UserController {
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("register", "messageDanger", attempt);
         }
-        return new ModelAndView("login", "messageSuccess",
+        redirectAttributes.addFlashAttribute("messageSuccess",
                 "Registered successfully, a confirmation email has been sent to your email address!");
+        return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/confirm-account/{token}")
@@ -94,7 +96,8 @@ public class UserController {
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("changePass", "messageDanger", attempt);
         }
-        return new ModelAndView("index", "messageSuccess", "Password changed successfully!");
+        redirectAttributes.addFlashAttribute("messageSuccess", "Password changed successfully!");
+        return new ModelAndView("redirect:/");
     }
 
     @GetMapping("/forgotPass")
@@ -105,7 +108,7 @@ public class UserController {
     @PostMapping("/forgotPass")
     public ModelAndView resetPass(@Validated({RegistrationEmailValidator.class})
                                   @ModelAttribute("forgotUserPass") RegisterUserDto dto,
-                                  BindingResult bindingResult) {
+                                  BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("forgotPass");
         }
@@ -115,8 +118,9 @@ public class UserController {
                     "messageDanger", "There is no account linked to that email");
         }
         tokenService.createResetEmail(user.get());
-        return new ModelAndView("login", "messageSuccess",
+        redirectAttributes.addFlashAttribute("messageSuccess",
                 "An email to reset your password has been sent to your account!");
+        return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/reset-password/{token}")
@@ -133,13 +137,14 @@ public class UserController {
     @PostMapping("/setNewPass")
     public ModelAndView setNewPass(@Validated({ResetPassValidator.class})
                                    @ModelAttribute("resetUserPass") RegisterUserDto dto,
-                                   BindingResult bindingResult) {
+                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("resetPass");
         }
         User user = userServiceImpl.checkEmail(dto.getEmail()).get();
         user.setPassword(dto.getPassword());
         userServiceImpl.insertUser(user);
-        return new ModelAndView("login", "messageSuccess", "Your new password has been set!");
+        redirectAttributes.addFlashAttribute("messageSuccess", "Your new password has been set!");
+        return new ModelAndView("redirect:/login");
     }
 }

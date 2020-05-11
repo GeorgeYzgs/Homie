@@ -25,6 +25,8 @@ public class Property {
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     private boolean isAvailable;
+    private int views;
+    private int searchValue; // will be 1 to 5 to promote certain properties.
     @Enumerated(EnumType.STRING)
     private Category category;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
@@ -44,6 +46,23 @@ public class Property {
         this.address = address;
         this.category = category;
         this.owner = owner;
+        this.searchValue = 2;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public int getSearchValue() {
+        return searchValue;
+    }
+
+    public void setSearchValue(int searchValue) {
+        this.searchValue = searchValue;
     }
 
     public int getId() {

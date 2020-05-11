@@ -52,10 +52,6 @@ public class PasswordPatternValidator implements ConstraintValidator<ValidPasswo
         List<String> messages = validator.getMessages(result);
         String messageTemplate = String.join(",", messages);
 
-        //entropy below can be used as a js meter ?
-        System.out.println(validator.estimateEntropy(new PasswordData(password)));
-
-
         //disables default error message of the @interface and passes error messages created as a violation.
         context.buildConstraintViolationWithTemplate(messageTemplate)
                 .addConstraintViolation()

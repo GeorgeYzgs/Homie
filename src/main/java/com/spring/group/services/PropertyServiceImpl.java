@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+
 /**
  * @author George.Giazitzis
  */
@@ -21,5 +23,15 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     @Override
     public Property insertProperty(Property property) {
         return propertyRepository.save(property);
+    }
+
+    @Override
+    public Property getPropertyByID(Integer PropertyID) {
+        return propertyRepository.getOne(PropertyID);
+    }
+
+    @Override
+    public Collection<Property> updateProperties(Collection<Property> updatedProperties) {
+        return propertyRepository.saveAll(updatedProperties);
     }
 }
