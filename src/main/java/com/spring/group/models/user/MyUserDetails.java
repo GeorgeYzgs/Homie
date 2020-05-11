@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class MyUserDetails implements OAuth2User, UserDetails {
 
+    private int id;
     private String username;
     private String password;
     private String email;
@@ -24,6 +25,7 @@ public class MyUserDetails implements OAuth2User, UserDetails {
     private Map<String, Object> attributes;
 
     public MyUserDetails(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.isEnabled = user.isEnabled();
@@ -37,6 +39,13 @@ public class MyUserDetails implements OAuth2User, UserDetails {
         this.attributes = attributes;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

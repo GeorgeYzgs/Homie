@@ -5,6 +5,7 @@ import com.spring.group.dto.user.validationgroups.ChangePassValidator;
 import com.spring.group.dto.user.validationgroups.RegistrationEmailValidator;
 import com.spring.group.dto.user.validationgroups.RegistrationValidator;
 import com.spring.group.dto.user.validationgroups.ResetPassValidator;
+import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
 import com.spring.group.services.UserServiceImpl;
@@ -88,11 +89,12 @@ public class UserController {
     @PostMapping("/changePass")
     public ModelAndView changeUserPass(@Validated({ChangePassValidator.class})
                                        @ModelAttribute("changeUserPass") RegisterUserDto dto,
-                                       BindingResult bindingResult, Authentication loggedUser) {
+                                       BindingResult bindingResult, Authentication auth, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("changePass");
         }
-        String attempt = userServiceImpl.changePass(dto, loggedUser.getName());
+        MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
+        String attempt = userServiceImpl.changePass(dto, loggedUser.getId());
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("changePass", "messageDanger", attempt);
         }

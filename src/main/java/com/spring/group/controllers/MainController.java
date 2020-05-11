@@ -1,8 +1,8 @@
 package com.spring.group.controllers;
 
 import com.spring.group.dto.PropertyDTO;
-import com.spring.group.models.property.Photo;
 import com.spring.group.models.property.Property;
+import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
 import com.spring.group.services.AddressServiceImpl;
 import com.spring.group.services.PhotoServiceImpl;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;

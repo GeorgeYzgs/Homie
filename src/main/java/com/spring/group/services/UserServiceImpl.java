@@ -72,8 +72,8 @@ public class UserServiceImpl implements UserServiceInterface {
         return "SUCCESS";
     }
 
-    public String changePass(RegisterUserDto dto, String username) {
-        User user = checkUserName(username).get();
+    public String changePass(RegisterUserDto dto, int userID) {
+        User user = getUserByID(userID);
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
             return "Given password does not match your old password";
         }
