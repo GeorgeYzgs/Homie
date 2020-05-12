@@ -18,18 +18,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 public class MainController {
 
-    private static final Map<Integer, Integer> pageViewCount = new HashMap<>();
+    private static final Map<Integer, Integer> pageViewCount = new ConcurrentHashMap<>();
 
     @Autowired
     AddressServiceImpl addressService;
@@ -50,7 +51,8 @@ public class MainController {
 
     @PostMapping("/list")
     public ModelAndView listProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
-                                     BindingResult bindingResult, Authentication auth) throws IOException {
+                                     BindingResult bindingResult, Authentication auth,
+                                     RedirectAttributes redirectAttributes) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("insert_entry");
         }
@@ -60,9 +62,11 @@ public class MainController {
         Property property = propertyDTO.unWrapProperty(loggedUser);
         propertyService.insertProperty(property);
         photoService.uploadPhotos(propertyDTO.getPhotoCollection(), property);
-        return new ModelAndView("index", "messageSuccess", "Property listed successfuly!");
+        redirectAttributes.addFlashAttribute("messageSuccess", "Property listed successfully!");
+        return new ModelAndView("redirect:/");
     }
 
+    //TODO Create a html page for property views.
     @GetMapping("/view/{id}")
     public ModelAndView viewProperty(@PathVariable Integer id) {
         pageViewCount.merge(id, 1, Integer::sum);

@@ -10,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author George.Giazitzis
@@ -22,7 +19,7 @@ import java.util.List;
 @Transactional
 public class PhotoServiceImpl implements PhotoServiceInterface {
 
-    private static final List<String> ACCEPTED_IMAGE_EXTENSIONS = Arrays.asList("jpg", "png");
+    private static final List<String> ACCEPTED_IMAGE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(".jpg", ".png"));
 
     @Autowired
     private PhotoRepository photoRepository;
@@ -37,7 +34,6 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
         return photoRepository.saveAll(photoAlbum);
     }
 
-
     public void uploadPhotos(Collection<MultipartFile> fileList, Property property) throws IOException {
         List<Photo> photoAlbum = new ArrayList<>();
         for (MultipartFile file : fileList) {
@@ -49,6 +45,6 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
     }
 
     private boolean isValidPhoto(MultipartFile file) {
-        return ACCEPTED_IMAGE_EXTENSIONS.contains(file.getOriginalFilename().split("\\.")[1]);
+        return ACCEPTED_IMAGE_EXTENSIONS.contains(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
     }
 }

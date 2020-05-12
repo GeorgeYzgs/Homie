@@ -32,7 +32,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         return processOAuth2User(oAuth2UserRequest, super.loadUser(oAuth2UserRequest));
     }
 
-    //TODO Allow users to update through social profile.
     private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
         AuthProvider authProvider = AuthProvider.valueOf(userRequest.getClientRegistration()
                 .getRegistrationId().toLowerCase());
@@ -47,7 +46,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
                         " Please use your " + user.getAuthProvider() + " account to login.";
                 throw new InvalidAuthProviderException(msg);
             }
-            return new MyUserDetails(user, userAttributes);
+            return new MyUserDetails(userRepository.save(user), userAttributes);
         }
         user = new User(userInfo.getName(),userInfo.getEmail(), authProvider);
         return new MyUserDetails(userRepository.save(user), userAttributes);

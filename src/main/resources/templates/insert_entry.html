@@ -6,7 +6,7 @@
     <title>Insert New Property</title>
 </head>
 <body>
-
+<header th:include="fragments :: body_header"></header>
 <div class="container">
     <div class="col-sm-6 offset-sm-3 col-12">
         <h3 class="text-center" th:text="#{Sign-in}"></h3>
@@ -23,42 +23,108 @@
                         </div>
                         <form enctype="multipart/form-data" th:action="@{/list}" th:method="post"
                               th:object="${propertyDTO}">
-                            <label th:for="description">Please Provide Description of Property</label>
+
+                            <label th:for="description" th:text="#{insertForm.description}">Please Provide Description
+                                of Property</label>
                             <input th:field="*{description}" type="text"/>
-                            <p th:errors="*{description}" th:if="${#fields.hasErrors('description')}">Invalid
+                            <p class="alert alert-danger" th:errors="*{description}"
+                               th:if="${#fields.hasErrors('description')}" th:text="#{insertFormError.description}">
+                                Invalid
                                 Description</p>
-                            <label th:for="price">Please Provide Renting Price of Property</label>
-                            <input th:field="*{price}" type="number"/>
-                            <p th:errors="*{price}" th:if="${#fields.hasErrors('price')}">Invalid
+
+                            <label th:accept="Integer" th:for="price" th:text="#{insertForm.price}">Please Provide
+                                Renting Price of
+                                Property</label>
+                            <input min="0" step=".01" th:field="*{price}" type="number"/>
+                            <p class="alert alert-danger" th:errors="*{price}"
+                               th:if="${#fields.hasErrors('price')}" th:text="#{insertFormError.price}">Invalid
                                 value</p>
-                            <label th:for="category">Please Provide Category</label>
+
+                            <label th:for="category" th:text="#{insertForm.category}">Please Provide Category</label>
                             <select name="category">
-                                <option th:each="category : ${T(com.spring.group.models.property.Category).values() }"
-                                        th:text="${category}" th:value="${category}"></option>
+                                <option th:each="ctgr : ${T(com.spring.group.models.property.Category).values() }"
+                                        th:text="#{'category.'+${ctgr}}" th:value="${ctgr}"></option>
                             </select>
-                            <label th:for="address_street">Please Provide street</label>
+                            <p class="alert alert-danger" th:errors="*{category}"
+                               th:if="${#fields.hasErrors('category')}" th:text="#{insertFormError.category}">Invalid
+                                value</p>
+
+                            <label th:for="numberOfRooms" th:text="#{insertForm.numberOfRooms}">Please Provide Number of
+                                Rooms of Property
+                            </label>
+                            <input min="0" th:field="*{numberOfRooms}" type="number"/>
+                            <p class="alert alert-danger" th:errors="*{numberOfRooms}"
+                               th:if="${#fields.hasErrors('numberOfRooms')}" th:text="#{insertFormError.numberOfRooms}">
+                                Invalid
+                                Description</p>
+
+                            <label th:for="area" th:text="#{insertForm.area}">Please Provide Area
+                                of Property</label>
+                            <input min="0" th:field="*{area}" type="number"/>
+                            <p class="alert alert-danger" th:errors="*{area}"
+                               th:if="${#fields.hasErrors('area')}" th:text="#{insertFormError.area}">Invalid
+                                Description</p>
+
+
+                            <label th:for="floor" th:text="#{insertForm.floor}">Please Provide Area
+                                of Property</label>
+                            <input min="0" th:field="*{floor}" type="number"/>
+                            <p class="alert alert-danger" th:errors="*{floor}"
+                               th:if="${#fields.hasErrors('floor')}" th:text="#{insertFormError.floor}">Invalid
+                                Description</p>
+
+
+                            <label th:for="heating" th:text="#{insertForm.heating}">Please Provide heating</label>
+                            <select name="heating">
+                                <option th:each="htng : ${T(com.spring.group.models.property.HeatingType).values() }"
+                                        th:text="#{'heating.'+${htng}}" th:value="${htng}"></option>
+                            </select>
+                            <p class="alert alert-danger" th:errors="*{heating}"
+                               th:if="${#fields.hasErrors('heating')}" th:text="#{insertFormError.heating}">Invalid
+                                value</p>
+
+                            <label th:for="address_street" th:text="#{insertForm.street}">Please Provide street</label>
                             <input th:field="*{address_street}" type="text"/>
-                            <p th:errors="*{address_street}" th:if="${#fields.hasErrors('address_street')}">Invalid
-                                value</p>
-                            <label th:for="address_number">Please Provide street number</label>
+                            <p class="alert alert-danger" th:errors="*{address_street}"
+                               th:if="${#fields.hasErrors('address_street')}" th:text="#{insertFormError.street}">
+                                Invalid
+                                value </p>
+
+                            <label th:for="address_number" th:text="#{insertForm.streetnumber}">Please Provide street
+                                number</label>
                             <input th:field="*{address_number}" type="number"/>
-                            <p th:errors="*{address_number}" th:if="${#fields.hasErrors('address_number')}">Invalid
-                                value</p>
-                            <label th:for="address_city">Please Provide city</label>
+                            <p class="alert alert-danger" th:errors="*{address_number}"
+                               th:if="${#fields.hasErrors('address_number')}" th:text="#{insertFormError.streetnumber}">
+                                Invalid
+                                value </p>
+
+                            <label th:for="address_city" th:text="#{insertForm.city}">Please Provide city</label>
                             <input th:field="*{address_city}" type="text"/>
-                            <p th:errors="*{address_city}" th:if="${#fields.hasErrors('address_city')}">Invalid
-                                value</p>
-                            <label th:for="address_state">Please Provide state</label>
+                            <p class="alert alert-danger" th:errors="*{address_city}"
+                               th:if="${#fields.hasErrors('address_city')}" th:text="#{insertFormError.city}">Invalid
+                                value </p>
+
+                            <label th:for="address_state" th:text="#{insertForm.state}">Please Provide state</label>
                             <input th:field="*{address_state}" type="text"/>
-                            <p th:errors="*{address_state}" th:if="${#fields.hasErrors('address_state')}">Invalid
-                                value</p>
-                            <label th:for="address_zipCode">Please Provide zip code</label>
-                            <input th:field="*{address_zipCode}" type="number"/>
-                            <p th:errors="*{address_zipCode}" th:if="${#fields.hasErrors('address_zipCode')}">Invalid
-                                value</p>
-                            <label th:for="photoCollection">Please Provide Photos</label>
-                            <input multiple="multiple" name="multipartFilesDocument" th:field="*{photoCollection}"
-                                   type="file" value="multipartFilesDocument"/>
+                            <p class="alert alert-danger" th:errors="*{address_state}"
+                               th:if="${#fields.hasErrors('address_state')}"
+                               th:text="#{insertFormError.state}">Invalid
+                                value </p>
+
+                            <label th:for="address_zipCode" th:text="#{insertForm.zipcode}">Please Provide zip
+                                code</label>
+                            <input min="0" th:field="*{address_zipCode}" type="number"/>
+                            <p class="alert alert-danger" th:errors="*{address_zipCode}"
+                               th:if="${#fields.hasErrors('address_zipCode')}" th:text="#{insertFormError.zipcode}">
+                                Invalid value </p>
+
+                            <label th:for="photoCollection" th:text="#{insertForm.photo}">Please Provide Photos</label>
+                            <input th:accept="'image/*'" th:field="*{photoCollection}" th:multiple="multiple"
+                                   th:name="multipartFilesDocument" th:type="file" th:value="multipartFilesDocument"/>
+                            <p class="alert alert-danger" th:errors="*{photoCollection}"
+                               th:if="${#fields.hasErrors('photoCollection')}" th:text="#{insertFormError.photo}">
+                                Invalid value </p>
+
                             <input type="submit"/>
                         </form>
                     </div>
@@ -67,10 +133,8 @@
         </div>
     </div>
 </div>
-
 <footer th:include="fragments :: body_footer"></footer>
 <th:block th:include="fragments :: scripts">
 </th:block>
-
 </body>
 </html>

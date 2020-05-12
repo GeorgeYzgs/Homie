@@ -59,7 +59,7 @@ public class User {
         this.userRole = UserRole.USER;
         this.creationDate = Instant.now();
         this.isNonLocked = true;
-        this.authProvider = AuthProvider.local;
+        this.authProvider = AuthProvider.Homie;
     }
 
     public User(String username, String email, AuthProvider authProvider) {

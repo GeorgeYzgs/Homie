@@ -33,18 +33,35 @@ public class Property {
     private Collection<Photo> photoCollection;
     @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
+
+    @Column
+    private int numberOfRooms;
+
+    @Column
+    private int area;
+
+    @Column
+    private int floor;
+
+    @Enumerated(EnumType.STRING)
+    private HeatingType heating;
+
     @ManyToOne
     private User owner;
 
     public Property() {
     }
 
-    public Property(String description, int price, Address address, Category category, User owner) {
+    public Property(String description, int price, Address address, Category category, int numberOfRooms, int area, int floor, HeatingType heating, User owner) {
         this.description = description;
         this.price = price;
         this.isAvailable = true;
         this.address = address;
         this.category = category;
+        this.numberOfRooms = numberOfRooms;
+        this.area = area;
+        this.floor = floor;
+        this.heating = heating;
         this.owner = owner;
         this.searchValue = 2;
     }
@@ -135,5 +152,37 @@ public class Property {
 
     public void setRentalCollection(Collection<Rental> rentalCollection) {
         this.rentalCollection = rentalCollection;
+    }
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
+
+    public HeatingType getHeating() {
+        return heating;
+    }
+
+    public void setHeating(HeatingType heating) {
+        this.heating = heating;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
     }
 }

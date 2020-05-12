@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ConfirmationToken {
 
     @Transient
-    private static final int EXPIRATION_HOURS = 24;
+    private static final Integer EXPIRATION_HOURS = 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,7 @@ package com.spring.group.dto;
 
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Category;
+import com.spring.group.models.property.HeatingType;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
@@ -21,20 +22,24 @@ public class PropertyDTO {
     private String address_city;
     private String address_state;
     private int address_zipCode;
+    private int numberOfRooms;
 
+    private int area;
+    private int floor;
+    private HeatingType heating;
     private Category category;
     private Collection<MultipartFile> photoCollection;
 
 
     private Collection<Rental> rentalCollection;
-    private User owner;
+
 
     public PropertyDTO() {
     }
 
     public Property unWrapProperty(User owner) {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
-        return new Property(description, price, tempAddress, category, owner);
+        return new Property(description, price, tempAddress, category, numberOfRooms, area, floor, heating, owner);
     }
 
     public Address unWrapAddress() {
@@ -106,6 +111,31 @@ public class PropertyDTO {
         this.category = category;
     }
 
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
+
+    public HeatingType getHeating() {
+        return heating;
+    }
+
+    public void setHeating(HeatingType heating) {
+        this.heating = heating;
+    }
+
     public Collection<MultipartFile> getPhotoCollection() {
         return photoCollection;
     }
@@ -122,11 +152,11 @@ public class PropertyDTO {
         this.rentalCollection = rentalCollection;
     }
 
-    public User getOwner() {
-        return owner;
+    public int getFloor() {
+        return floor;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setFloor(int floor) {
+        this.floor = floor;
     }
 }

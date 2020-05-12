@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ResetPassToken {
 
     @Transient
-    private static final int EXPIRATION_HOURS = 1;
+    private static final Integer EXPIRATION_HOURS = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
