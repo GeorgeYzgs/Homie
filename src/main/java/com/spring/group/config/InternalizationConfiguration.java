@@ -14,6 +14,8 @@ import java.util.Locale;
 public class InternalizationConfiguration implements WebMvcConfigurer {
 
     //    TODO Changing language requires ?language={lang_code} eg 'el'. Implement it in fromt.
+    //      Spring Security takes header accepted language and not url argument into account for returning messages
+
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();

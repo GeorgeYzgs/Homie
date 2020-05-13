@@ -4,27 +4,31 @@
       lang="en">
 
 <head th:fragment="headerfiles">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
+    <title th:include=":: #pageTitle">Layout Generic Title </title>
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!--       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"-->
     <!--          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap_customization.css}">-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/search-style.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
           rel="stylesheet">
+
 
 </head>
 <title>Template Fragments</title>
 <body>
 
 <nav class="pl-3" th:fragment="logo_band">
-    <div class="col-sm-3 col-11 row px-0">
-        <div class="col-sm-4 col-4 pr-0">
+    <div class="col-xl-3 col-lg-4 col-md-7 col-sm-6 col-11 row px-0">
+        <div class="col-xl-4 col-lg-4 col-md-3 col-sm-4 col-4 pr-0">
             <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
         </div>
-        <div class="col-sm-8 col-8 pl-0">
+        <div class="col-xl-8 col-lg-8 col-md-9 col-sm-8 col-8 pl-0">
             <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
             <h6 class="text-secondary">Your land companion</h6>
         </div>
@@ -32,7 +36,7 @@
     </div>
 </nav>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="nav_bar">
+<nav class="navbar navbar-expand-sm navbar-light bg-light" th:fragment="nav_bar">
     <button aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"
             class="navbar-toggler"
             data-target="#navbarNavDropdown" data-toggle="collapse" type="button">
@@ -62,7 +66,84 @@
             </li>
         </ul>
     </div>
+    <div sec:authorize="isAnonymous()">
+        <a class="text-secondary text-decoration-none" th:href="@{/login}">Login</a>
+        <!--TO DO - GG to check these links -->
+        <a class="text-secondary text-decoration-none pl-4" th:href="@{/register}">Register</a>
+        <!--TO DO - GG to check these links -->
+    </div>
+    <div class="btn-group" sec:authorize="isAuthenticated()">
+        <button aria-expanded="false" aria-haspopup="true" class="btn btn-green btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                type="button">
+            <span class="text-white"
+                  sec:authentication="name">User</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" th:href="@{/changePass}" th:text="#{Change.password}">Change Password</a>
+            <a class="dropdown-item" href="#">Control Panel</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+            <a class="dropdown-item" th:href="@{/logout}" th:text="#{Logout}">Logout</a>
+        </div>
+    </div>
 </nav>
+
+
+<div th:fragment="search_bar">
+    <div class="row justify-content-center py-3 px-sm-4">
+        <div class="col-12">
+            <form>
+                <div class="row pb-sm-2">
+                    <div class="col-xl-8 offset-xl-1 col-lg-8 offset-lg-1 col-md-8 offset-md-1 col-sm-9 col-10">
+                        <div class="input-group">
+                            <span class="input-group-prepend ">
+                                <i class="fa fa-map-marker input-group-text bg-secondary text-white"></i>
+                            </span>
+                            <input class="form-control" id="inputSearchQuery"
+                                   placeholder="Εισάγετε μια τοποθεσία, πχ. Ζωγράφος"
+                                   type="text">
+                        </div>
+                    </div>
+                    <button class="btn bg-green text-white font-weight-bold" id="searchButton">
+                        <i class="fa fa-search"></i> <span class="button-text" th:text="#{Search}">
+                        Search</span>
+                    </button>
+                </div>
+
+                <div class="row pb-md-2">
+                    <div class="col-xl-8 offset-xl-1 col-lg-8 offset-lg-1 col-md-8 offset-md-1 col-sm-9 col-12">
+                        <div class="input-group collapse" id="collapseExample">
+                            <span class="input-group-prepend">
+                                <span class="input-group-text bg-secondary text-white">&euro;</span>
+                            </span>
+                            <input class="form-control" id="inputStartingPrice" placeholder="Από"
+                                   type="number">
+                            <input class="form-control" id="inputEndingPrice" placeholder="Έως"
+                                   type="number">
+                            <span class="input-group-prepend pl-3">
+                                <span class="input-group-text bg-secondary text-white">&#x33A1;</span>
+                            </span>
+                            <input class="form-control" id="inputStartingArea" placeholder="Από"
+                                   type="number">
+                            <input class="form-control" id="inputEndingArea" placeholder="Έως"
+                                   type="number">
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
+                    </div>
+                    <a aria-controls="collapseExample" aria-expanded="false" class="text-secondary text-decoration-none"
+                       data-target="#collapseExample" data-toggle="collapse" th:text="#{Advanced.search}"
+                       type="button">
+                    </a>
+                </div>
+        </div>
+        <div class="p-2 row" id="cityTextArea">
+        </div>
+        </form>
+    </div>
+</div>
+</div>
 
 <header th:fragment="body_header" class="container">
 
@@ -88,7 +169,7 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
             <span sec:authorize="isAuthenticated()" sec:authentication="name"
-                  class="navbar-brand">Kyriakidis Kyriakos</span>
+                  class="navbar-brand">User</span>
 
             <span sec:authorize="isAnonymous()">
                 <a class="navbar-brand" th:href="@{/login}">Login</a>   <!--TO DO - GG to check these links -->

@@ -1,15 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
-    <title th:text="#{Register.page.title}"></title>
-    <!--    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"-->
-    <!--          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">-->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
+    <title id="pageTitle" th:text="#{Register.page.title}">Register</title>
     <meta th:content="#{Password.must.contain}" th:name="password_must_contain">
     <meta th:content="#{Password.length}" th:name="password_length">
     <meta th:content="#{Password.digits}" th:name="password_digits">
@@ -65,15 +58,21 @@
                                             <i class="fa fa-eye input-group-text bg-light pt-2 btn"></i>
                                         </div>
                                     </div>
-                                    <ul class="text-danger" th:each="error: ${#fields.errors('password')}">
-                                        <li th:each="message : ${error.split(',')}">
-                                            <p class="error-message" th:text="${message}"></p>
-                                        </li>
-                                    </ul>
                                     <div class="progress">
                                         <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0"
                                              class="progress-bar" id="passwordStrength" role="progressbar"></div>
                                     </div>
+                                    <ul class="text-danger list-unstyled" data-target="error-list"
+                                        th:each="error: ${#fields.errors('password')}">
+                                        <li th:each="message :${error.split(',')}">
+                                            <span th:text="${message}"></span>
+                                        </li>
+                                    </ul>
+                                    <!--                                    <ul class="text-danger list-unstyled" th:each="error: ${#fields.errors('password')}">-->
+                                    <!--                                        <li th:each="message : ${error.split(',')}">-->
+                                    <!--                                            <p class="error-message" th:text="${message}"></p>-->
+                                    <!--                                        </li>-->
+                                    <!--                                    </ul>-->
 
                                     <ul class="text-danger list-unstyled" data-target="error-list"
                                         id="passwordErrors"></ul>
@@ -88,13 +87,12 @@
                                     <ul class="text-danger list-unstyled" data-target="error-list"
                                         id="password2Errors"></ul>
                                 </div>
+                                <div class="text-center">
+                                    <button class="btn btn-green text-white text-center" id="registerButton"
+                                            th:text="#{Register}" type="submit"></button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="text-center">
-                            <button class="btn btn-green text-white text-center" id="registerButton"
-                                    th:text="#{Register}" type="submit"></button>
-                        </div>
-
-                        </form>
                     </div>
                 </div>
             </div>

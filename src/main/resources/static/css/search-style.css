@@ -199,4 +199,10 @@
 .btn-google:hover {
     background-color: #D5D8DB;
 }
+
+@media screen and (max-width: 450px) {
+    .button-text {
+        display: none;
+    }
+}
  

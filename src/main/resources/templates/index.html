@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
+    <title id="pageTitle" th:utext="#{Home.page.title}">Home</title>
+    <link rel="stylesheet" th:href="@{/css/carousel.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+
 </head>
-<body>
-<div class="alert alert-success" th:if="${messageSuccess}">
-    <p class="text text-center" th:text="${messageSuccess}"></p>
+<body class="bg-light">
+
+<section class="px-3 pt-4">
+    <!-- Logo Band    -->
+    <nav th:replace="fragments :: logo_band"></nav>
+    <!-- Nav bar -->
+    <nav th:replace="fragments :: nav_bar"></nav>
+    <!-- Main body -->
+    <main class="bg-light pt-5" id="propertiesParentMain">
+        <!-- Search bar -->
+        <div class="bg-light" th:include="fragments :: search_bar"></div>
+        <div class="alert alert-success" th:if="${messageSuccess}">
+            <p class="text text-center" th:text="${messageSuccess}"></p>
+        </div>
+        <section class="h-25 " th:include="UtilFragments :: property_carousel"></section>
+    </main>
+</section>
+
+<a th:replace="UtilFragments :: chat_button"></a>
+<div th:replace="UtilFragments :: chat_popup">
 </div>
-<div class="container pt-4">
-    <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-        <button class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
-    </form>
-    <a th:href="@{/changePass}">Change Password</a>
-</div>
+
+
+<div th:include="fragments :: scripts" th:remove="tag"></div>
+<script th:src="@{/js/carousel.js}"></script>
+<script th:src="@{/js/chat.js}"></script>
 </body>
 </html>

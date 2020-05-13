@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Change Password</title>
-    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+<head th:insert="fragments :: headerfiles">
+    <title id="pageTitle" th:text="#{Reset.password.page.title}">Reset password</title>
 </head>
-<body>
-<div class="container pt-4">
-    <h1 class="text-center">Reset Your Password</h1>
-    <div class="row justify-content-md-center">
-        <div class="col-4">
-            <h4 class="text-center pt-2">Enter your email below</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-danger" th:if="${messageDanger}">
-                        <p class="text text-center" th:text="${messageDanger}"></p>
-                    </div>
-                    <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
-                        <fieldset>
-                            <div class="form-group">
-                                <label class="form-control-label" for="email">Email</label>
-                                <input class="form-control" id="email" th:field="*{email}" type="text"/>
-                                <div class="text text-danger" th:errors="*{email}"
-                                     th:if="${#fields.hasErrors('email')}"></div>
+<body class="bg-light">
+<section class="px-3 pt-4">
+    <!-- Logo Band -->
+    <nav th:replace="fragments :: logo_band"></nav>
+    <!-- Main body -->
+    <main class="bg-light pt-2" id="propertiesParentMain">
+        <div class="col-sm-6 offset-sm-3 col-12">
+            <h3 class="text-center" th:text="#{Reset.password}"></h3>
+            <div class="row">
+                <div class="col-sm-8 offset-sm-2 col-12">
+                    <p class="text-center text-secondary" th:text="#{Insert.email}"></p>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="alert alert-danger" th:if="${messageDanger}">
+                                <p class="text text-center" th:text="${messageDanger}"></p>
                             </div>
-                            <button class="btn btn-primary" type="submit">Reset Password</button>
-                        </fieldset>
-                    </form>
+                            <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="form-control-label text-secondary" for="email">Email</label>
+                                        <input class="form-control" id="email" th:field="*{email}" type="text"/>
+                                        <div class="text text-danger" th:errors="*{email}"
+                                             th:if="${#fields.hasErrors('email')}"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button class="btn btn-green text-white text-center" th:text="#{Submit}"
+                                                type="submit">Reset Password
+                                        </button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        </div>
+    </main>
+</section>
 </body>
 </html>

@@ -165,20 +165,6 @@ $(document).ready(function () {
         inputField.toggleClass("eye-open eye-closed");
     })
 
-    submitButton.on('click', function (event) {
-        event.preventDefault();
-        let isFormValid = isUsernameValid && isEmailValid && isPasswordValid && arePasswordMatched;
-        if (!isFormValid) {
-            $("#registerButton").effect("shake", {distance: 10, times: 2}, 400);
-            usernameInput.focusout();
-            emailInput.focusout();
-            passwordInput.focusout();
-            password2Input.focusout();
-        } else {
-            form.submit();
-        }
-    })
-
     usernameInput.on("focusout", function (event) {
         $.ajax({
             type: "POST",
@@ -243,5 +229,20 @@ $(document).ready(function () {
                 }
             }
         })
+
+
+    submitButton.on('click', function (event) {
+        event.preventDefault();
+        let isFormValid = isUsernameValid && isEmailValid && isPasswordValid && arePasswordMatched;
+        if (!isFormValid) {
+            $("#registerButton").effect("shake", {distance: 10, times: 2}, 400);
+            usernameInput.focusout();
+            emailInput.focusout();
+            passwordInput.focusout();
+            password2Input.focusout();
+        } else {
+            form.submit();
+        }
+    })
 
 });
