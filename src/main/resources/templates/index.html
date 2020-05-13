@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>index</title>
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
@@ -17,6 +18,8 @@
     <a th:href="@{/changePass}">Change Password</a>
     <br>
     <a th:href="@{/list}">List New Property</a>
+    <div th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
+    <div sec:authorize-url="/mod/**">   <a th:href="@{/mod/users}">User List</a></div>
 </div>
 </body>
 </html>

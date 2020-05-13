@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 public class RegisterValidatorController {
 
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     //    Method used to merge two lists into one. It is used in case the Collectors.toMap function encounters multiple
     //    occurrences of the same key. It adds all values to the key that they correspond.

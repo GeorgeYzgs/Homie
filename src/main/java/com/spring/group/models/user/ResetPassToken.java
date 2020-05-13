@@ -36,6 +36,8 @@ public class ResetPassToken {
     public ResetPassToken() {
     }
 
+    public static Integer getExpirationHours() { return EXPIRATION_HOURS; }
+
     public int getId() {
         return id;
     }

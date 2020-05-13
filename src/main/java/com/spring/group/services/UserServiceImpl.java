@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -50,6 +51,9 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Override
     public User getUserByID(Integer userID) { return userRepository.getOne(userID); }
+
+    @Override
+    public Collection<User> getUserList() { return userRepository.findAll(); }
 
     public boolean isUsernamePresent(String username) {
         return userRepository.findByUsername(username).isPresent();

@@ -51,8 +51,9 @@ public class TokenService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setFrom("homieafdemp@gmail.com");
-        mailMessage.setText("To confirm your account, please click here : "
-                + "http://localhost:8080/GroupProject/confirm-account/" + confirmationToken.getConfirmationToken());
+        mailMessage.setText("To confirm your account, please click here: "
+                + "http://localhost:8080/GroupProject/confirm-account/" + confirmationToken.getConfirmationToken()
+                + "\nThis token expires in " + ConfirmationToken.getExpirationHours() + " hour(s)");
         sendEmail(mailMessage);
     }
 
@@ -63,8 +64,9 @@ public class TokenService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Reset Password!");
         mailMessage.setFrom("homieafdemp@gmail.com");
-        mailMessage.setText("To reset your password, please click here : "
-                + "http://localhost:8080/GroupProject/reset-password/" + resetPassToken.getResetPassToken());
+        mailMessage.setText("To reset your password, please click here: "
+                + "http://localhost:8080/GroupProject/reset-password/" + resetPassToken.getResetPassToken()
+                + "\nThis token expires in " + ResetPassToken.getExpirationHours() + " hour(s)");
         sendEmail(mailMessage);
     }
 

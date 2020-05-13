@@ -42,9 +42,7 @@ public class UserController {
 
     //TODO Merge index with search html
     @GetMapping("/")
-    public String index() {
-        return "index";
-    }
+    public String index() { return "index"; }
 
     @GetMapping("/search")
     public String getSearchPage() {

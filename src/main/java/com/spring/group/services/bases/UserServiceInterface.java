@@ -2,6 +2,7 @@ package com.spring.group.services.bases;
 
 import com.spring.group.models.user.User;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -18,4 +19,6 @@ public interface UserServiceInterface {
     Optional<User> checkEmail(String email);
 
     User getUserByID(Integer userID);
+
+    Collection<User> getUserList();
 }

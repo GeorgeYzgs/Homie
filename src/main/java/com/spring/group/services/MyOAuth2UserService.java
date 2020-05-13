@@ -28,8 +28,8 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
     private UserRepository userRepository;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) {
-        return processOAuth2User(oAuth2UserRequest, super.loadUser(oAuth2UserRequest));
+    public OAuth2User loadUser(OAuth2UserRequest request) {
+        return processOAuth2User(request, super.loadUser(request));
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
@@ -41,14 +41,22 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
-            if (!user.getAuthProvider().equals(authProvider)) {
-                String msg = "You are signed up with " + user.getAuthProvider() + " account." +
-                        " Please use your " + user.getAuthProvider() + " account to login.";
-                throw new InvalidAuthProviderException(msg);
-            }
-            return new MyUserDetails(userRepository.save(user), userAttributes);
+            authAttempt(user, authProvider);
+            return new MyUserDetails(user, userAttributes);
         }
-        user = new User(userInfo.getName(),userInfo.getEmail(), authProvider);
+        user = new User(userInfo.getName(), userInfo.getEmail(), authProvider);
         return new MyUserDetails(userRepository.save(user), userAttributes);
+    }
+
+    private void authAttempt(User user, AuthProvider authProvider) {
+        if (!user.getAuthProvider().equals(authProvider)) {
+            String msg = "You are signed up with " + user.getAuthProvider() + " account." +
+                    " Please use your " + user.getAuthProvider() + " account to login.";
+            throw new InvalidAuthProviderException(msg);
+        }
+        if (!user.isNonLocked()) {
+            String msg = "This account has been banned";
+            throw new InvalidAuthProviderException(msg);
+        }
     }
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
+    <title th:text="#{Register.page.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<section class="px-3 pt-4">
+    <!-- Logo Band    -->
+    <nav th:replace="fragments :: logo_band"></nav>
+
+    <!-- Main body -->
+    <main class="bg-light pt-2" id="propertiesParentMain">
+        <div class="container">
+            <div class="table-responsive table-hover">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Creation Date</th>
+                        <th>Enabled</th>
+                        <th>Active</th>
+                        <th>Role</th>
+                    </tr>
+                    <tr th:each="user : ${userList}">
+                        <td th:text="${user.id}"></td>
+                        <td><a th:href="@{'/mod/user/'+ ${user.id}}" th:text="${user.username}"/></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${#temporals.format(user.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                        <td th:text="${user.enabled}"></td>
+                        <td th:text="${user.nonLocked}"></td>
+                        <td th:text="${user.userRole}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+</section>
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/js/jquery_ui-1.12.1.min.js}"></script>
+</body>
+</html>

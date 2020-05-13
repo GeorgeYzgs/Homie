@@ -19,6 +19,9 @@ import java.util.*;
 @Transactional
 public class PhotoServiceImpl implements PhotoServiceInterface {
 
+    @Autowired
+    private AmazonWebService amazonWebService;
+
     private static final List<String> ACCEPTED_IMAGE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(".jpg", ".png"));
 
     @Autowired
@@ -38,7 +41,7 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
         List<Photo> photoAlbum = new ArrayList<>();
         for (MultipartFile file : fileList) {
             if (isValidPhoto(file)) {
-                photoAlbum.add(new Photo(file.getBytes(), property));
+                photoAlbum.add(new Photo(amazonWebService.uploadFile(file, property.getId()), property));
             }
         }
         insertPhotoAlbum(photoAlbum);

@@ -16,7 +16,7 @@ import java.util.List;
 public class AutocompleteController {
 
     @Autowired
-    CityServiceInterface cityService;
+    private CityServiceInterface cityService;
 
     @GetMapping("/city/{query}")
     public List<AutocompleteResponse> getCityAutocomplete(@PathVariable String query) {

@@ -12,16 +12,15 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_id")
     private int id;
-    @Lob
-    private byte[] image;
+    private String imageUrl;
     @ManyToOne()
     private Property property;
 
     public Photo() {
     }
 
-    public Photo(byte[] image, Property property) {
-        this.image = image;
+    public Photo(String imageUrl, Property property) {
+        this.imageUrl = imageUrl;
         this.property = property;
     }
 
@@ -29,9 +28,9 @@ public class Photo {
 
     public void setId(int id) { this.id = id; }
 
-    public byte[] getImage() { return image; }
+    public String getImageUrl() { return imageUrl; }
 
-    public void setImage(byte[] image) { this.image = image; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public Property getProperty() { return property; }
 

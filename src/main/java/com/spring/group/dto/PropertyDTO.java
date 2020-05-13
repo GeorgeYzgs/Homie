@@ -128,9 +128,7 @@ public class PropertyDTO {
         this.area = area;
     }
 
-    public HeatingType getHeating() {
-        return heating;
-    }
+    public HeatingType getHeating() { return heating; }
 
     public void setHeating(HeatingType heating) {
         this.heating = heating;

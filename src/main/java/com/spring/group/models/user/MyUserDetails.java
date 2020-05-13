@@ -23,6 +23,7 @@ public class MyUserDetails implements OAuth2User, UserDetails {
     private boolean isNonLocked;
     private List<GrantedAuthority> authorities;
     private Map<String, Object> attributes;
+    private boolean oauth2;
 
     public MyUserDetails(User user) {
         this.id = user.getId();
@@ -37,7 +38,12 @@ public class MyUserDetails implements OAuth2User, UserDetails {
     public MyUserDetails(User user, Map<String, Object> attributes) {
         this(user);
         this.attributes = attributes;
+        this.oauth2 = true;
     }
+
+    public boolean isOauth2() { return oauth2; }
+
+    public void setOauth2(boolean oauth2) { this.oauth2 = oauth2; }
 
     public int getId() {
         return id;

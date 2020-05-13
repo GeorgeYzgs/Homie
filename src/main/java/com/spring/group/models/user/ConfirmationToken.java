@@ -35,6 +35,8 @@ public class ConfirmationToken {
     public ConfirmationToken() {
     }
 
+    public static Integer getExpirationHours() { return EXPIRATION_HOURS; }
+
     public int getId() {
         return id;
     }

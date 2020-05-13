@@ -4,10 +4,10 @@ import com.spring.group.dto.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
-import com.spring.group.services.AddressServiceImpl;
 import com.spring.group.services.PhotoServiceImpl;
-import com.spring.group.services.PropertyServiceImpl;
-import com.spring.group.services.UserServiceImpl;
+import com.spring.group.services.bases.AddressServiceInterface;
+import com.spring.group.services.bases.PropertyServiceInterface;
+import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
@@ -33,16 +33,16 @@ public class MainController {
     private static final Map<Integer, Integer> pageViewCount = new ConcurrentHashMap<>();
 
     @Autowired
-    AddressServiceImpl addressService;
+    private AddressServiceInterface addressService;
 
     @Autowired
-    PropertyServiceImpl propertyService;
+    private PropertyServiceInterface propertyService;
 
     @Autowired
-    PhotoServiceImpl photoService;
+    private PhotoServiceImpl photoServiceImpl;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserServiceInterface userService;
 
     @GetMapping("/list")
     public ModelAndView list() {
@@ -57,11 +57,11 @@ public class MainController {
             return new ModelAndView("insert_entry");
         }
         MyUserDetails user = (MyUserDetails) auth.getPrincipal();
-        User loggedUser = userServiceImpl.getUserByID(user.getId());
+        User loggedUser = userService.getUserByID(user.getId());
         addressService.insertAddress(propertyDTO.unWrapAddress());
         Property property = propertyDTO.unWrapProperty(loggedUser);
         propertyService.insertProperty(property);
-        photoService.uploadPhotos(propertyDTO.getPhotoCollection(), property);
+        photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
         redirectAttributes.addFlashAttribute("messageSuccess", "Property listed successfully!");
         return new ModelAndView("redirect:/");
     }
