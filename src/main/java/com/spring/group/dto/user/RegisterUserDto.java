@@ -15,14 +15,14 @@ import javax.validation.constraints.Size;
 @PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPassMatchValidator.class})
 public class RegisterUserDto {
 
-    @NotBlank(groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Not.blank}")
+    @NotBlank(groups = {RegistrationUsernameValidator.class}, message = "{Not.blank}")
     @Size(min = 4, max = 25, groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Size}")
     private String username;
     @ValidEmail(groups = {RegistrationValidator.class, RegistrationEmailValidator.class})
     private String email;
     @ValidPassword(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class})
-    @NotBlank(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class}, message = "{Not.blank}")
-    @Size(min = 4, max = 25, groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPasswordValidator.class}, message = "{Size}")
+    @NotBlank(groups = {ChangePassValidator.class, ResetPassValidator.class}, message = "{Not.blank}")
+    @Size(min = 4, max = 25, groups = {ChangePassValidator.class, ResetPassValidator.class, RegistrationPasswordValidator.class}, message = "{Size}")
     private String password;
     private String password2;
     private String oldPassword;
