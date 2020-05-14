@@ -44,7 +44,10 @@ public class Property {
     private int floor;
 
     @Enumerated(EnumType.STRING)
-    private HeatingType heating;
+    private HeatingType heatingType;
+
+    @Enumerated(EnumType.STRING)
+    private HeatingFuel heatingFuel;
 
     @ManyToOne
     private User owner;
@@ -52,7 +55,17 @@ public class Property {
     public Property() {
     }
 
-    public Property(String description, int price, Address address, Category category, int numberOfRooms, int area, int floor, HeatingType heating, User owner) {
+    public Property(String description,
+                    int price,
+                    Address address,
+                    Category category,
+                    int numberOfRooms,
+                    int area,
+                    int floor,
+                    HeatingType heatingType,
+                    HeatingFuel heatingFuel,
+                    User owner) {
+
         this.description = description;
         this.price = price;
         this.isAvailable = true;
@@ -61,7 +74,8 @@ public class Property {
         this.numberOfRooms = numberOfRooms;
         this.area = area;
         this.floor = floor;
-        this.heating = heating;
+        this.heatingType = heatingType;
+        this.heatingFuel = heatingFuel;
         this.owner = owner;
         this.searchValue = 2;
     }
@@ -170,12 +184,20 @@ public class Property {
         this.area = area;
     }
 
-    public HeatingType getHeating() {
-        return heating;
+    public HeatingType getHeatingType() {
+        return heatingType;
     }
 
-    public void setHeating(HeatingType heating) {
-        this.heating = heating;
+    public void setHeatingType(HeatingType heatingType) {
+        this.heatingType = heatingType;
+    }
+
+    public HeatingFuel getHeatingFuel() {
+        return heatingFuel;
+    }
+
+    public void setHeatingFuel(HeatingFuel heatingFuel) {
+        this.heatingFuel = heatingFuel;
     }
 
     public int getFloor() {

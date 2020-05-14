@@ -5,7 +5,6 @@ import com.spring.group.models.property.Property;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
 import com.spring.group.services.PhotoServiceImpl;
-import com.spring.group.services.bases.AddressServiceInterface;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,6 @@ public class MainController {
     private static final Map<Integer, Integer> pageViewCount = new ConcurrentHashMap<>();
 
     @Autowired
-    private AddressServiceInterface addressService;
-
-    @Autowired
     private PropertyServiceInterface propertyService;
 
     @Autowired
@@ -58,7 +54,6 @@ public class MainController {
         }
         MyUserDetails user = (MyUserDetails) auth.getPrincipal();
         User loggedUser = userService.getUserByID(user.getId());
-        addressService.insertAddress(propertyDTO.unWrapAddress());
         Property property = propertyDTO.unWrapProperty(loggedUser);
         propertyService.insertProperty(property);
         photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);

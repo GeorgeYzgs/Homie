@@ -2,31 +2,56 @@ package com.spring.group.dto;
 
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Category;
+import com.spring.group.models.property.HeatingFuel;
 import com.spring.group.models.property.HeatingType;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 public class PropertyDTO {
 
-
-    //    private int id;
+    @NotBlank(message = "{Not.blank}")
+    @Size(min = 4, max = 25, message = "{Size}")
     private String description;
+
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 9999, message = "{Range}")
     private int price;
 
+    @NotBlank(message = "{Not.blank}")
     private String address_street;
+
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 999, message = "{Range}")
     private int address_number;
+
+    @NotBlank(message = "{Not.blank}")
     private String address_city;
+
+    @NotBlank(message = "{Not.blank}")
     private String address_state;
+
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 99999, message = "{Range}")
     private int address_zipCode;
     private int numberOfRooms;
 
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 99999, message = "{Range}")
     private int area;
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 99999, message = "{Range}")
     private int floor;
-    private HeatingType heating;
+
+    private HeatingType heatingType;
+    private HeatingFuel heatingFuel;
     private Category category;
     private Collection<MultipartFile> photoCollection;
 
@@ -39,13 +64,8 @@ public class PropertyDTO {
 
     public Property unWrapProperty(User owner) {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
-        return new Property(description, price, tempAddress, category, numberOfRooms, area, floor, heating, owner);
+        return new Property(description, price, tempAddress, category, numberOfRooms, area, floor, heatingType, heatingFuel, owner);
     }
-
-    public Address unWrapAddress() {
-        return new Address(address_street, address_number, address_city, address_state, address_zipCode);
-    }
-
 
     public String getDescription() {
         return description;
@@ -128,10 +148,20 @@ public class PropertyDTO {
         this.area = area;
     }
 
-    public HeatingType getHeating() { return heating; }
+    public HeatingType getHeatingType() {
+        return heatingType;
+    }
 
-    public void setHeating(HeatingType heating) {
-        this.heating = heating;
+    public void setHeatingType(HeatingType heatingType) {
+        this.heatingType = heatingType;
+    }
+
+    public HeatingFuel getHeatingFuel() {
+        return heatingFuel;
+    }
+
+    public void setHeatingFuel(HeatingFuel heatingFuel) {
+        this.heatingFuel = heatingFuel;
     }
 
     public Collection<MultipartFile> getPhotoCollection() {

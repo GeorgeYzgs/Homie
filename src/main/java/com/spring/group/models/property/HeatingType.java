@@ -5,10 +5,7 @@ package com.spring.group.models.property;
  */
 public enum HeatingType {
 
-    Self_Diesel,
-    Self_Gas,
-    Self_Electric,
-    Common_Diesel,
-    Common_Gas,
-    None;
+    AUTONOMOUS,
+    CENTRAL,
+    NONE;
 }

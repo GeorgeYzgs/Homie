@@ -40,7 +40,7 @@ public class AmazonWebService {
         File file = convertMultiPartToFile(multipartFile);
         String fileName = generateFileName(multipartFile, propertyID);
         String fileUrl = "https://" + bucketName + endpointUrl + "/" + fileName;
-        uploadFileToAWS(fileName, file);
+//        uploadFileToAWS(fileName, file);
         file.delete();
         return fileUrl;
     }

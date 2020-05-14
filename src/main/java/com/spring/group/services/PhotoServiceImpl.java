@@ -48,6 +48,7 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
     }
 
     private boolean isValidPhoto(MultipartFile file) {
+        if ("".equals(file.getOriginalFilename())) return false;
         return ACCEPTED_IMAGE_EXTENSIONS.contains(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
     }
 }

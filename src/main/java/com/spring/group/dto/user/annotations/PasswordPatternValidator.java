@@ -15,7 +15,7 @@ import java.util.Properties;
 public class PasswordPatternValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
