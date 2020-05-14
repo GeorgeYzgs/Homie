@@ -8,6 +8,7 @@ import com.spring.group.services.PhotoServiceImpl;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,6 +41,9 @@ public class MainController {
 
     @Autowired
     private UserServiceInterface userService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping("/list")
     public ModelAndView list() {
@@ -57,7 +62,7 @@ public class MainController {
         Property property = propertyDTO.unWrapProperty(loggedUser);
         propertyService.insertProperty(property);
         photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
-        redirectAttributes.addFlashAttribute("messageSuccess", "Property listed successfully!");
+        redirectAttributes.addFlashAttribute("messageSuccess", messageSource.getMessage("Property.listed.success", null, Locale.UK));
         return new ModelAndView("redirect:/");
     }
 

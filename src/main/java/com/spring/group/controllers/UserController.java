@@ -10,6 +10,7 @@ import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
 import com.spring.group.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -35,6 +37,9 @@ public class UserController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -42,7 +47,9 @@ public class UserController {
 
     //TODO Merge index with search html
     @GetMapping("/")
-    public String index() { return "index"; }
+    public String index() {
+        return "index";
+    }
 
     @GetMapping("/search")
     public String getSearchPage() {
@@ -66,7 +73,7 @@ public class UserController {
             return new ModelAndView("register", "messageDanger", attempt);
         }
         redirectAttributes.addFlashAttribute("messageSuccess",
-                "Registered successfully, a confirmation email has been sent to your email address!");
+                messageSource.getMessage("Register.success.email.sent", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 
@@ -76,7 +83,7 @@ public class UserController {
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("login", "messageDanger", attempt);
         }
-        return new ModelAndView("login", "messageSuccess", "Your account has been activated!");
+        return new ModelAndView("login", "messageSuccess", messageSource.getMessage("Account.activated", null, Locale.UK));
     }
 
     @GetMapping("/changePass")
@@ -96,7 +103,7 @@ public class UserController {
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("changePass", "messageDanger", attempt);
         }
-        redirectAttributes.addFlashAttribute("messageSuccess", "Password changed successfully!");
+        redirectAttributes.addFlashAttribute("messageSuccess", messageSource.getMessage("Password.change.success", null, Locale.UK));
         return new ModelAndView("redirect:/");
     }
 
@@ -115,11 +122,11 @@ public class UserController {
         Optional<User> user = userServiceImpl.checkEmail(dto.getEmail());
         if (!user.isPresent()) {
             return new ModelAndView("forgotPass",
-                    "messageDanger", "There is no account linked to that email");
+                    "messageDanger", messageSource.getMessage("Email.not.linked.to.account", null, Locale.UK));
         }
         tokenService.createResetEmail(user.get());
         redirectAttributes.addFlashAttribute("messageSuccess",
-                "An email to reset your password has been sent to your account!");
+                messageSource.getMessage("Reset.email.sent", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 
@@ -144,7 +151,7 @@ public class UserController {
         User user = userServiceImpl.checkEmail(dto.getEmail()).get();
         user.setPassword(dto.getPassword());
         userServiceImpl.insertUser(user);
-        redirectAttributes.addFlashAttribute("messageSuccess", "Your new password has been set!");
+        redirectAttributes.addFlashAttribute("messageSuccess", messageSource.getMessage("Reset.success", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 }

@@ -44,6 +44,7 @@ public class TokenService {
         return resetPassTokenRepository.findByResetPassToken(token);
     }
 
+    // TODO Make a thymeleaf template for email
     public void createConfirmEmail(User user) {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         confirmationTokenRepository.save(confirmationToken);
@@ -57,6 +58,7 @@ public class TokenService {
         sendEmail(mailMessage);
     }
 
+    // TODO Make a thymeleaf template for email
     public void createResetEmail(User user) {
         ResetPassToken resetPassToken = new ResetPassToken(user);
         resetPassTokenRepository.save(resetPassToken);

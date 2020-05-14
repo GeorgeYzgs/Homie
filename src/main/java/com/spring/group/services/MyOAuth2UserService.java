@@ -48,6 +48,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         return new MyUserDetails(userRepository.save(user), userAttributes);
     }
 
+    // TODO Move messages to messagesources
     private void authAttempt(User user, AuthProvider authProvider) {
         if (!user.getAuthProvider().equals(authProvider)) {
             String msg = "You are signed up with " + user.getAuthProvider() + " account." +
