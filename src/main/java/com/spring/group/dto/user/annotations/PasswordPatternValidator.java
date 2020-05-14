@@ -36,8 +36,10 @@ public class PasswordPatternValidator implements ConstraintValidator<ValidPasswo
         PasswordValidator validator = new PasswordValidator(resolver, Arrays.asList(
                 // at least 8 characters
                 new LengthRule(8, 20),
+
                 // at least one upper-case character
                 new CharacterRule(EnglishCharacterData.UpperCase, 1),
+
                 // at least one lower-case character
                 new CharacterRule(EnglishCharacterData.LowerCase, 1),
                 // at least one digit
