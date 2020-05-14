@@ -104,6 +104,7 @@ Chat Iteration No2
     -webkit-transition: .5s;
     transition: .5s;
     background-color: #f8f9fa;
+    z-index: 3000;
 }
 
 .padding {
