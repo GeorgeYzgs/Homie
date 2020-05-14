@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPassMatchValidator.class})
 public class RegisterUserDto {
 
-    @NotBlank(groups = {RegistrationUsernameValidator.class}, message = "{Not.blank}")
+    @NotBlank(groups = {}, message = "{Not.blank}")
     @Size(min = 4, max = 25, groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Size}")
     private String username;
     @ValidEmail(groups = {RegistrationValidator.class, ResetPassEmailValidator.class, RegistrationEmailValidator.class})

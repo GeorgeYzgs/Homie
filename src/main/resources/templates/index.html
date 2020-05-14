@@ -9,21 +9,42 @@
 </head>
 <body class="bg-light">
 
-<section class="px-3 pt-4">
+<nav class="pt-4 px-0 navigation">
     <!-- Logo Band    -->
-    <nav th:replace="fragments :: logo_band"></nav>
+    <nav class="" th:include="fragments :: logo_band"></nav>
     <!-- Nav bar -->
     <nav th:replace="fragments :: nav_bar"></nav>
     <!-- Main body -->
-    <main class="bg-light pt-5" id="propertiesParentMain">
-        <!-- Search bar -->
-        <div class="bg-light" th:include="fragments :: search_bar"></div>
+</nav>
+
+<main class="bg-light pt-5" id="propertiesParentMain">
+    <!-- Search bar -->
+    <div class="bg-light sticky-top" th:include="fragments :: search_bar"></div>
+    <section class="px-2">
         <div class="alert alert-success" th:if="${messageSuccess}">
             <p class="text text-center" th:text="${messageSuccess}"></p>
         </div>
+    </section>
+
+
+    <!--        <img class="img-responsive position-relative" th:src="@{/img/athens_jumbotron_1280.jpg}">-->
+    <div class="parallax d-flex justify-content-center align-items-center"
+         th:style="'background-image:url(' + @{/img/athens_jumbotron_1280.jpg} + ');'">
+        <div>
+            <h1 class="text-white font-weight-bold">House</h1>
+            <h1 class="text-white font-weight-bold" style="animation-delay:2s">Room</h1>
+            <h1 class="text-white font-weight-bold" style="animation-delay:4s">Apartment <span class="blinking">|</span>
+            </h1>
+        </div>
+    </div>
+    <section class="px-2">
+        <h2 class="font-weight-bold pt-5 pb-2" style="color:#435773" th:text="#{Discover}">Discover</h2>
         <section class="h-25 " th:include="UtilFragments :: property_carousel"></section>
-    </main>
-</section>
+        <h5 class="mt-2" style="color: #322F66">Advances one slide at a time</h5>
+    </section>
+    <div class="parallax" th:style="'background-image:url(' + @{/img/intersection_top_down_2750.jpg} + ');'"></div>
+</main>
+
 
 <a th:replace="UtilFragments :: chat_button"></a>
 <div th:replace="UtilFragments :: chat_popup">
@@ -31,6 +52,7 @@
 
 
 <div th:include="fragments :: scripts" th:remove="tag"></div>
+<footer th:replace="fragments :: body_footer"></footer>
 <script th:src="@{/js/carousel.js}"></script>
 <script th:src="@{/js/chat.js}"></script>
 </body>
