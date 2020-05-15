@@ -1,5 +1,7 @@
 package com.spring.group.services;
 
+import com.spring.group.dto.user.RegisterUserDto;
+import com.spring.group.models.user.AuthProvider;
 import com.spring.group.models.user.ConfirmationToken;
 import com.spring.group.models.user.ResetPassToken;
 import com.spring.group.models.user.User;
@@ -100,8 +102,27 @@ public class TokenService {
         if (validToken.getExpirationDate().isBefore(Instant.now())) {
             return "This token has expired, please request another token";
         }
-        validToken.setUsed(true);
-        resetPassTokenRepository.save(validToken);
         return validToken.getUser().getEmail();
+    }
+
+    public String forgotPass(String email) {
+        Optional<User> user = userServiceImpl.checkEmail(email);
+        if (!user.isPresent()) {
+            return "There is no account linked to that email";
+        }
+        if (!user.get().getAuthProvider().equals(AuthProvider.Homie)) {
+            return "You can only issue passwords resets for Homie accounts";
+        }
+        createResetEmail(user.get());
+        return "SUCCESS";
+    }
+
+    public void setNewPass(RegisterUserDto dto, String email) {
+        User user = userServiceImpl.checkEmail(email).get();
+        user.setPassword(dto.getPassword());
+        userServiceImpl.insertUser(user);
+        ResetPassToken token = checkResetPassToken(dto.getToken()).get();
+        token.setUsed(true);
+        resetPassTokenRepository.save(token);
     }
 }

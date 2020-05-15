@@ -4,8 +4,8 @@ import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 
 
 /**
@@ -21,16 +21,32 @@ public class Rental {
     @Basic
     @Column(nullable = false)
     private int agreedPrice;
-    private Date startDate;
-    private Date endDate;
+    private Instant startDate;
+    private Instant endDate;
     @ManyToOne()
     private Property residence;
     @ManyToOne()
-    private User user;
+    private User tenant;
+    private boolean isPending;
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL)
     private Collection<PaymentLog> paymentLogs;
 
     public Rental() {
+    }
+
+    public Rental(int agreedPrice, Property residence, User tenant) {
+        this.agreedPrice = agreedPrice;
+        this.residence = residence;
+        this.tenant = tenant;
+        this.isPending = true;
+    }
+
+    public boolean isPending() {
+        return isPending;
+    }
+
+    public void setPending(boolean pending) {
+        isPending = pending;
     }
 
     public int getId() {
@@ -49,19 +65,19 @@ public class Rental {
         this.agreedPrice = agreedPrice;
     }
 
-    public Date getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Instant getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Instant endDate) {
         this.endDate = endDate;
     }
 
@@ -73,12 +89,12 @@ public class Rental {
         this.residence = residence;
     }
 
-    public User getUser() {
-        return user;
+    public User getTenant() {
+        return tenant;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTenant(User tenant) {
+        this.tenant = tenant;
     }
 
     public Collection<PaymentLog> getPaymentLogs() {

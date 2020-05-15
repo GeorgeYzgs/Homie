@@ -2,10 +2,12 @@ package com.spring.group.controllers;
 
 import com.spring.group.dto.PropertyDTO;
 import com.spring.group.models.property.Property;
+import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
 import com.spring.group.services.PhotoServiceImpl;
 import com.spring.group.services.bases.PropertyServiceInterface;
+import com.spring.group.services.bases.RentalServiceInterface;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -13,10 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -43,38 +42,81 @@ public class MainController {
     private UserServiceInterface userService;
 
     @Autowired
+    private RentalServiceInterface rentalService;
+
+    @Autowired
     private MessageSource messageSource;
 
-    @GetMapping("/list")
+    @GetMapping("/list-new-property")
     public ModelAndView list() {
-        return new ModelAndView("insert_entry", "propertyDTO", new PropertyDTO());
+        return new ModelAndView("insert-property", "propertyDTO", new PropertyDTO());
     }
 
-    @PostMapping("/list")
+    @PostMapping("/list-new-property")
     public ModelAndView listProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
                                      BindingResult bindingResult, Authentication auth,
                                      RedirectAttributes redirectAttributes) throws IOException {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("insert_entry");
+            return new ModelAndView("insert-property");
         }
         MyUserDetails user = (MyUserDetails) auth.getPrincipal();
         User loggedUser = userService.getUserByID(user.getId());
         Property property = propertyDTO.unWrapProperty(loggedUser);
         propertyService.insertProperty(property);
         photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
-        redirectAttributes.addFlashAttribute("messageSuccess", messageSource.getMessage("Property.listed.success", null, Locale.UK));
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                messageSource.getMessage("Property.listed.success", null, Locale.UK));
         return new ModelAndView("redirect:/");
+    }
+
+    @PostMapping("/submit-offer")
+    public ModelAndView submitOffer(@RequestParam Integer id, @RequestParam Integer price,
+                                    Authentication auth, RedirectAttributes redirectAttributes) {
+        MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
+        Property property = propertyService.getPropertyByID(id);
+        if (loggedUser.getId() == property.getOwner().getId()) {
+            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer on your own property!");
+            return new ModelAndView("redirect:/view/" + id);
+        }
+        User tenant = userService.getUserByID(loggedUser.getId());
+        rentalService.insertRental(new Rental(price, property, tenant));
+        redirectAttributes.addFlashAttribute("messageSuccess", "Offer submitted!");
+        return new ModelAndView("redirect:/view/" + id);
+    }
+
+    //TODO redirect back to his profile................................
+    @PostMapping("/manage-offers")
+    public ModelAndView manageOffers(@RequestParam Integer id, @RequestParam boolean isAccepted,
+                                     Authentication auth, RedirectAttributes redirectAttributes) {
+        MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
+        Rental rental = rentalService.getRentalByID(id);
+        if (loggedUser.getId() != rental.getResidence().getOwner().getId()) {
+            redirectAttributes.addFlashAttribute("messageDanger", "You can only manage offers to your properties!");
+            return new ModelAndView("redirect:/view/" + id);
+        }
+        if (rentalService.handleOffer(rental, isAccepted)) {
+            redirectAttributes.addFlashAttribute("messageSuccess", "Offer accepted!");
+            return new ModelAndView("redirect:/view/" + id);
+        }
+        redirectAttributes.addFlashAttribute("messageSuccess", "Offer declined!");
+        return new ModelAndView("redirect:/view/" + id);
+    }
+
+    @GetMapping("/my-profile")
+    public ModelAndView displayProfile(Authentication auth) {
+        MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
+        return new ModelAndView("user-page", "user", userService.getUserByID(loggedUser.getId()));
     }
 
     //TODO Create a html page for property views.
     @GetMapping("/view/{id}")
     public ModelAndView viewProperty(@PathVariable Integer id) {
         pageViewCount.merge(id, 1, Integer::sum);
-        return new ModelAndView("SOME VIEW PAGE", "property", propertyService.getPropertyByID(id));
+        return new ModelAndView("view-property", "property", propertyService.getPropertyByID(id));
     }
 
-    @Scheduled(cron = "1 * * * * ?")
-    // seconds minutes hours days months years <-currently updating every minute (when seconds == 1)
+    @Scheduled(cron = "0 */5 * * * ?")
+    // seconds minutes hours days months years <-currently updating every 5 minutes
     private void updateViewCount() {
         System.out.println("Updating Property View Counts!");
         List<Property> updatedProperties = new ArrayList<>();

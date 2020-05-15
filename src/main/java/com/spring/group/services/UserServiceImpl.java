@@ -1,6 +1,7 @@
 package com.spring.group.services;
 
 import com.spring.group.dto.user.RegisterUserDto;
+import com.spring.group.models.user.AuthProvider;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
 import com.spring.group.services.bases.UserServiceInterface;
@@ -81,8 +82,12 @@ public class UserServiceImpl implements UserServiceInterface {
         return "SUCCESS";
     }
 
+    //TODO Add another message here.
     public String changePass(RegisterUserDto dto, int userID) {
         User user = getUserByID(userID);
+        if (!user.getAuthProvider().equals(AuthProvider.Homie)) {
+            return "You can only change passwords on Homie accounts";
+        }
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
             return messageSource.getMessage("Password.not.matches.old.password", null, Locale.UK);
         }
@@ -93,4 +98,5 @@ public class UserServiceImpl implements UserServiceInterface {
         insertUser(user);
         return "SUCCESS";
     }
+
 }

@@ -34,7 +34,7 @@
                             <div class="alert alert-danger" th:if="${messageDanger}">
                                 <p class="text text-center" th:text="${messageDanger}"></p>
                             </div>
-                            <form enctype="multipart/form-data" th:action="@{/list}" th:method="post"
+                            <form enctype="multipart/form-data" th:action="@{/list-new-property}" th:method="post"
                                   th:object="${propertyDTO}">
 
                                 <label class="mb-0" th:for="description" th:text="#{insertForm.description}">Please

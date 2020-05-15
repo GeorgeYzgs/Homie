@@ -14,4 +14,6 @@ public interface PropertyServiceInterface {
     Property getPropertyByID(Integer PropertyID);
 
     Collection<Property> updateProperties(Collection<Property> updatedProperties);
+
+    void alterAvailability(Property property);
 }

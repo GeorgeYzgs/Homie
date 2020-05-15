@@ -34,4 +34,10 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     public Collection<Property> updateProperties(Collection<Property> updatedProperties) {
         return propertyRepository.saveAll(updatedProperties);
     }
+
+    @Override
+    public void alterAvailability(Property property) {
+        property.setAvailable(!property.isAvailable());
+        propertyRepository.save(property);
+    }
 }

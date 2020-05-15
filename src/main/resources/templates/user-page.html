@@ -15,12 +15,17 @@
 <section class="px-3 pt-4">
     <!-- Logo Band    -->
     <nav th:replace="fragments :: logo_band"></nav>
-
+    <div class="alert alert-success" th:if="${messageSuccess}">
+        <p class="text text-center" th:text="${messageSuccess}"></p>
+    </div>
+    <div class="alert alert-danger" th:if="${messageDanger}">
+        <p class="text text-center" th:text="${messageDanger}"></p>
+    </div>
     <!-- Main body -->
     <main class="bg-light pt-2" id="propertiesParentMain">
         <div th:if="${#authentication.principal.id != user.id}">
             <div sec:authorize-url="/mod/**">
-                <form method="post" th:action="@{/mod/lockUser}">
+                <form method="post" th:action="@{/mod/lock-user}">
                     Active:
                     <div th:text="${user.nonLocked}"></div>
                     <input name="id" th:value="${user.id}" th:hidden="hidden">

@@ -8,17 +8,19 @@
 </head>
 <body>
 <div class="container pt-4">
-    <h1 class="text-center">Reset Your Password</h1>
+    <h1 class="text-center">Change your Password</h1>
     <div class="row justify-content-md-center">
         <div class="col-4">
-            <h4 class="text-center pt-2">Set a new Password</h4>
             <div class="card">
                 <div class="card-body">
-                    <form method="post" th:action="@{/setNewPass}" th:object="${resetUserPass}">
+                    <div class="alert alert-danger" th:if="${messageDanger}">
+                        <p class="text text-center" th:text="${messageDanger}"></p>
+                    </div>
+                    <form method="post" th:action="@{/change-pass}" th:object="${changeUserPass}">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" id="email" th:field="*{email}" th:hidden="hidden"
-                                       type="text"/>
+                                <label class="form-control-label" for="oldPassword">Old Password</label>
+                                <input class="form-control" id="oldPassword" th:field="*{oldPassword}" type="password"/>
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label" for="password">New Password</label>
