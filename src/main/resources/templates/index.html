@@ -47,7 +47,7 @@
 </main>
 
 <!--Temporarily, to be removed-->
-<div th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
+<div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
 <div sec:authorize-url="/mod/**"><a th:href="@{/mod/users}">User List</a></div>
 
 <a th:replace="UtilFragments :: chat_button"></a>

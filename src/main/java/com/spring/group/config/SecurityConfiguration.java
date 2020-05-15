@@ -41,6 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mod/**").hasAnyAuthority("ADMIN", "MODERATOR")
                 .antMatchers(LOGGED_USER_URLS).authenticated()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/changePass").authenticated()
+                .antMatchers("/forgotPass", "/setNewPass", "/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/").permitAll()
                 .and().formLogin()
                 .loginPage("/login")
                 .and().oauth2Login()
@@ -48,7 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
+//                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/")
                 .and().rememberMe();
 
         http.sessionManagement()
