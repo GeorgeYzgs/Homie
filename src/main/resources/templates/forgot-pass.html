@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head th:insert="fragments :: headerfiles">
+<head>
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:text="#{Reset.password.page.title}">Reset password</title>
 </head>
 <body class="bg-light">
-<section class="px-3 pt-4">
-    <!-- Logo Band -->
+<nav class="py-4 px-3 navigation">
+    <!-- Logo Band    -->
     <nav th:replace="fragments :: logo_band"></nav>
-    <!-- Main body -->
-    <main class="bg-light pt-2" id="propertiesParentMain">
-        <div class="col-sm-6 offset-sm-3 col-12">
-            <h3 class="text-center" th:text="#{Reset.password}"></h3>
-            <div class="row">
-                <div class="col-sm-8 offset-sm-2 col-12">
-                    <p class="text-center text-secondary" th:text="#{Insert.email}"></p>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="alert alert-danger" th:if="${messageDanger}">
-                                <p class="text text-center" th:text="${messageDanger}"></p>
-                            </div>
-                            <form method="post" th:action="@{/forgot-pass}" th:object="${forgotUserPass}">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <label class="form-control-label text-secondary" for="email">Email</label>
-                                        <input class="form-control" id="email" th:field="*{email}" type="text"/>
-                                        <div class="text text-danger" th:errors="*{email}"
-                                             th:if="${#fields.hasErrors('email')}"></div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-green text-white text-center" th:text="#{Submit}"
-                                                type="submit">Reset Password
-                                        </button>
-                                    </div>
-                                </fieldset>
-                            </form>
+</nav>
+<!-- Main body -->
+<main class="bg-light py-4" id="propertiesParentMain">
+    <div class="col-sm-6 offset-sm-3 col-12">
+        <h3 class="text-center" th:text="#{Reset.password}"></h3>
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2 col-12">
+                <p class="text-center text-secondary" th:text="#{Insert.email}"></p>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-danger" th:if="${messageDanger}">
+                            <p class="text text-center" th:text="${messageDanger}"></p>
                         </div>
+                        <form method="post" th:action="@{/forgot-pass}" th:object="${forgotUserPass}">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="form-control-label text-secondary" for="email">Email</label>
+                                    <input class="form-control" id="email" th:field="*{email}" type="text"/>
+                                    <div class="text text-danger" th:errors="*{email}"
+                                         th:if="${#fields.hasErrors('email')}"></div>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-green text-white text-center" th:text="#{Submit}"
+                                            type="submit">Reset Password
+                                    </button>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-    </main>
-</section>
+    </div>
+</main>
+<footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 </body>
 </html>

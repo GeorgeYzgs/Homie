@@ -1,48 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
-    <title th:text="#{Register.page.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <title id="pageTitle" th:text="#{Users.list.page.title}">Users</title>
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
 </head>
 <body class="bg-light">
-<section class="px-3 pt-4">
+<nav class="pt-4 px-3 navigation">
     <!-- Logo Band    -->
-    <nav th:replace="fragments :: logo_band"></nav>
-
+    <nav class="" th:include="fragments :: logo_band"></nav>
+    <!-- Nav bar -->
+    <nav th:replace="fragments :: nav_bar"></nav>
     <!-- Main body -->
-    <main class="bg-light pt-2" id="propertiesParentMain">
-        <div class="container">
-            <div class="table-responsive table-hover">
-                <table class="table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Creation Date</th>
-                        <th>Enabled</th>
-                        <th>Active</th>
-                        <th>Role</th>
-                    </tr>
-                    <tr th:each="user : ${userList}">
-                        <td th:text="${user.id}"></td>
-                        <td><a th:href="@{'/mod/user/'+ ${user.id}}" th:text="${user.username}"/></td>
-                        <td th:text="${user.email}"></td>
-                        <td th:text="${#temporals.format(user.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
-                        <td th:text="${user.enabled}"></td>
-                        <td th:text="${user.nonLocked}"></td>
-                        <td th:text="${user.userRole}"></td>
-                    </tr>
-                </table>
-            </div>
+</nav>
+<!-- Main body -->
+<main class="bg-light py-4" id="mainParent">
+    <div class="container">
+        <h5 class="text-center pb-4" th:text="#{Users}">Users</h5>
+        <div class="table-responsive table-hover">
+            <table class="table">
+                <tr>
+                    <th th:text="#{ID}">ID</th>
+                    <th th:text="#{Username}">Username</th>
+                    <th th:text="#{Email}">Email</th>
+                    <th th:text="#{Creation.date}">Creation Date</th>
+                    <th th:text="#{Enabled}">Enabled</th>
+                    <th th:text="#{Active}">Active</th>
+                    <th th:text="#{Role}">Role</th>
+                </tr>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.id}"></td>
+                    <td><a th:href="@{'/mod/user/'+ ${user.id}}" th:text="${user.username}"/></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${#temporals.format(user.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                    <td th:text="${user.enabled}"></td>
+                    <td th:text="${user.nonLocked}"></td>
+                    <td th:text="${user.userRole}"></td>
+                </tr>
+            </table>
         </div>
-    </main>
-</section>
-<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-<script th:src="@{/js/jquery_ui-1.12.1.min.js}"></script>
+    </div>
+</main>
+<footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 </body>
 </html>

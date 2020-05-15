@@ -55,7 +55,8 @@ public class MainController {
     @PostMapping("/list-new-property")
     public ModelAndView listProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
                                      BindingResult bindingResult, Authentication auth,
-                                     RedirectAttributes redirectAttributes) throws IOException {
+                                     RedirectAttributes redirectAttributes,
+                                     Locale userLocale) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("insert-property");
         }
@@ -65,7 +66,7 @@ public class MainController {
         propertyService.insertProperty(property);
         photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
         redirectAttributes.addFlashAttribute("messageSuccess",
-                messageSource.getMessage("Property.listed.success", null, Locale.UK));
+                messageSource.getMessage("Property.listed.success", null, userLocale));
         return new ModelAndView("redirect:/");
     }
 

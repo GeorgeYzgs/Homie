@@ -7,7 +7,7 @@
 
 <nav th:fragment="logo_band">
     <div class="d-flex justify-content-between px-2">
-        <div class="col-xl-3 col-lg-4 col-md-7 col-sm-6 col-9 row px-0">
+        <div class="col-xl-3 col-lg-4 col-md-7 col-sm-6 col-10 row px-0">
             <div class="col-xl-4 col-lg-4 col-md-3 col-sm-4 col-4 pr-0">
                 <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
             </div>
@@ -17,20 +17,20 @@
             </div>
             <a class="stretched-link" th:href="@{/}"></a>
         </div>
-        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-3 pl-0 pr-4">
+        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-2 pl-0 pr-4">
             <div class="dropdown" id="languageDropdown">
                 <button aria-expanded="false" aria-haspopup="true"
-                        class="btn btn-light dropdown-toggle" data-toggle="dropdown" type="button">
-                    <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="button-text"
+                        class="btn btn-nav dropdown-toggle" data-toggle="dropdown" type="button">
+                    <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="responsive-text-hide"
                                                                               data-locale_code="el">Ελληνικά</span>
                 </button>
-                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item " data-locale_code="el_GR" href="?lang=el_GR">
-                        <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="button-text"
+                        <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="responsive-text-hide"
                                                                                   data-locale_code="el_GR">Ελληνικά</span>
                     </a>
                     <a class="dropdown-item active" data-locale_code="en_GB" href="?lang=en_GB">
-                        <img th:src="@{/img/icons/flags/uk-circle_16.png}"> <span class="button-text"
+                        <img th:src="@{/img/icons/flags/uk-circle_16.png}"> <span class="responsive-text-hide"
                                                                                   data-locale_code="en_GB">English</span>
                     </a>
                 </div>
@@ -75,15 +75,18 @@
         <a class="text-secondary text-decoration-none pl-4" th:href="@{/register}" th:text="#{Register}">Register</a>
     </div>
     <div class="btn-group" sec:authorize="isAuthenticated()">
-        <button aria-expanded="false" aria-haspopup="true" class="btn btn-green btn-sm dropdown-toggle"
+        <button aria-expanded="false" aria-haspopup="true" class="btn btn-nav btn-sm dropdown-toggle"
                 data-toggle="dropdown"
                 type="button">
-            <span class="text-white"
+            <i class="fa fa-user fa-2x text-secondary"></i>
+            <span class="text-secondary"
                   sec:authentication="name">User</span>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" th:href="@{/my-profile}" th:text="#{Profile}">Change Password</a>
             <a class="dropdown-item" th:href="@{/change-pass}" th:text="#{Change.password}">Change Password</a>
-            <a class="dropdown-item" href="#">Control Panel</a>
+            <a class="dropdown-item" sec:authorize-url="/mod/**" th:href="@{/mod/users}" th:text="#{User.list}">User
+                List</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Separated link</a>
             <a class="dropdown-item" th:href="@{/logout}" th:text="#{Logout}">Logout</a>
@@ -108,7 +111,7 @@
                         </div>
                     </div>
                     <button class="btn bg-green text-white font-weight-bold" id="searchButton">
-                        <i class="fa fa-search"></i> <span class="button-text" th:text="#{Search}">
+                        <i class="fa fa-search"></i> <span class="button-text-hide" th:text="#{Search}">
                         Search</span>
                     </button>
                 </div>
@@ -242,7 +245,7 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
     <meta th:content="${#locale}" th:name="current_locale">
-    <title th:include=":: #pageTitle">Layout Generic Title </title>
+    <!--    <title th:include=":: #pageTitle">Layout Generic Title </title>-->
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <!--       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"-->

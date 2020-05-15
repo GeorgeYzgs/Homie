@@ -69,12 +69,12 @@ public class UserServiceImpl implements UserServiceInterface {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    public String registerUser(RegisterUserDto dto) {
+    public String registerUser(RegisterUserDto dto, Locale userLocale) {
         if (checkUserName(dto.getUsername()).isPresent()) {
-            return messageSource.getMessage("Username.unavailable", null, Locale.UK);
+            return messageSource.getMessage("Username.unavailable", null, userLocale);
         }
         if (checkEmail(dto.getEmail()).isPresent()) {
-            return messageSource.getMessage("Email.unavailable", null, Locale.UK);
+            return messageSource.getMessage("Email.unavailable", null, userLocale);
         }
         User user = dto.unwrapDTO();
         insertUser(user);
@@ -83,16 +83,16 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     //TODO Add another message here.
-    public String changePass(RegisterUserDto dto, int userID) {
+    public String changePass(RegisterUserDto dto, int userID, Locale userLocale) {
         User user = getUserByID(userID);
         if (!user.getAuthProvider().equals(AuthProvider.Homie)) {
             return "You can only change passwords on Homie accounts";
         }
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            return messageSource.getMessage("Password.not.matches.old.password", null, Locale.UK);
+            return messageSource.getMessage("Password.not.matches.old.password", null, userLocale);
         }
         if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return messageSource.getMessage("Password.cannot.match.old.password", null, Locale.UK);
+            return messageSource.getMessage("Password.cannot.match.old.password", null, userLocale);
         }
         user.setPassword(dto.getPassword());
         insertUser(user);

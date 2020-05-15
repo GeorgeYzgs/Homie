@@ -22,7 +22,7 @@
         <p class="text text-center" th:text="${messageDanger}"></p>
     </div>
     <!-- Main body -->
-    <main class="bg-light pt-2" id="propertiesParentMain">
+    <main class="bg-light pt-2" id="mainParent">
         <div th:if="${#authentication.principal.id != user.id}">
             <div sec:authorize-url="/mod/**">
                 <form method="post" th:action="@{/mod/lock-user}">
