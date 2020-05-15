@@ -6,10 +6,10 @@ import com.spring.group.dto.user.validationgroups.RegistrationEmailValidator;
 import com.spring.group.dto.user.validationgroups.RegistrationValidator;
 import com.spring.group.dto.user.validationgroups.ResetPassValidator;
 import com.spring.group.models.user.MyUserDetails;
-import com.spring.group.models.user.User;
 import com.spring.group.services.TokenService;
 import com.spring.group.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
+import java.util.Locale;
 
 /**
  * @author George.Giazitzis
@@ -35,6 +35,9 @@ public class UserController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -42,7 +45,9 @@ public class UserController {
 
     //TODO Merge index with search html
     @GetMapping("/")
-    public String index() { return "index"; }
+    public String index() {
+        return "index";
+    }
 
     @GetMapping("/search")
     public String getSearchPage() {
@@ -66,7 +71,7 @@ public class UserController {
             return new ModelAndView("register", "messageDanger", attempt);
         }
         redirectAttributes.addFlashAttribute("messageSuccess",
-                "Registered successfully, a confirmation email has been sent to your email address!");
+                messageSource.getMessage("Register.success.email.sent", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 
@@ -76,50 +81,49 @@ public class UserController {
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("login", "messageDanger", attempt);
         }
-        return new ModelAndView("login", "messageSuccess", "Your account has been activated!");
+        return new ModelAndView("login", "messageSuccess", messageSource.getMessage("Account.activated", null, Locale.UK));
     }
 
-    @GetMapping("/changePass")
+    @GetMapping("/change-pass")
     public ModelAndView changePass() {
-        return new ModelAndView("changePass", "changeUserPass", new RegisterUserDto());
+        return new ModelAndView("change-pass", "changeUserPass", new RegisterUserDto());
     }
 
-    @PostMapping("/changePass")
+    @PostMapping("/change-pass")
     public ModelAndView changeUserPass(@Validated({ChangePassValidator.class})
                                        @ModelAttribute("changeUserPass") RegisterUserDto dto,
                                        BindingResult bindingResult, Authentication auth, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("changePass");
+            return new ModelAndView("change-pass");
         }
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         String attempt = userServiceImpl.changePass(dto, loggedUser.getId());
         if (!attempt.equals("SUCCESS")) {
-            return new ModelAndView("changePass", "messageDanger", attempt);
+            return new ModelAndView("change-pass", "messageDanger", attempt);
         }
-        redirectAttributes.addFlashAttribute("messageSuccess", "Password changed successfully!");
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                messageSource.getMessage("Password.change.success", null, Locale.UK));
         return new ModelAndView("redirect:/");
     }
 
-    @GetMapping("/forgotPass")
+    @GetMapping("/forgot-pass")
     public ModelAndView forgotPass() {
-        return new ModelAndView("forgotPass", "forgotUserPass", new RegisterUserDto());
+        return new ModelAndView("forgot-pass", "forgotUserPass", new RegisterUserDto());
     }
 
-    @PostMapping("/forgotPass")
+    @PostMapping("/forgot-pass")
     public ModelAndView resetPass(@Validated({RegistrationEmailValidator.class})
                                   @ModelAttribute("forgotUserPass") RegisterUserDto dto,
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("forgotPass");
+            return new ModelAndView("forgot-pass");
         }
-        Optional<User> user = userServiceImpl.checkEmail(dto.getEmail());
-        if (!user.isPresent()) {
-            return new ModelAndView("forgotPass",
-                    "messageDanger", "There is no account linked to that email");
+        String attempt = tokenService.forgotPass(dto.getEmail());
+        if (!attempt.equals("SUCCESS")) {
+            return new ModelAndView("forgot-pass", "messageDanger", attempt);
         }
-        tokenService.createResetEmail(user.get());
         redirectAttributes.addFlashAttribute("messageSuccess",
-                "An email to reset your password has been sent to your account!");
+                messageSource.getMessage("Reset.email.sent", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 
@@ -130,21 +134,25 @@ public class UserController {
             return new ModelAndView("login", "messageDanger", attempt);
         }
         RegisterUserDto dto = new RegisterUserDto();
-        dto.setEmail(attempt);
-        return new ModelAndView("resetPass", "resetUserPass", dto);
+        dto.setToken(token);
+        return new ModelAndView("reset-pass", "resetUserPass", dto);
     }
 
-    @PostMapping("/setNewPass")
+    @PostMapping("/set-new-pass")
     public ModelAndView setNewPass(@Validated({ResetPassValidator.class})
                                    @ModelAttribute("resetUserPass") RegisterUserDto dto,
                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("resetPass");
+            return new ModelAndView("reset-pass");
         }
-        User user = userServiceImpl.checkEmail(dto.getEmail()).get();
-        user.setPassword(dto.getPassword());
-        userServiceImpl.insertUser(user);
-        redirectAttributes.addFlashAttribute("messageSuccess", "Your new password has been set!");
+        String attempt = tokenService.validateResetToken(dto.getToken());
+        if (!attempt.contains("@")) {
+            redirectAttributes.addFlashAttribute("messageDanger", attempt);
+            return new ModelAndView("redirect:/login");
+        }
+        tokenService.setNewPass(dto, attempt);
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                messageSource.getMessage("Reset.success", null, Locale.UK));
         return new ModelAndView("redirect:/login");
     }
 }

@@ -1,15 +1,18 @@
 package com.spring.group.services;
 
 import com.spring.group.dto.user.RegisterUserDto;
+import com.spring.group.models.user.AuthProvider;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -27,6 +30,9 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public User insertUser(User user) {
@@ -65,10 +71,10 @@ public class UserServiceImpl implements UserServiceInterface {
 
     public String registerUser(RegisterUserDto dto) {
         if (checkUserName(dto.getUsername()).isPresent()) {
-            return "This username is unavailable";
+            return messageSource.getMessage("Username.unavailable", null, Locale.UK);
         }
         if (checkEmail(dto.getEmail()).isPresent()) {
-            return "This email is unavailable";
+            return messageSource.getMessage("Email.unavailable", null, Locale.UK);
         }
         User user = dto.unwrapDTO();
         insertUser(user);
@@ -76,16 +82,21 @@ public class UserServiceImpl implements UserServiceInterface {
         return "SUCCESS";
     }
 
+    //TODO Add another message here.
     public String changePass(RegisterUserDto dto, int userID) {
         User user = getUserByID(userID);
+        if (!user.getAuthProvider().equals(AuthProvider.Homie)) {
+            return "You can only change passwords on Homie accounts";
+        }
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            return "Given password does not match your old password";
+            return messageSource.getMessage("Password.not.matches.old.password", null, Locale.UK);
         }
         if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return "Your new password cannot match your old password";
+            return messageSource.getMessage("Password.cannot.match.old.password", null, Locale.UK);
         }
         user.setPassword(dto.getPassword());
         insertUser(user);
         return "SUCCESS";
     }
+
 }

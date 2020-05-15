@@ -3,46 +3,49 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       lang="en">
 
-<head th:fragment="headerfiles">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta charset="UTF-8">
-    <title th:include=":: #pageTitle">Layout Generic Title </title>
-    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!--       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"-->
-    <!--          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap_customization.css}">-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
-          rel="stylesheet">
-
-
-</head>
-<title>Template Fragments</title>
 <body>
 
-<nav class="pl-3" th:fragment="logo_band">
-    <div class="col-xl-3 col-lg-4 col-md-7 col-sm-6 col-11 row px-0">
-        <div class="col-xl-4 col-lg-4 col-md-3 col-sm-4 col-4 pr-0">
-            <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+<nav th:fragment="logo_band">
+    <div class="d-flex justify-content-between px-2">
+        <div class="col-xl-3 col-lg-4 col-md-7 col-sm-6 col-9 row px-0">
+            <div class="col-xl-4 col-lg-4 col-md-3 col-sm-4 col-4 pr-0">
+                <img alt="company-logo" class="" th:src="@{/img/logo-house-green.png}" width="100px">
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-9 col-sm-8 col-8 px-0">
+                <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
+                <h6 class="text-secondary">Your land companion </h6>
+            </div>
+            <a class="stretched-link" th:href="@{/}"></a>
         </div>
-        <div class="col-xl-8 col-lg-8 col-md-9 col-sm-8 col-8 pl-0">
-            <h1 class="pb-0" style="color:#80ea6e"> Homie </h1>
-            <h6 class="text-secondary">Your land companion</h6>
+        <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-3 pl-0 pr-4">
+            <div class="dropdown" id="languageDropdown">
+                <button aria-expanded="false" aria-haspopup="true"
+                        class="btn btn-light dropdown-toggle" data-toggle="dropdown" type="button">
+                    <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="button-text"
+                                                                              data-locale_code="el">Ελληνικά</span>
+                </button>
+                <div aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+                    <a class="dropdown-item " data-locale_code="el_GR" href="?lang=el_GR">
+                        <img th:src="@{/img/icons/flags/gr-circle_16.png}"> <span class="button-text"
+                                                                                  data-locale_code="el_GR">Ελληνικά</span>
+                    </a>
+                    <a class="dropdown-item active" data-locale_code="en_GB" href="?lang=en_GB">
+                        <img th:src="@{/img/icons/flags/uk-circle_16.png}"> <span class="button-text"
+                                                                                  data-locale_code="en_GB">English</span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <a class="stretched-link" th:href="@{/}"></a>
     </div>
 </nav>
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light" th:fragment="nav_bar">
+<nav class="navbar navbar-expand-sm navbar-light" th:fragment="nav_bar">
     <button aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"
             class="navbar-toggler"
             data-target="#navbarNavDropdown" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <div class="collapse navbar-collapse col-10" id="navbarNavDropdown">
         <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -66,11 +69,10 @@
             </li>
         </ul>
     </div>
-    <div sec:authorize="isAnonymous()">
-        <a class="text-secondary text-decoration-none" th:href="@{/login}">Login</a>
-        <!--TO DO - GG to check these links -->
-        <a class="text-secondary text-decoration-none pl-4" th:href="@{/register}">Register</a>
-        <!--TO DO - GG to check these links -->
+    <div class="row" sec:authorize="isAnonymous()">
+
+        <a class="text-secondary text-decoration-none" th:href="@{/login}" th:text="#{Login}">Login</a>
+        <a class="text-secondary text-decoration-none pl-4" th:href="@{/register}" th:text="#{Register}">Register</a>
     </div>
     <div class="btn-group" sec:authorize="isAuthenticated()">
         <button aria-expanded="false" aria-haspopup="true" class="btn btn-green btn-sm dropdown-toggle"
@@ -80,7 +82,7 @@
                   sec:authentication="name">User</span>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" th:href="@{/changePass}" th:text="#{Change.password}">Change Password</a>
+            <a class="dropdown-item" th:href="@{/change-pass}" th:text="#{Change.password}">Change Password</a>
             <a class="dropdown-item" href="#">Control Panel</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">Separated link</a>
@@ -91,7 +93,7 @@
 
 
 <div th:fragment="search_bar">
-    <div class="row justify-content-center py-3 px-sm-4">
+    <div class="row justify-content-center py-3 mx-4">
         <div class="col-12">
             <form>
                 <div class="row pb-sm-2">
@@ -132,7 +134,8 @@
                             </div>
                         </div>
                     </div>
-                    <a aria-controls="collapseExample" aria-expanded="false" class="text-secondary text-decoration-none"
+                    <a aria-controls="collapseExample" aria-expanded="false"
+                       class="text-secondary text-decoration-none"
                        data-target="#collapseExample" data-toggle="collapse" th:text="#{Advanced.search}"
                        type="button">
                     </a>
@@ -185,12 +188,35 @@
 
 </main>
 
-<footer th:fragment="body_footer" class="footer mt-auto py-3">
-    <div class="container">
-        <p>
-            Today is: <span th:text="${#dates.createToday()}">13 May 2011</span>
-        </p>
+<footer class="footer" th:fragment="body_footer">
+    <div class="row px">
+        <div class="col-3 offset-1">
+            <h5 class="font-weight-bold">Homie</h5>
+            <ul class="list-unstyled">
+                <li class="font-weight-light">Jobs</li>
+            </ul>
+        </div>
+        <div class="col-3">
+            <h5 class="font-weight-bold">Contact Us</h5>
+            <ul class="list-unstyled">
+                <li class="font-weight-light">FAQ</li>
+                <li class="font-weight-light">Customer Care</li>
+                <li class="font-weight-light">Press</li>
+            </ul>
+        </div>
+        <div class="col-3">
+            <h5 class="font-weight-bold">Legal</h5>
+            <ul class="list-unstyled">
+                <li class="font-weight-light">Terms and Conditions</li>
+                <li class="font-weight-light">Privacy Policy</li>
+                <li class="font-weight-light">Rent Policy</li>
+            </ul>
+        </div>
+
     </div>
+    <!--    <p>-->
+    <!--        Today is: <span th:text="${#dates.createToday()}">13 May 2011</span>-->
+    <!--    </p>-->
 </footer>
 
 
@@ -208,7 +234,29 @@
     <script crossorigin="anonymous"
             integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
             src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script th:src="@{/js/common.js}"></script>
     <script th:src="@{/js/search-functionality.js}"></script>
 </div>
 </body>
+<head th:fragment="headerfiles">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    <meta th:content="${#locale}" th:name="current_locale">
+    <title th:include=":: #pageTitle">Layout Generic Title </title>
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <!--       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"-->
+    <!--          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap_customization.css}">-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <link rel="stylesheet" th:href="@{/css/image_parallax.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
+
+</head>
+<title>Template Fragments</title>
 </html>

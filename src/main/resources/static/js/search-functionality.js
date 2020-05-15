@@ -32,6 +32,9 @@ $(document).ready(function () {
                 }
             });
         },
+        open: function () {
+            $('.ui-autocomplete').css('z-index', 3000);
+        },
         minLength: 3,
         select: function (event, ui) {
             event.preventDefault();

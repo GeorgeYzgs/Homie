@@ -25,8 +25,9 @@ public class Property {
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
     private boolean isAvailable;
+    private boolean isNonLocked;
     private int views;
-    private int searchValue; // will be 1 to 5 to promote certain properties.
+    private int searchValue;
     @Enumerated(EnumType.STRING)
     private Category category;
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
@@ -55,17 +56,8 @@ public class Property {
     public Property() {
     }
 
-    public Property(String description,
-                    int price,
-                    Address address,
-                    Category category,
-                    int numberOfRooms,
-                    int area,
-                    int floor,
-                    HeatingType heatingType,
-                    HeatingFuel heatingFuel,
-                    User owner) {
-
+    public Property(String description, int price, Address address, Category category, int numberOfRooms,
+                    int area, int floor, HeatingType heatingType, HeatingFuel heatingFuel, User owner) {
         this.description = description;
         this.price = price;
         this.isAvailable = true;
@@ -78,6 +70,15 @@ public class Property {
         this.heatingFuel = heatingFuel;
         this.owner = owner;
         this.searchValue = 2;
+        this.isNonLocked = true;
+    }
+
+    public boolean isNonLocked() {
+        return isNonLocked;
+    }
+
+    public void setNonLocked(boolean nonLocked) {
+        isNonLocked = nonLocked;
     }
 
     public int getViews() {
@@ -148,16 +149,16 @@ public class Property {
         return photoCollection;
     }
 
+    public void setPhotoCollection(Collection<Photo> photoCollection) {
+        this.photoCollection = photoCollection;
+    }
+
     public User getOwner() {
         return owner;
     }
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public void setPhotoCollection(Collection<Photo> photoCollection) {
-        this.photoCollection = photoCollection;
     }
 
     public Collection<Rental> getRentalCollection() {

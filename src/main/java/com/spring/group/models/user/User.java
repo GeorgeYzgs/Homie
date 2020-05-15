@@ -44,7 +44,7 @@ public class User {
     private AuthProvider authProvider;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Collection<Property> propertyCollection;

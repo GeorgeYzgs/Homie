@@ -19,7 +19,7 @@
                             <div class="alert alert-danger" th:if="${messageDanger}">
                                 <p class="text text-center" th:text="${messageDanger}"></p>
                             </div>
-                            <form method="post" th:action="@{/forgotPass}" th:object="${forgotUserPass}">
+                            <form method="post" th:action="@{/forgot-pass}" th:object="${forgotUserPass}">
                                 <fieldset>
                                     <div class="form-group">
                                         <label class="form-control-label text-secondary" for="email">Email</label>
