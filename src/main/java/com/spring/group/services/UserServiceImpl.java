@@ -59,7 +59,9 @@ public class UserServiceImpl implements UserServiceInterface {
     public User getUserByID(Integer userID) { return userRepository.getOne(userID); }
 
     @Override
-    public Collection<User> getUserList() { return userRepository.findAll(); }
+    public Collection<User> getUserList() {
+        return userRepository.findAll();
+    }
 
     public boolean isUsernamePresent(String username) {
         return userRepository.findByUsername(username).isPresent();
@@ -69,6 +71,14 @@ public class UserServiceImpl implements UserServiceInterface {
         return userRepository.findByEmail(email).isPresent();
     }
 
+    /**
+     * Attempts to register a new user to our database, by unwrapping the given data access object.
+     * Returns "SUCCESS" if successful, otherwise an error message
+     * if the given username or email address of the data access object are unavailable
+     *
+     * @param dto the data access object to be unwrapped
+     * @return "SUCCESS" or an error message
+     */
     public String registerUser(RegisterUserDto dto) {
         if (checkUserName(dto.getUsername()).isPresent()) {
             return messageSource.getMessage("Username.unavailable", null, Locale.UK);
@@ -82,6 +92,15 @@ public class UserServiceImpl implements UserServiceInterface {
         return "SUCCESS";
     }
 
+    /**
+     * Attempts to change the password of a logged user,by unwrapping a given data access object.
+     * If the user is logged in with a Homie account,their old password does not match their new given password,
+     * and the two new given passwords match
+     *
+     * @param dto    the provided data access object
+     * @param userID the id of the logged user to be linked to a user in our database
+     * @return
+     */
     //TODO Add another message here.
     public String changePass(RegisterUserDto dto, int userID) {
         User user = getUserByID(userID);

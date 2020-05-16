@@ -12,7 +12,11 @@ import java.util.Optional;
 @Repository
 public interface ResetPassTokenRepository extends JpaRepository<ResetPassToken, Integer> {
 
-    Optional<ResetPassToken> findByResetPassToken(String confirmationToken);
-
-    Optional<ResetPassToken> findByUserEmail(String email);
+    /**
+     * A method query created to find reset pass tokens by their reset pass token generated String
+     *
+     * @param resetPassToken the UUID string linked to the token
+     * @return an optional token if the given string was linked to a token
+     */
+    Optional<ResetPassToken> findByResetPassToken(String resetPassToken);
 }

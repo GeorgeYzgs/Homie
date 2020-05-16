@@ -7,6 +7,8 @@ import java.util.UUID;
 
 /**
  * @author George.Giazitzis
+ * A reset pass token is emailed to the user upon successful reset pass procedure,
+ * enables the user to reset their forgotten password, for a set limited time.
  */
 @Entity
 public class ResetPassToken {

@@ -12,6 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * The implementation of the @Valid password interface annotation,
+ * utilizing passay library to create a password pattern and custom error messages
+ */
 public class PasswordPatternValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Autowired

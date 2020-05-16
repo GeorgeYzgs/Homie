@@ -26,6 +26,13 @@ public class AdminController {
     @Autowired
     private PropertyServiceInterface propertyService;
 
+    /**
+     * A controller to promote and demote users to and from moderators.
+     *
+     * @param id                 the target user's id
+     * @param redirectAttributes informs the user of the result of his attempt.
+     * @return the target user's profile page
+     */
     @PostMapping("/change-role")
     public ModelAndView changeUserRole(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByID(id);
@@ -40,16 +47,30 @@ public class AdminController {
         return new ModelAndView("redirect:/mod/user/" + id);
     }
 
-    //TODO implement properly page, change redirect!
+    /**
+     * A controller to change a property search value
+     *
+     * @param id    the id of the target property
+     * @param value the value to be changed to
+     * @return the page of the target property
+     */
+    //TODO implement properly page button!
     @PostMapping("/change-property-value")
     public ModelAndView changePropertyValue(@RequestParam Integer id,
                                             @RequestParam Integer value) {
         Property property = propertyService.getPropertyByID(id);
         property.setSearchValue(value);
         propertyService.insertProperty(property);
-        return new ModelAndView("redirect:/mod/users");
+        return new ModelAndView("redirect:/view/" + id);
     }
 
+    /**
+     * A controller to change the search value of all the properties of a user
+     *
+     * @param userID the target user's id
+     * @param value  the value to be changed to
+     * @return the profile page of the target user
+     */
     @PostMapping("/change-all-properties-value")
     public ModelAndView changeAllPropertyValues(@RequestParam Integer userID,
                                                 @RequestParam Integer value) {

@@ -15,6 +15,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
+/**
+ * The main property data transfer object that unwraps into a property entity
+ * its linked address, along with a collection of photos provided for the property.
+ */
 public class PropertyDTO {
 
     @NotBlank(message = "{Not.blank}")

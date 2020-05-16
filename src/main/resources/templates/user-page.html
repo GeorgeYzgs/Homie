@@ -56,16 +56,10 @@
             </div>
         </div>
 
-
-        <div th:if="${#authentication.principal.id == user.id}">
-            <!--                Implement change account stuff here...-->
-        </div>
-
-
-
         <div class="container">
 
             <div class="table-responsive table-hover">
+                Properties
                 <table class="table">
                     <tr>
                         <th>Category</th>
@@ -81,6 +75,43 @@
                     </tr>
                 </table>
             </div>
+
+            <div class="table-responsive table-hover">
+                Rental offers:
+                <table class="table">
+                    <tr>
+                        <th>Property</th>
+                        <th>Price</th>
+                    </tr>
+                    <div th:each="property : ${user.propertyCollection}">
+                        <span th:each="rental : ${property.rentalCollection}">
+                            <span th:if="${rental.pending}">
+                            <td th:text="${rental.residence.address.city}  +','+ ${rental.residence.address.street}+','+ ${rental.residence.address.number}"></td>
+                            <td th:text="${rental.agreedPrice}"></td>
+                            <span sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == user.id}">
+                            <td>
+                                <form method="post" th:action="@{/manage-offers}">
+                                 <input name="id" th:hidden="hidden" th:value="${rental.id}">
+                                    <input hidden name="isAccepted" type="text" value="true">
+                         <button class="btn btn-success" type="submit">Accept Offer</button>
+                                </form>
+                            </td>
+                            <td>
+                                 <form method="post" th:action="@{/manage-offers}">
+                                <input name="id" th:hidden="hidden" th:value="${rental.id}">
+                                    <input hidden name="isAccepted" type="text" value="false">
+                            <button class="btn btn-danger" type="submit">Decline</button>
+                                 </form>
+                            </td>
+                                </span>
+                            </span>
+                        </span>
+
+                    </div>
+                </table>
+            </div>
+
+
         </div>
     </main>
 </section>

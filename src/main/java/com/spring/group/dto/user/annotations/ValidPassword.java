@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * An interface to create our own annotation for validating password patterns.
+ */
 @Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = PasswordPatternValidator.class)

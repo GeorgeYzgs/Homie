@@ -30,6 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Controller
 public class MainController {
 
+    /**
+     * A thread safe map to store new views for every property
+     */
     private static final Map<Integer, Integer> pageViewCount = new ConcurrentHashMap<>();
 
     @Autowired
@@ -47,11 +50,26 @@ public class MainController {
     @Autowired
     private MessageSource messageSource;
 
+    /**
+     * A controller that allows users to list a new property
+     *
+     * @return the insert property page
+     */
     @GetMapping("/list-new-property")
     public ModelAndView list() {
         return new ModelAndView("insert-property", "propertyDTO", new PropertyDTO());
     }
 
+    /**
+     * A controller that handles form submission for listing new properties
+     *
+     * @param propertyDTO        the object to be validated
+     * @param bindingResult      validates the object for errors
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return redirects to the home page if successful, otherwise returns the insert property
+     * @throws IOException if the parsing of the provided photos of the property fails.
+     */
     @PostMapping("/list-new-property")
     public ModelAndView listProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
                                      BindingResult bindingResult, Authentication auth,
@@ -69,13 +87,27 @@ public class MainController {
         return new ModelAndView("redirect:/");
     }
 
+    /**
+     * A controller to handle user offers for a property
+     *
+     * @param id                 the id of the target property
+     * @param price              the price the user offers
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return redirects to the target property page
+     */
+    //TODO add property not available, only 1 pending offer.
     @PostMapping("/submit-offer")
     public ModelAndView submitOffer(@RequestParam Integer id, @RequestParam Integer price,
                                     Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         Property property = propertyService.getPropertyByID(id);
         if (loggedUser.getId() == property.getOwner().getId()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer on your own property!");
+            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer for your own property");
+            return new ModelAndView("redirect:/view/" + id);
+        }
+        if (!property.isNonLocked()) {
+            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer for a locked property");
             return new ModelAndView("redirect:/view/" + id);
         }
         User tenant = userService.getUserByID(loggedUser.getId());
@@ -84,7 +116,16 @@ public class MainController {
         return new ModelAndView("redirect:/view/" + id);
     }
 
-    //TODO redirect back to his profile................................
+    /**
+     * A controller that manages offers a user has on a property
+     *
+     * @param id                 the target property id
+     * @param isAccepted         the owners decision of accepting or declining the given offer
+     * @param auth               the logged user / owner
+     * @param redirectAttributes informs the owner of the result of his decision
+     * @return redirects to the owner's profile page
+     */
+    //TODO add residency availability / locked
     @PostMapping("/manage-offers")
     public ModelAndView manageOffers(@RequestParam Integer id, @RequestParam boolean isAccepted,
                                      Authentication auth, RedirectAttributes redirectAttributes) {
@@ -92,40 +133,59 @@ public class MainController {
         Rental rental = rentalService.getRentalByID(id);
         if (loggedUser.getId() != rental.getResidence().getOwner().getId()) {
             redirectAttributes.addFlashAttribute("messageDanger", "You can only manage offers to your properties!");
-            return new ModelAndView("redirect:/view/" + id);
+            return new ModelAndView("redirect:/my-profile");
+        }
+        if (!rental.isPending()) {
+            redirectAttributes.addFlashAttribute("messageDanger", "This offer has already been managed.");
+            return new ModelAndView("redirect:/my-profile");
         }
         if (rentalService.handleOffer(rental, isAccepted)) {
             redirectAttributes.addFlashAttribute("messageSuccess", "Offer accepted!");
-            return new ModelAndView("redirect:/view/" + id);
+            return new ModelAndView("redirect:/my-profile");
         }
         redirectAttributes.addFlashAttribute("messageSuccess", "Offer declined!");
-        return new ModelAndView("redirect:/view/" + id);
+        return new ModelAndView("redirect:/my-profile");
     }
 
+    /**
+     * A controller for users to access their profile page
+     *
+     * @param auth the logged user
+     * @return returns the logged user's profile page
+     */
     @GetMapping("/my-profile")
     public ModelAndView displayProfile(Authentication auth) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         return new ModelAndView("user-page", "user", userService.getUserByID(loggedUser.getId()));
     }
 
-    //TODO Create a html page for property views.
+    /**
+     * A controller that returns the page of a property
+     *
+     * @param id the target property id
+     * @return the target property page
+     */
     @GetMapping("/view/{id}")
     public ModelAndView viewProperty(@PathVariable Integer id) {
         pageViewCount.merge(id, 1, Integer::sum);
         return new ModelAndView("view-property", "property", propertyService.getPropertyByID(id));
     }
 
+    /**
+     * A method that updates property view count with a cron expression,
+     * to not stress the database, currently updating every 5 minutes
+     * (seconds minutes hours days months years)
+     */
     @Scheduled(cron = "0 */5 * * * ?")
-    // seconds minutes hours days months years <-currently updating every 5 minutes
     private void updateViewCount() {
         System.out.println("Updating Property View Counts!");
         List<Property> updatedProperties = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : pageViewCount.entrySet()) {
-            Property property = propertyService.getPropertyByID(entry.getKey());
+            Property property = propertyService.getFullProperty(entry.getKey());
             property.setViews(property.getViews() + entry.getValue());
             updatedProperties.add(property);
         }
-        propertyService.updateProperties(updatedProperties);
         pageViewCount.clear();
+        propertyService.updateProperties(updatedProperties);
     }
 }

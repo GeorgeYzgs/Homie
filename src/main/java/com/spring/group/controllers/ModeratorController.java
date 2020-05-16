@@ -31,16 +31,35 @@ public class ModeratorController {
     @Autowired
     private SessionRegistry sessionRegistry;
 
+    /**
+     * A controller to access registered users data
+     *
+     * @return the display users page
+     */
     @GetMapping("/users")
     public ModelAndView displayUsersList() {
         return new ModelAndView("display-users", "userList", userService.getUserList());
     }
 
+    /**
+     * A controller to access a user's profile
+     *
+     * @param id the user's id provided as a path variable
+     * @return the user page of that user
+     */
     @GetMapping("/user/{id}")
     public ModelAndView displayUser(@PathVariable Integer id) {
         return new ModelAndView("user-page", "user", userService.getUserByID(id));
     }
 
+    /**
+     * A controller for banning / unbanning users
+     *
+     * @param id                 the target user's id provided as a path variable
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return the target user's profile page.
+     */
     @PostMapping("/lock-user")
     public ModelAndView lockUser(@RequestParam Integer id, Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
@@ -60,6 +79,11 @@ public class ModeratorController {
         return new ModelAndView("redirect:/mod/user/" + id);
     }
 
+    /**
+     * A method that is called when banning a user, to epxire any active sessions they may have
+     *
+     * @param id the target user's id
+     */
     private void deleteActiveSession(Integer id) {
         sessionRegistry.getAllPrincipals().stream()
                 .filter(principal -> principal instanceof MyUserDetails)
@@ -69,12 +93,19 @@ public class ModeratorController {
                         .forEach(SessionInformation::expireNow));
     }
 
+    /**
+     * A controller for locking / unlocking properties
+     *
+     * @param id                 the property id
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return redirects to the property page
+     */
     @PostMapping("/lock-property")
     public ModelAndView lockProperty(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
         Property property = propertyService.getPropertyByID(id);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);
         redirectAttributes.addFlashAttribute("messageSuccess", "Property has been locked / unlocked");
-        return new ModelAndView("redirect:/mod/user/" + id);
+        return new ModelAndView("redirect:/view/" + id);
     }
 }

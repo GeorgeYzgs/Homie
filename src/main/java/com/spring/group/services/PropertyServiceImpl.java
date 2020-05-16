@@ -36,8 +36,7 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public void alterAvailability(Property property) {
-        property.setAvailable(!property.isAvailable());
-        propertyRepository.save(property);
+    public Property getFullProperty(Integer PropertyID) {
+        return propertyRepository.findById(PropertyID).get();
     }
 }

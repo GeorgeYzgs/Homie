@@ -7,6 +7,8 @@ import java.util.UUID;
 
 /**
  * @author George.Giazitzis
+ * A confirmation token class that is created upon every successful registration attempt,
+ * sent as an email to the user in order to fully activate a user's account, for a set limited time.
  */
 @Entity
 public class ConfirmationToken {
