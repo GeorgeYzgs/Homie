@@ -31,35 +31,59 @@ public class ModeratorController {
     @Autowired
     private SessionRegistry sessionRegistry;
 
+    /**
+     * A controller to access registered users data
+     *
+     * @return the display users page
+     */
     @GetMapping("/users")
     public ModelAndView displayUsersList() {
         return new ModelAndView("display-users", "userList", userService.getUserList());
     }
 
+    /**
+     * A controller to access a user's profile
+     *
+     * @param id the user's id provided as a path variable
+     * @return the user page of that user
+     */
     @GetMapping("/user/{id}")
     public ModelAndView displayUser(@PathVariable Integer id) {
         return new ModelAndView("user-page", "user", userService.getUserByID(id));
     }
 
+    /**
+     * A controller for banning / unbanning users
+     *
+     * @param userID             the target user's id provided as a path variable
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return the target user's profile page.
+     */
     @PostMapping("/lock-user")
-    public ModelAndView lockUser(@RequestParam Integer id, Authentication auth, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockUser(@RequestParam Integer userID, Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        User user = userService.getUserByID(id);
+        User user = userService.getUserByID(userID);
         if (loggedUser.getId() == user.getId()) {
             redirectAttributes.addFlashAttribute("messageDanger", "Did you just try to ban yourself?");
-            return new ModelAndView("redirect:/mod/user/" + id);
+            return new ModelAndView("redirect:/mod/user/" + userID);
         }
         if (!user.getUserRole().equals(UserRole.USER)) {
             redirectAttributes.addFlashAttribute("messageDanger", "You can only ban / un-ban users.");
-            return new ModelAndView("redirect:/mod/user/" + id);
+            return new ModelAndView("redirect:/mod/user/" + userID);
         }
         user.setNonLocked(!user.isNonLocked());
         userService.updateUser(user);
-        deleteActiveSession(id);
+        deleteActiveSession(userID);
         redirectAttributes.addFlashAttribute("messageSuccess", "User has been banned / unbanned");
-        return new ModelAndView("redirect:/mod/user/" + id);
+        return new ModelAndView("redirect:/mod/user/" + userID);
     }
 
+    /**
+     * A method that is called when banning a user, to epxire any active sessions they may have
+     *
+     * @param id the target user's id
+     */
     private void deleteActiveSession(Integer id) {
         sessionRegistry.getAllPrincipals().stream()
                 .filter(principal -> principal instanceof MyUserDetails)
@@ -69,12 +93,19 @@ public class ModeratorController {
                         .forEach(SessionInformation::expireNow));
     }
 
+    /**
+     * A controller for locking / unlocking properties
+     *
+     * @param propertyID                 the property id
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return redirects to the property page
+     */
     @PostMapping("/lock-property")
-    public ModelAndView lockProperty(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
-        Property property = propertyService.getPropertyByID(id);
+    public ModelAndView lockProperty(@RequestParam Integer propertyID, RedirectAttributes redirectAttributes) {
+        Property property = propertyService.getPropertyByID(propertyID);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);
         redirectAttributes.addFlashAttribute("messageSuccess", "Property has been locked / unlocked");
-        return new ModelAndView("redirect:/mod/user/" + id);
+        return new ModelAndView("redirect:/view/" + propertyID);
     }
 }

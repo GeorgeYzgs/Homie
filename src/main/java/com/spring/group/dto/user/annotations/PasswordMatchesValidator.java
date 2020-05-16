@@ -6,6 +6,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
+ * The implementation of the @PasswordMatches interface that compares the two passwords
+ *
  * @author George.Giazitzis
  */
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, RegisterUserDto> {

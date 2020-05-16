@@ -12,7 +12,12 @@ import java.util.Optional;
 @Repository
 public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationToken, Integer> {
 
+    /**
+     * A method query created to find confirmation tokens by their confirmation token generated String
+     *
+     * @param confirmationToken the UUID string linked to the token
+     * @return an optional token if the given string was linked to a token
+     */
     Optional<ConfirmationToken> findByConfirmationToken(String confirmationToken);
 
-    Optional<ConfirmationToken> findByUserEmail(String email);
 }

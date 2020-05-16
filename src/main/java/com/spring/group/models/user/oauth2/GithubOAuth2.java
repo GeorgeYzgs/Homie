@@ -4,6 +4,8 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * A class that extends oauthuserinfo to validate oauth with GitHub accounts
+ * @see OAuth2UserInfo
  */
 public class GithubOAuth2 extends OAuth2UserInfo {
 

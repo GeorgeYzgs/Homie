@@ -4,6 +4,8 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * A class that extends oauthuserinfo to validate oauth with Facebook accounts
+ * @see OAuth2UserInfo
  */
 public class FacebookOAuth2 extends OAuth2UserInfo {
 

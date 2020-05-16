@@ -10,7 +10,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
+ * The main user data transfer object, used for most form submissions to alter / create users.
+ *
  * @author George.Giazitzis
+ * @see validationgroups for how different combinations of variable fields are being validated each time.
  */
 @PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPassMatchValidator.class})
 public class RegisterUserDto {

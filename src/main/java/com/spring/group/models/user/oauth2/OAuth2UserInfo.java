@@ -4,6 +4,10 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * An abstract class that is used as a base for a factory design pattern
+ * for oauth authorization with multiple social netowrks.
+ * Requests the user's name email and potential avatar upon authentication.
+ * @see OAuth2UserInfoFactory
  */
 public abstract class OAuth2UserInfo {
 

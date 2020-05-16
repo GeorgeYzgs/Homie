@@ -14,6 +14,7 @@ import java.util.Optional;
 
 /**
  * @author George.Giazitzis
+ * The implementation of the service method utilized when attempting form login, by accessing data from our data source
  */
 @Service
 @Transactional

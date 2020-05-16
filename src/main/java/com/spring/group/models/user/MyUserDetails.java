@@ -12,6 +12,9 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * The implementation of two interfaces needed by spring security for authentication and authorization.
+ * The userdetails interface is utilized upon form login, while the oauthuser interface is utilized by oauth login
+ * Having a single class for both interfaces allows us to not differentiate between the active session tokens.
  */
 public class MyUserDetails implements OAuth2User, UserDetails {
 

@@ -33,6 +33,11 @@ public class TokenService {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    /**
+     * Utilizes java mail sender to send an async, yes java async, email.
+     *
+     * @param email the email to be sent.
+     */
     @Async
     public void sendEmail(SimpleMailMessage email) {
         javaMailSender.send(email);
@@ -46,6 +51,12 @@ public class TokenService {
         return resetPassTokenRepository.findByResetPassToken(token);
     }
 
+    /**
+     * Creates a confirmation token for the provided user, persists it in our database
+     * and creates an email to be sent to the given user to fully activate his account.
+     *
+     * @param user the user the created confirmation token and email will be linked to
+     */
     // TODO Make a thymeleaf template for email
     public void createConfirmEmail(User user) {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
@@ -60,6 +71,12 @@ public class TokenService {
         sendEmail(mailMessage);
     }
 
+    /**
+     * Creates a reset pass token for the provided user, persists it in our database
+     * and creates an email to be sent to the given user to reset their password.
+     *
+     * @param user the user the created reset token and email will be linked to
+     */
     // TODO Make a thymeleaf template for email
     public void createResetEmail(User user) {
         ResetPassToken resetPassToken = new ResetPassToken(user);
@@ -74,6 +91,14 @@ public class TokenService {
         sendEmail(mailMessage);
     }
 
+    /**
+     * Validates that the given confirmation token exists in our database and is not expired.
+     * If expired, issues a new confirmation token for the user linked to provided token
+     * Returns "SUCCESS" if the above criteria are met, otherwise an error message.
+     *
+     * @param confirmationToken the token to be validated
+     * @return "SUCCESS" or an error message as a string
+     */
     public String validateConfirmationToken(String confirmationToken) {
         Optional<ConfirmationToken> token = checkConfirmationToken(confirmationToken);
         if (!token.isPresent()) {
@@ -90,6 +115,14 @@ public class TokenService {
         return "SUCCESS";
     }
 
+    /**
+     * Validates that the given reset token exists in our database, has not been used
+     * and is not expired.Returns the email of the user linekd to the above token if successful, otherwise
+     * an error message
+     *
+     * @param resetPassToken
+     * @return
+     */
     public String validateResetToken(String resetPassToken) {
         Optional<ResetPassToken> token = checkResetPassToken(resetPassToken);
         if (!token.isPresent()) {
@@ -105,6 +138,13 @@ public class TokenService {
         return validToken.getUser().getEmail();
     }
 
+    /**
+     * Validates that the given email is linked to an account provided,
+     * and if the linked account is a local Homie account
+     *
+     * @param email the email provided
+     * @return "SUCCESS" if above criteria are met, otherwise an error message
+     */
     public String forgotPass(String email) {
         Optional<User> user = userServiceImpl.checkEmail(email);
         if (!user.isPresent()) {
@@ -117,6 +157,12 @@ public class TokenService {
         return "SUCCESS";
     }
 
+    /**
+     * Unwraps the given data access object and the provided email to set a new pass to the user linked to it.
+     *
+     * @param dto   the data access object to be unwrapped
+     * @param email the provided email address
+     */
     public void setNewPass(RegisterUserDto dto, String email) {
         User user = userServiceImpl.checkEmail(email).get();
         user.setPassword(dto.getPassword());

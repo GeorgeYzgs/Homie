@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * The implementation of the @ValidEmail interface, used to validate provided email addresses with a given email pattern
+ *
  * @author George.Giazitzis
  */
 public class EmailValidator implements ConstraintValidator<ValidEmail, String> {

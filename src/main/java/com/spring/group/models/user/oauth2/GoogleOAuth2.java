@@ -4,6 +4,8 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * A class that extends oauthuserinfo to validate oauth with Google accounts
+ * @see OAuth2UserInfo
  */
 public class GoogleOAuth2 extends OAuth2UserInfo {
 

@@ -27,11 +27,28 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Utilizes spring oauth client to pass the authentication process of oauth login,
+     * and then manages the authorization process of the request
+     *
+     * @param request tha oauth2 user request to be processed
+     * @return an oauth user after login / registration
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest request) {
         return processOAuth2User(request, super.loadUser(request));
     }
 
+    /**
+     * Handles the request passed from oauth process and the affiliated user token that was given from the social network.
+     * We are able to both register the user in our database, and deny his request if his account is banned pr
+     * the email address provided is already in use
+     * Arguably by the same user, but with a different kind of social network login or Homie account.
+     *
+     * @param userRequest the initial oauth request
+     * @param oAuth2User  the oauth user spring oauth client creates from its initial loadUser method we are calling
+     * @return an oauth user that was logged in
+     */
     private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
         AuthProvider authProvider = AuthProvider.valueOf(userRequest.getClientRegistration()
                 .getRegistrationId().toLowerCase());
@@ -48,6 +65,13 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         return new MyUserDetails(userRepository.save(user), userAttributes);
     }
 
+    /**
+     * Attempts to authorise the user if the provided email address is not linked to a different account
+     * than the one provided by his authentication provider or if they are not banned
+     *
+     * @param user         the user to be authorised
+     * @param authProvider the given authentication provider
+     */
     // TODO Move messages to messagesources
     private void authAttempt(User user, AuthProvider authProvider) {
         if (!user.getAuthProvider().equals(authProvider)) {

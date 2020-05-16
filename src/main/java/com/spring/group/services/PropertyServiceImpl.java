@@ -2,6 +2,7 @@ package com.spring.group.services;
 
 
 import com.spring.group.models.property.Property;
+import com.spring.group.models.rental.Rental;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,37 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public void alterAvailability(Property property) {
-        property.setAvailable(!property.isAvailable());
-        propertyRepository.save(property);
+    public Property getFullProperty(Integer PropertyID) {
+        return propertyRepository.findById(PropertyID).get();
+    }
+
+    @Override
+    public String submitOffer(Property property, int userID) {
+        if (userID == property.getOwner().getId()) {
+            return "You cannot submit an offer for your own property";
+        }
+        if (hasPendingOffer(property, userID)) {
+            return "You have already submitted an offer for this property";
+        }
+        if (!property.isAvailable()) {
+            return "This property is no longer available";
+        }
+        if (!property.isNonLocked()) {
+            return "You cannot submit an offer for a locked property";
+        }
+        return "SUCCESS";
+    }
+
+    /**
+     * Checks the collection of pending rentals of a property to see if a user has
+     * already submitted an offer for the provided property
+     *
+     * @param property the provided property
+     * @param userID   the id of the user interested in submitting an offer
+     * @return true if the user already has an offer pending, otherwise false.
+     */
+    private boolean hasPendingOffer(Property property, int userID) {
+        return property.getRentalCollection().stream().
+                filter(rental -> rental.getTenant().getId() == userID).anyMatch(Rental::isPending);
     }
 }

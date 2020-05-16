@@ -10,6 +10,8 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * An interface to create a strict email validation annotation for emails provided
+ *
  * @author George.Giazitzis
  */
 @Target({TYPE, FIELD, ANNOTATION_TYPE})

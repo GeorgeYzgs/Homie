@@ -23,17 +23,39 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String[] LOGGED_USER_URLS = {"/", "/change-pass", "/list-new-property"};
+    /**
+     * An array of all the endpoints the user can only access upon being authenticated
+     */
+    private static final String[] LOGGED_USER_URLS = {"/manage-offers", "/submit-offer", "/my-profile",
+            "/change-pass", "/list-new-property"};
 
+    /**
+     * The user detail service class used for logging in
+     */
     @Qualifier("myUserDetailsService")
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Configures the authentication builder to utilize our implementation of a login service class
+     * and a password encoder
+     *
+     * @param auth the authentication manager builder, default provided by spring security
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
     }
 
+    /**
+     * The main security configuration of endpoints, separates endpoints into admin only access,
+     * moderator, users and permit all, along with enabling both form and oauth logins.
+     * Furthermore, allows only one session per user and enables session registry.
+     *
+     * @param http the http security to be configured
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -59,11 +81,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .maximumSessions(1).sessionRegistry(sessionRegistry());
     }
 
+    /**
+     * The chosen implementation of a password encoder
+     *
+     * @return a bcrypt password encoder
+     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * A session registry to be used for monitoring user activity
+     *
+     * @return a session registry implementation
+     */
     @Bean
-    public SessionRegistry sessionRegistry() { return new SessionRegistryImpl(); }
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 }

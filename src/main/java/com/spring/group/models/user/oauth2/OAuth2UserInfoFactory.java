@@ -8,6 +8,10 @@ import java.util.Map;
 
 /**
  * @author George.Giazitzis
+ * A factory to create an oauthuser based on the type of social network they are using.
+ * Leverages the fact that every network attaches its name inside the response JSON,
+ * which is indentified to differentiate between the social networks to parse their JSON accordingly,
+ * to extract the requested data/
  */
 public abstract class OAuth2UserInfoFactory {
 

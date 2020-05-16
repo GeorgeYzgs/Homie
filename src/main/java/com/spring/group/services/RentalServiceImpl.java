@@ -1,5 +1,6 @@
 package com.spring.group.services;
 
+import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.repos.RentalRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collection;
 
 /**
  * @author George.Giazitzis
@@ -34,12 +36,29 @@ public class RentalServiceImpl implements RentalServiceInterface {
     }
 
     @Override
-    public boolean handleOffer(Rental rental, boolean isAccepted) {
+    public String manageOffers(Rental rental, boolean isAccepted, int userID) {
+        if (userID != rental.getResidence().getOwner().getId()) {
+            return "You can only manage offers to your properties!";
+        }
+        if (!rental.isPending()) {
+            return "This offer has already been managed.";
+        }
+        if (handleOffer(rental, isAccepted)) {
+            return "Offer accepted!";
+        }
+        return "Offer declined";
+    }
+
+    private boolean handleOffer(Rental rental, boolean isAccepted) {
         rental.setPending(false);
         if (isAccepted) {
             rental.setStartDate(Instant.now());
-            rentalRepository.save(rental);
-            propertyService.alterAvailability(rental.getResidence());
+            Property property = rental.getResidence();
+            property.setAvailable(false);
+            propertyService.insertProperty(property);
+            Collection<Rental> offers = property.getRentalCollection();
+            offers.forEach(offer -> offer.setPending(false));
+            rentalRepository.saveAll(offers);
             return true;
         }
         rentalRepository.save(rental);

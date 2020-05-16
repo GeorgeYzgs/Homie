@@ -26,36 +26,59 @@ public class AdminController {
     @Autowired
     private PropertyServiceInterface propertyService;
 
+    /**
+     * A controller to promote and demote users to and from moderators.
+     *
+     * @param userID             the target user's id
+     * @param redirectAttributes informs the user of the result of his attempt.
+     * @return the target user's profile page
+     */
     @PostMapping("/change-role")
-    public ModelAndView changeUserRole(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
-        User user = userService.getUserByID(id);
+    public ModelAndView changeUserRole(@RequestParam Integer userID, RedirectAttributes redirectAttributes) {
+        User user = userService.getUserByID(userID);
         if (user.getUserRole().equals(UserRole.ADMIN)) {
             redirectAttributes.addFlashAttribute("messageDanger", "You cannot change the role of Admins.");
-            return new ModelAndView("redirect:/mod/user/" + id);
+            return new ModelAndView("redirect:/mod/user/" + userID);
         }
         UserRole role = user.getUserRole().equals(UserRole.USER) ? UserRole.MODERATOR : UserRole.USER;
         user.setUserRole(role);
         userService.updateUser(user);
         redirectAttributes.addFlashAttribute("messageSuccess", "User role has been changed");
-        return new ModelAndView("redirect:/mod/user/" + id);
+        return new ModelAndView("redirect:/mod/user/" + userID);
     }
 
-    //TODO implement properly page, change redirect!
+    /**
+     * A controller to change a property search value
+     *
+     * @param propertyID    the id of the target property
+     * @param value the value to be changed to
+     * @return the page of the target property
+     */
     @PostMapping("/change-property-value")
-    public ModelAndView changePropertyValue(@RequestParam Integer id,
-                                            @RequestParam Integer value) {
-        Property property = propertyService.getPropertyByID(id);
+    public ModelAndView changePropertyValue(@RequestParam Integer propertyID,
+                                            @RequestParam Integer value, RedirectAttributes redirectAttributes) {
+        Property property = propertyService.getPropertyByID(propertyID);
         property.setSearchValue(value);
         propertyService.insertProperty(property);
-        return new ModelAndView("redirect:/mod/users");
+        redirectAttributes.addFlashAttribute("messageSuccess", "The Search Value of this property has been set!");
+        return new ModelAndView("redirect:/view/" + propertyID);
     }
 
+    /**
+     * A controller to change the search value of all the properties of a user
+     *
+     * @param userID the target user's id
+     * @param value  the value to be changed to
+     * @return the profile page of the target user
+     */
     @PostMapping("/change-all-properties-value")
     public ModelAndView changeAllPropertyValues(@RequestParam Integer userID,
-                                                @RequestParam Integer value) {
+                                                @RequestParam Integer value, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByID(userID);
         user.getPropertyCollection().forEach(p -> p.setSearchValue(value));
         propertyService.updateProperties(user.getPropertyCollection());
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                "The Search Value of all this user's properties has been set!");
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
 }
