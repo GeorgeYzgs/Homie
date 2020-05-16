@@ -29,7 +29,7 @@ public interface RentalServiceInterface {
      *
      * @param rental     the offer the owner has reviewed
      * @param isAccepted the owner's decision of accepting or declining said offer
-     * @return the result of handling the offer.
+     * @return the result of handling the offer
      */
-    boolean handleOffer(Rental rental, boolean isAccepted);
+    String manageOffers(Rental rental, boolean isAccepted, int userID);
 }

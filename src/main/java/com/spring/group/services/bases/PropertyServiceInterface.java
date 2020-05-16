@@ -41,7 +41,17 @@ public interface PropertyServiceInterface {
      *
      * @param PropertyID the target property id we are searchinb by
      * @return a full property object from our database.
-     * @see getPropertyByID
+     * @see {@link PropertyServiceInterface#getPropertyByID}
      */
     Property getFullProperty(Integer PropertyID);
+
+    /**
+     * Attempts to submit an offer for a property, by validating that the provided userID is not the property owner's ID,
+     * the property is not locked or unavailable, and the user has not already submitted an offer for the provided property
+     *
+     * @param property the provided property to submit an offer for
+     * @param userID   the id of the user interested in submitting an offer.
+     * @return "SUCCESS" if successful or an error message.
+     */
+    String submitOffer(Property property, int userID);
 }

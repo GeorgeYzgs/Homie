@@ -36,7 +36,20 @@ public class RentalServiceImpl implements RentalServiceInterface {
     }
 
     @Override
-    public boolean handleOffer(Rental rental, boolean isAccepted) {
+    public String manageOffers(Rental rental, boolean isAccepted, int userID) {
+        if (userID != rental.getResidence().getOwner().getId()) {
+            return "You can only manage offers to your properties!";
+        }
+        if (!rental.isPending()) {
+            return "This offer has already been managed.";
+        }
+        if (handleOffer(rental, isAccepted)) {
+            return "Offer accepted!";
+        }
+        return "Offer declined";
+    }
+
+    private boolean handleOffer(Rental rental, boolean isAccepted) {
         rental.setPending(false);
         if (isAccepted) {
             rental.setStartDate(Instant.now());

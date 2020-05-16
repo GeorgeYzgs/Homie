@@ -28,7 +28,7 @@
                 <form method="post" th:action="@{/mod/lock-user}">
                     Active:
                     <div th:text="${user.nonLocked}"></div>
-                    <input name="id" th:value="${user.id}" th:hidden="hidden">
+                    <input name="userI" th:hidden="hidden" th:value="${user.id}">
                     <button class="btn btn-danger" type="submit">Ban/Unban</button>
                 </form>
             </div>
@@ -37,7 +37,7 @@
                 <form method="post" th:action="@{/admin/change-role}">
                     Role:
                     <div th:text="${user.userRole}"></div>
-                    <input name="id" th:value="${user.id}" th:hidden="hidden">
+                    <input name="userID" th:hidden="hidden" th:value="${user.id}">
                     <button class="btn btn-primary" type="submit">Promote/Demote</button>
                 </form>
                 <br>
@@ -91,14 +91,14 @@
                             <span sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == user.id}">
                             <td>
                                 <form method="post" th:action="@{/manage-offers}">
-                                 <input name="id" th:hidden="hidden" th:value="${rental.id}">
+                                 <input name="rentalID" th:hidden="hidden" th:value="${rental.id}">
                                     <input hidden name="isAccepted" type="text" value="true">
                          <button class="btn btn-success" type="submit">Accept Offer</button>
                                 </form>
                             </td>
                             <td>
                                  <form method="post" th:action="@{/manage-offers}">
-                                <input name="id" th:hidden="hidden" th:value="${rental.id}">
+                                <input name="rentalID" th:hidden="hidden" th:value="${rental.id}">
                                     <input hidden name="isAccepted" type="text" value="false">
                             <button class="btn btn-danger" type="submit">Decline</button>
                                  </form>

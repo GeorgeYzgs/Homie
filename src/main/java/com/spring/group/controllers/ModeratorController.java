@@ -55,28 +55,28 @@ public class ModeratorController {
     /**
      * A controller for banning / unbanning users
      *
-     * @param id                 the target user's id provided as a path variable
+     * @param userID             the target user's id provided as a path variable
      * @param auth               the logged user
      * @param redirectAttributes informs the user of the result of his attempt
      * @return the target user's profile page.
      */
     @PostMapping("/lock-user")
-    public ModelAndView lockUser(@RequestParam Integer id, Authentication auth, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockUser(@RequestParam Integer userID, Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        User user = userService.getUserByID(id);
+        User user = userService.getUserByID(userID);
         if (loggedUser.getId() == user.getId()) {
             redirectAttributes.addFlashAttribute("messageDanger", "Did you just try to ban yourself?");
-            return new ModelAndView("redirect:/mod/user/" + id);
+            return new ModelAndView("redirect:/mod/user/" + userID);
         }
         if (!user.getUserRole().equals(UserRole.USER)) {
             redirectAttributes.addFlashAttribute("messageDanger", "You can only ban / un-ban users.");
-            return new ModelAndView("redirect:/mod/user/" + id);
+            return new ModelAndView("redirect:/mod/user/" + userID);
         }
         user.setNonLocked(!user.isNonLocked());
         userService.updateUser(user);
-        deleteActiveSession(id);
+        deleteActiveSession(userID);
         redirectAttributes.addFlashAttribute("messageSuccess", "User has been banned / unbanned");
-        return new ModelAndView("redirect:/mod/user/" + id);
+        return new ModelAndView("redirect:/mod/user/" + userID);
     }
 
     /**
@@ -96,16 +96,16 @@ public class ModeratorController {
     /**
      * A controller for locking / unlocking properties
      *
-     * @param id                 the property id
+     * @param propertyID                 the property id
      * @param redirectAttributes informs the user of the result of his attempt
      * @return redirects to the property page
      */
     @PostMapping("/lock-property")
-    public ModelAndView lockProperty(@RequestParam Integer id, RedirectAttributes redirectAttributes) {
-        Property property = propertyService.getPropertyByID(id);
+    public ModelAndView lockProperty(@RequestParam Integer propertyID, RedirectAttributes redirectAttributes) {
+        Property property = propertyService.getPropertyByID(propertyID);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);
         redirectAttributes.addFlashAttribute("messageSuccess", "Property has been locked / unlocked");
-        return new ModelAndView("redirect:/view/" + id);
+        return new ModelAndView("redirect:/view/" + propertyID);
     }
 }

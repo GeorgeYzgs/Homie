@@ -90,60 +90,47 @@ public class MainController {
     /**
      * A controller to handle user offers for a property
      *
-     * @param id                 the id of the target property
+     * @param propertyID         the id of the target property
      * @param price              the price the user offers
      * @param auth               the logged user
      * @param redirectAttributes informs the user of the result of his attempt
      * @return redirects to the target property page
      */
-    //TODO add property not available, only 1 pending offer.
     @PostMapping("/submit-offer")
-    public ModelAndView submitOffer(@RequestParam Integer id, @RequestParam Integer price,
+    public ModelAndView submitOffer(@RequestParam Integer propertyID, @RequestParam Integer price,
                                     Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        Property property = propertyService.getPropertyByID(id);
-        if (loggedUser.getId() == property.getOwner().getId()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer for your own property");
-            return new ModelAndView("redirect:/view/" + id);
-        }
-        if (!property.isNonLocked()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "You cannot submit an offer for a locked property");
-            return new ModelAndView("redirect:/view/" + id);
+        Property property = propertyService.getPropertyByID(propertyID);
+        String attempt = propertyService.submitOffer(property, loggedUser.getId());
+        if (!attempt.equals("SUCCESS")) {
+            redirectAttributes.addFlashAttribute("messageDanger", attempt);
+            return new ModelAndView("redirect:/view/" + propertyID);
         }
         User tenant = userService.getUserByID(loggedUser.getId());
         rentalService.insertRental(new Rental(price, property, tenant));
-        redirectAttributes.addFlashAttribute("messageSuccess", "Offer submitted!");
-        return new ModelAndView("redirect:/view/" + id);
+        redirectAttributes.addFlashAttribute("messageSuccess", "Offer submitted successfully!");
+        return new ModelAndView("redirect:/view/" + propertyID);
     }
 
     /**
      * A controller that manages offers a user has on a property
      *
-     * @param id                 the target property id
+     * @param rentalID           the target property id
      * @param isAccepted         the owners decision of accepting or declining the given offer
      * @param auth               the logged user / owner
      * @param redirectAttributes informs the owner of the result of his decision
      * @return redirects to the owner's profile page
      */
-    //TODO add residency availability / locked
     @PostMapping("/manage-offers")
-    public ModelAndView manageOffers(@RequestParam Integer id, @RequestParam boolean isAccepted,
+    public ModelAndView manageOffers(@RequestParam Integer rentalID, @RequestParam boolean isAccepted,
                                      Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        Rental rental = rentalService.getRentalByID(id);
-        if (loggedUser.getId() != rental.getResidence().getOwner().getId()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "You can only manage offers to your properties!");
-            return new ModelAndView("redirect:/my-profile");
+        Rental rental = rentalService.getRentalByID(rentalID);
+        String attempt = rentalService.manageOffers(rental, isAccepted, loggedUser.getId());
+        if (!attempt.contains("Offer")) {
+            redirectAttributes.addFlashAttribute("messageDanger", attempt);
         }
-        if (!rental.isPending()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "This offer has already been managed.");
-            return new ModelAndView("redirect:/my-profile");
-        }
-        if (rentalService.handleOffer(rental, isAccepted)) {
-            redirectAttributes.addFlashAttribute("messageSuccess", "Offer accepted!");
-            return new ModelAndView("redirect:/my-profile");
-        }
-        redirectAttributes.addFlashAttribute("messageSuccess", "Offer declined!");
+        redirectAttributes.addFlashAttribute("messageSuccess", attempt);
         return new ModelAndView("redirect:/my-profile");
     }
 
