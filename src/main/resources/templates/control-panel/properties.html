@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="userPropertiesOwned">
+    <h4>Property Owned</h4>
+    <table class="table table-responsive table-hover">
+        <tr>
+            <th>Category</th>
+            <th>Price</th>
+            <th>City / Address</th>
+            <th>Available</th>
+            <th>Owner</th>
+        </tr>
+        <tr th:each="property : ${userPropertiesOwned}">
+            <td th:text="${property.category}"></td>
+            <td th:text="${property.price}"></td>
+            <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
+            <td th:text="${property.available}"></td>
+            <td th:text="${property.owner.username}"></td>
+        </tr>
+    </table>
+</div>
+<div th:fragment="userPropertiesRenting">
+    <h4>Property Renting</h4>
+    <table class="table table-responsive table-hover">
+        <tr>
+            <th>Category</th>
+            <th>Price</th>
+            <th>City / Address</th>
+            <th>Available</th>
+            <th>Owner</th>
+        </tr>
+        <tr th:each="property : ${userPropertiesRenting}">
+            <td th:text="${property.category}"></td>
+            <td th:text="${property.price}"></td>
+            <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
+            <td th:text="${property.available}"></td>
+            <td th:text="${property.owner.username}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

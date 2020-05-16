@@ -23,7 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String[] LOGGED_USER_URLS = {"/change-pass", "/list-new-property"};
+    private static final String[] LOGGED_USER_URLS = {"/change-pass", "/list-new-property", "/my-profile", "/async/**"};
 
     @Qualifier("myUserDetailsService")
     @Autowired
@@ -41,8 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mod/**").hasAnyAuthority("ADMIN", "MODERATOR")
                 .antMatchers(LOGGED_USER_URLS).authenticated()
                 .antMatchers("/**").permitAll()
-                .antMatchers("/changePass").authenticated()
-                .antMatchers("/forgotPass", "/setNewPass", "/css/**", "/js/**", "/img/**").permitAll()
+//                .antMatchers("/changePass").authenticated()
+//                .antMatchers("/forgotPass", "/setNewPass", "/css/**", "/js/**", "/img/**").permitAll()
 //                .antMatchers("/").permitAll()
                 .and().formLogin()
                 .loginPage("/login")

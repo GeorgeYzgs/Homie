@@ -1,6 +1,7 @@
 "use strict";
 
-let url = "/GroupProject"
+// TODO Find better way to get base url
+let baseUrl = "/GroupProject"
 let passMustContain = $('meta[name=password_must_contain]').attr("content");
 let passLength = $('meta[name=password_length]').attr("content");
 let passDigitsSymbols = $('meta[name=password_digits_symbols]').attr("content");
@@ -163,7 +164,7 @@ $(document).ready(function () {
     usernameInput.on("focusout", function (event) {
         $.ajax({
             type: "POST",
-            url: url + "/validate/check-username",
+            url: baseUrl + "/validate/check-username",
             timeout: 3000,
             data: {
                 "_csrf": $("input[name*='_csrf']").val(),
@@ -178,7 +179,7 @@ $(document).ready(function () {
     emailInput.on("focusout", function (event) {
         $.ajax({
             type: "POST",
-            url: url + "/validate/check-email",
+            url: baseUrl + "/validate/check-email",
             timeout: 3000,
             data: {
                 "_csrf": $("input[name*='_csrf']").val(),

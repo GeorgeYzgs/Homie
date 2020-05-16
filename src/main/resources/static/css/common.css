@@ -155,3 +155,7 @@ html, body {
         display: none;
     }
 }
+
+.navbar-scrollable {
+    overflow-y: hidden;
+}

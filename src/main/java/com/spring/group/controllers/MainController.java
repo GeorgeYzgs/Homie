@@ -5,6 +5,7 @@ import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
+import com.spring.group.pojo.UserDetailsPojo;
 import com.spring.group.services.PhotoServiceImpl;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import com.spring.group.services.bases.RentalServiceInterface;
@@ -14,6 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -104,9 +106,11 @@ public class MainController {
     }
 
     @GetMapping("/my-profile")
-    public ModelAndView displayProfile(Authentication auth) {
+    public String displayProfile(Authentication auth, ModelMap modelMap) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        return new ModelAndView("user-page", "user", userService.getUserByID(loggedUser.getId()));
+        modelMap.addAttribute("user", userService.getUserByID(loggedUser.getId()));
+        modelMap.addAttribute("userDetails", new UserDetailsPojo(userService.getUserByID(loggedUser.getId())));
+        return "user-page";
     }
 
     //TODO Create a html page for property views.

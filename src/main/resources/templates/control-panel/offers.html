@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<body>
+<div th:fragment="userOffersReceived">
+    <h4>Offers Received</h4>
+    <table class="table table-responsive table-hover">
+        <tr>
+            <th>Residence</th>
+            <th>Price</th>
+            <th>Is Pending</th>
+            <th>Offer By</th>
+        </tr>
+        <tr th:each="offer : ${userOffersReceived}">
+            <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
+            <td th:text="${offer.agreedPrice}"></td>
+            <td th:text="${offer.pending}"></td>
+            <td th:text="${offer.tenant.username}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:fragment="userOffersSent">
+    <h4>Offers Sent</h4>
+    <table class="table table-responsive table-hover">
+        <tr>
+            <th>Residence</th>
+            <th>Price</th>
+            <th>Is Pending</th>
+            <th>Owner</th>
+        </tr>
+        <tr th:each="offer : ${userOffersSent}">
+            <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
+            <td th:text="${offer.agreedPrice}"></td>
+            <td th:text="${offer.pending}"></td>
+            <td th:text="${offer.residence.owner.username}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
