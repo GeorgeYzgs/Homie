@@ -11,14 +11,13 @@ import javax.validation.constraints.Size;
 
 /**
  * The main user data transfer object, used for most form submissions to alter / create users.
- *
+ * validation groups allow for different combinations of variable fields are being validated each time.
  * @author George.Giazitzis
- * @see validationgroups for how different combinations of variable fields are being validated each time.
  */
 @PasswordMatches(groups = {RegistrationValidator.class, ChangePassValidator.class, ResetPassValidator.class, RegistrationPassMatchValidator.class})
 public class RegisterUserDto {
 
-    @NotBlank(groups = {}, message = "{Not.blank}")
+    @NotBlank(groups = {RegistrationValidator.class}, message = "{Not.blank}")
     @Size(min = 4, max = 25, groups = {RegistrationValidator.class, RegistrationUsernameValidator.class}, message = "{Size}")
     private String username;
     @ValidEmail(groups = {RegistrationValidator.class, RegistrationEmailValidator.class})
