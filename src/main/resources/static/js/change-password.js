@@ -3,10 +3,8 @@
 let url = "/GroupProject"
 let passMustContain = $('meta[name=password_must_contain]').attr("content");
 let passLength = $('meta[name=password_length]').attr("content");
-let passDigits = $('meta[name=password_digits]').attr("content");
+let passDigitsSymbols = $('meta[name=password_digits_symbols]').attr("content");
 let passLowercase = $('meta[name=password_lowercase]').attr("content");
-let passUppercase = $('meta[name=password_uppercase]').attr("content");
-let passSymbols = $('meta[name=password_symbols]').attr("content");
 let passNotMatch = $('meta[name=passwords_not_match]').attr("content");
 
 function resetInputField(inputField) {
@@ -40,7 +38,7 @@ function updatePassStrengthBar(event) {
             }
         }
         return true;
-    } else if (score > 55) {
+    } else if (score > 35) {
         inputField.removeClass("border-danger").addClass("border-success");
         passwordStrengthBar.removeClass("bg-danger").removeClass("bg-success").addClass("bg-warning");
         if (Array.isArray(scoreMessages) && scoreMessages.length) {
@@ -69,10 +67,8 @@ function getStrengthenPasswordMessages(variations) {
         messages.push(passLength)
     } else {
         if (!variations.length) messages.push(passLength);
-        if (!variations.digits) messages.push(passDigits);
         if (!variations.lower) messages.push(passLowercase);
-        if (!variations.upper) messages.push(passUppercase);
-        if (!variations.nonWords) messages.push(passSymbols);
+        if (!variations.digits && !variations.nonWords) messages.push(passDigitsSymbols);
     }
     return messages;
 }
@@ -80,13 +76,12 @@ function getStrengthenPasswordMessages(variations) {
 
 function scorePassword(pass) {
     let score = 0;
-
+    let groupings = 1;
 
     // bonus points for mixing it up
     let variations = {
-        digits: /\d/.test(pass),
         lower: /[a-z]/.test(pass),
-        upper: /[A-Z]/.test(pass),
+        digits: /\d/.test(pass),
         nonWords: /\W/.test(pass),
         length: (pass.length >= 8)
     }
@@ -97,7 +92,7 @@ function scorePassword(pass) {
     for (let check in variations) {
         variationCount += (variations[check] === true) ? 1 : 0;
     }
-    if (variationCount < Object.keys(variations).length) {
+    if (variationCount < Object.keys(variations).length - groupings) {
         score += (variationCount + 1) * 10;
         return [score, variations];
     } else {
@@ -109,32 +104,6 @@ function scorePassword(pass) {
             score += 5.0 / letters[pass[i]];
         }
         return [score, variations];
-    }
-}
-
-
-function showValidationMessages(event, response) {
-    let inputField = $(event.currentTarget);
-    let errorList = $(event.currentTarget).siblings("[data-target=error-list]");
-    let inputName = inputField.attr('name')
-    if (response.status === "error") {
-        let errors = response["errors"][inputName];
-        if (errors !== undefined) {
-            if (!inputField.hasClass("border-danger")) {
-                inputField.addClass("border-danger");
-            }
-            errorList.empty()
-            for (let i = 0; i < errors.length; i++) {
-                if (errors[i] != null) {
-                    errorList.append("<li>" + errors[i] + '</li>');
-                }
-            }
-        }
-        return true;
-    } else {
-        inputField.removeClass("border-danger").addClass("border-success");
-        errorList.empty();
-        return false;
     }
 }
 

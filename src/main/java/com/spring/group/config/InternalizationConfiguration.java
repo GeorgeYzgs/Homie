@@ -19,7 +19,8 @@ public class InternalizationConfiguration implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(Locale.UK);
+        Locale defaultLocale = new Locale("el", "GR");
+        sessionLocaleResolver.setDefaultLocale(defaultLocale);
         return sessionLocaleResolver;
     }
 

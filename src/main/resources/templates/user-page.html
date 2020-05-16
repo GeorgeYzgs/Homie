@@ -2,89 +2,85 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta charset="UTF-8">
-    <title>Account Page</title>
-    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/ico"/>
-    <title th:text="#{Register.page.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
+    <title id="pageTitle" th:utext="#{User.profile.page.title}">Home</title>
+
 </head>
 <body class="bg-light">
-<section class="px-3 pt-4">
+<nav class="pt-4 px-3 navigation">
     <!-- Logo Band    -->
-    <nav th:replace="fragments :: logo_band"></nav>
+    <nav class="" th:include="fragments :: logo_band"></nav>
+    <!-- Nav bar -->
+    <nav th:replace="fragments :: nav_bar"></nav>
+</nav>
+<!-- Main body -->
+<main class="bg-light pt-2" id="mainParent">
     <div class="alert alert-success" th:if="${messageSuccess}">
         <p class="text text-center" th:text="${messageSuccess}"></p>
     </div>
     <div class="alert alert-danger" th:if="${messageDanger}">
         <p class="text text-center" th:text="${messageDanger}"></p>
     </div>
-    <!-- Main body -->
-    <main class="bg-light pt-2" id="mainParent">
-        <div th:if="${#authentication.principal.id != user.id}">
-            <div sec:authorize-url="/mod/**">
-                <form method="post" th:action="@{/mod/lock-user}">
-                    Active:
-                    <div th:text="${user.nonLocked}"></div>
-                    <input name="id" th:value="${user.id}" th:hidden="hidden">
-                    <button class="btn btn-danger" type="submit">Ban/Unban</button>
-                </form>
-            </div>
-            <div sec:authorize-url="/admin/**">
-                <br>
-                <form method="post" th:action="@{/admin/change-role}">
-                    Role:
-                    <div th:text="${user.userRole}"></div>
-                    <input name="id" th:value="${user.id}" th:hidden="hidden">
-                    <button class="btn btn-primary" type="submit">Promote/Demote</button>
-                </form>
-                <br>
-                <form method="post" th:action="@{/admin/change-all-properties-value}">
-                    Set Value on ALL Properties:
-                    <input name="userID" th:value="${user.id}" th:hidden="hidden">
-                    <select name="value">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                    <button class="btn btn-primary" type="submit">Set Search Value</button>
-                </form>
-            </div>
+    <div th:if="${#authentication.principal.id != user.id}">
+        <div sec:authorize-url="/mod/**">
+            <form method="post" th:action="@{/mod/lock-user}">
+                Active:
+                <div th:text="${user.nonLocked}"></div>
+                <input name="id" th:hidden="hidden" th:value="${user.id}">
+                <button class="btn btn-danger" type="submit">Ban/Unban</button>
+            </form>
         </div>
-
-
-        <div th:if="${#authentication.principal.id == user.id}">
-            <!--                Implement change account stuff here...-->
+        <div sec:authorize-url="/admin/**">
+            <br>
+            <form method="post" th:action="@{/admin/change-role}">
+                Role:
+                <div th:text="${user.userRole}"></div>
+                <input name="id" th:hidden="hidden" th:value="${user.id}">
+                <button class="btn btn-primary" type="submit">Promote/Demote</button>
+            </form>
+            <br>
+            <form method="post" th:action="@{/admin/change-all-properties-value}">
+                Set Value on ALL Properties:
+                <input name="userID" th:hidden="hidden" th:value="${user.id}">
+                <select name="value">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Set Search Value</button>
+            </form>
         </div>
+    </div>
 
 
+    <div th:if="${#authentication.principal.id == user.id}">
+        <!--                Implement change account stuff here...-->
+    </div>
 
-        <div class="container">
+    <div class="container">
 
-            <div class="table-responsive table-hover">
-                <table class="table">
-                    <tr>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>City / Address</th>
-                        <th>Available</th>
-                    </tr>
-                    <tr th:each="property : ${user.propertyCollection}">
-                        <td th:text="${property.category}"></td>
-                        <td th:text="${property.price}"></td>
-                        <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
-                        <td th:text="${property.available}"></td>
-                    </tr>
-                </table>
-            </div>
+        <div class="table-responsive table-hover">
+            <table class="table">
+                <tr>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>City / Address</th>
+                    <th>Available</th>
+                </tr>
+                <tr th:each="property : ${user.propertyCollection}">
+                    <td th:text="${property.category}"></td>
+                    <td th:text="${property.price}"></td>
+                    <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
+                    <td th:text="${property.available}"></td>
+                </tr>
+            </table>
         </div>
-    </main>
+    </div>
+</main>
 </section>
-<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
-<script th:src="@{/js/jquery_ui-1.12.1.min.js}"></script>
+<footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 </body>
 </html>

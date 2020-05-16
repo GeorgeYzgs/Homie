@@ -5,10 +5,8 @@
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <meta th:content="#{Password.must.contain}" th:name="password_must_contain">
     <meta th:content="#{Password.length}" th:name="password_length">
-    <meta th:content="#{Password.digits}" th:name="password_digits">
+    <meta th:content="#{Password.digits.symbols}" th:name="password_digits_symbols">
     <meta th:content="#{Password.lowercase}" th:name="password_lowercase">
-    <meta th:content="#{Password.uppercase}" th:name="password_uppercase">
-    <meta th:content="#{Password.symbols}" th:name="password_symbols">
     <meta th:content="#{Passwords.not.match}" th:name="passwords_not_match">
 </head>
 <body class="bg-light">

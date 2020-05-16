@@ -55,8 +55,8 @@
 </div>
 
 
-<div th:include="fragments :: scripts" th:remove="tag"></div>
 <footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 <script th:src="@{/js/carousel.js}"></script>
 <script th:src="@{/js/chat.js}"></script>
 </body>

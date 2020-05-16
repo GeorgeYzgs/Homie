@@ -83,12 +83,12 @@
                   sec:authentication="name">User</span>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" th:href="@{/my-profile}" th:text="#{Profile}">Change Password</a>
+            <a class="dropdown-item" th:href="@{/my-profile}" th:text="#{Profile}">Profile</a>
             <a class="dropdown-item" th:href="@{/change-pass}" th:text="#{Change.password}">Change Password</a>
+            <div class="dropdown-divider" sec:authorize-url="/mod/**"></div>
             <a class="dropdown-item" sec:authorize-url="/mod/**" th:href="@{/mod/users}" th:text="#{User.list}">User
                 List</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
             <a class="dropdown-item" th:href="@{/logout}" th:text="#{Logout}">Logout</a>
         </div>
     </div>
@@ -105,8 +105,7 @@
                             <span class="input-group-prepend ">
                                 <i class="fa fa-map-marker input-group-text bg-secondary text-white"></i>
                             </span>
-                            <input class="form-control" id="inputSearchQuery"
-                                   placeholder="Εισάγετε μια τοποθεσία, πχ. Ζωγράφος"
+                            <input class="form-control" id="inputSearchQuery" th:placeholder="#{Search.bar.placeholder}"
                                    type="text">
                         </div>
                     </div>

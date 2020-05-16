@@ -1,8 +1,6 @@
 package com.spring.group.dto.user.annotations;
 
 import org.passay.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,9 +11,6 @@ import java.util.List;
 import java.util.Properties;
 
 public class PasswordPatternValidator implements ConstraintValidator<ValidPassword, String> {
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Override
     public void initialize(ValidPassword constraintAnnotation) {
@@ -33,17 +28,19 @@ public class PasswordPatternValidator implements ConstraintValidator<ValidPasswo
         }
         MessageResolver resolver = new PropertiesMessageResolver(props);
 
+        CharacterCharacteristicsRule specialDigitRule = new CharacterCharacteristicsRule();
+        // Rule to have at least one of the following
+        specialDigitRule.setNumberOfCharacteristics(1);
+        specialDigitRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
+        specialDigitRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
+
         PasswordValidator validator = new PasswordValidator(resolver, Arrays.asList(
                 // at least 8 characters
                 new LengthRule(8, 20),
-                // at least one upper-case character
-                new CharacterRule(EnglishCharacterData.UpperCase, 1),
                 // at least one lower-case character
                 new CharacterRule(EnglishCharacterData.LowerCase, 1),
-                // at least one digit
-                new CharacterRule(EnglishCharacterData.Digit, 1),
-                // at least one symbol
-                new CharacterRule(EnglishCharacterData.Special, 1),
+                // at least one digit or symbol
+                specialDigitRule,
                 // no whitespace
                 new WhitespaceRule()
 
