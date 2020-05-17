@@ -2,8 +2,8 @@ package com.spring.group.services;
 
 
 import com.spring.group.models.property.Property;
-import com.spring.group.models.user.User;
 import com.spring.group.models.rental.Rental;
+import com.spring.group.models.user.User;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;

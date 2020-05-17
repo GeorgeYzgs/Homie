@@ -55,13 +55,37 @@
                 <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id != property.owner.id}">
                     <form method="post" th:action="@{/submit-offer}">
                         <input min="0" name="price" type="number"/>
-                        <input name="id" th:hidden="hidden" th:value="${property.id}">
+                        <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
                         <button class="btn btn-primary" type="submit">Submit Offer</button>
                     </form>
 
                 </div>
             </div>
 
+
+            <div sec:authorize-url="/mod/**">
+                <form method="post" th:action="@{/mod/lock-property}">
+                    Active:
+                    <div th:text="${property.nonLocked}"></div>
+                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                    <button class="btn btn-danger" type="submit">Lock/UnLock</button>
+                </form>
+            </div>
+            <div sec:authorize-url="/admin/**">
+                <br>
+                <form method="post" th:action="@{/admin/change-property-value}">
+                    Set Search Value of this Property:
+                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                    <select name="value">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                    <button class="btn btn-primary" type="submit">Set Search Value</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>

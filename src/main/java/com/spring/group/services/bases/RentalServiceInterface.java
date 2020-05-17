@@ -35,6 +35,7 @@ public interface RentalServiceInterface {
      * @return the result of handling the offer
      */
     String manageOffers(Rental rental, boolean isAccepted, int userID);
+
     List<Rental> getRentalsByTenant(User tenant);
 
     List<Rental> getRentalsByOwner(User owner);

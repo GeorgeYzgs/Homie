@@ -75,7 +75,8 @@ public class ModeratorController {
         user.setNonLocked(!user.isNonLocked());
         userService.updateUser(user);
         deleteActiveSession(userID);
-        redirectAttributes.addFlashAttribute("messageSuccess", "User has been banned / unbanned");
+        String message = user.isNonLocked() ? "User has been unbanned" : "User has been banned";
+        redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
 
