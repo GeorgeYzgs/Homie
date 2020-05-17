@@ -10,7 +10,7 @@
 </head>
 <body class="bg-light">
 
-<nav class="pt-4 px-0 navigation">
+<nav class="pt-4 px-3 navigation">
     <!-- Logo Band    -->
     <nav class="" th:include="fragments :: logo_band"></nav>
     <!-- Nav bar -->
@@ -18,7 +18,7 @@
     <!-- Main body -->
 </nav>
 
-<main class="bg-light pt-5" id="propertiesParentMain">
+<main class="bg-light pt-5" id="mainParent">
     <!-- Search bar -->
     <div class="bg-light sticky-top" th:include="fragments :: search_bar"></div>
     <section class="px-2">
@@ -48,15 +48,15 @@
 
 <!--Temporarily, to be removed-->
 <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
-<div sec:authorize-url="/mod/**"><a th:href="@{/mod/users}">User List</a></div>
+
 
 <a th:replace="UtilFragments :: chat_button"></a>
 <div th:replace="UtilFragments :: chat_popup">
 </div>
 
 
-<div th:include="fragments :: scripts" th:remove="tag"></div>
 <footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 <script th:src="@{/js/carousel.js}"></script>
 <script th:src="@{/js/chat.js}"></script>
 </body>

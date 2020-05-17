@@ -2,6 +2,7 @@ package com.spring.group.services;
 
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
+import com.spring.group.models.user.User;
 import com.spring.group.repos.RentalRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import com.spring.group.services.bases.RentalServiceInterface;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Collection;
 
 /**
@@ -33,6 +35,16 @@ public class RentalServiceImpl implements RentalServiceInterface {
     @Override
     public Rental getRentalByID(Integer rentalID) {
         return rentalRepository.getOne(rentalID);
+    }
+
+    @Override
+    public List<Rental> getRentalsByTenant(User tenant) {
+        return rentalRepository.findAllByTenant(tenant);
+    }
+
+    @Override
+    public List<Rental> getRentalsByOwner(User owner) {
+        return rentalRepository.findAllByResidenceOwner(owner);
     }
 
     @Override

@@ -5,29 +5,28 @@
     <title id="pageTitle" th:text="#{Register.page.title}">Register</title>
     <meta th:content="#{Password.must.contain}" th:name="password_must_contain">
     <meta th:content="#{Password.length}" th:name="password_length">
-    <meta th:content="#{Password.digits}" th:name="password_digits">
+    <meta th:content="#{Password.digits.symbols}" th:name="password_digits_symbols">
     <meta th:content="#{Password.lowercase}" th:name="password_lowercase">
-    <meta th:content="#{Password.uppercase}" th:name="password_uppercase">
-    <meta th:content="#{Password.symbols}" th:name="password_symbols">
     <meta th:content="#{Passwords.not.match}" th:name="passwords_not_match">
 </head>
 <body class="bg-light">
-<section class="px-3 py-4">
+<nav class="py-4 px-3 navigation">
     <!-- Logo Band    -->
     <nav th:replace="fragments :: logo_band"></nav>
+</nav>
 
-    <!-- Main body -->
-    <main class="bg-light pt-2" id="propertiesParentMain">
-        <div class="col-sm-6 offset-sm-3 col-12">
-            <h3 class="text-center" th:text="#{Register}"></h3>
-            <div class="row">
-                <div class="col-sm-8 offset-sm-2 col-12">
-                    <p class="text-center text-secondary" th:text="#{Account.create}"></p>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="alert alert-danger" th:if="${messageDanger}">
-                                <p class="text text-center" th:text="${messageDanger}"></p>
-                            </div>
+<!-- Main body -->
+<main class="bg-light py-4" id="mainParent">
+    <div class="col-sm-6 offset-sm-3 col-12">
+        <h3 class="text-center" th:text="#{Register}"></h3>
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2 col-12">
+                <p class="text-center text-secondary" th:text="#{Account.create}"></p>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-danger" th:if="${messageDanger}">
+                            <p class="text text-center" th:text="${messageDanger}"></p>
+                        </div>
                             <form id="registerForm" method="post" th:action="@{/register}" th:object="${registerUser}">
                                 <div class="form-group">
                                     <label class="form-control-label text-secondary" for="username"
@@ -94,9 +93,8 @@
         </div>
         </div>
     </main>
-</section>
-<div th:include="fragments :: scripts" th:remove="tag"></div>
 <footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 <!--<script th:src="@{/js/jquery-3.4.1.min.js}"></script>-->
 <!--<script th:src="@{/js/jquery_ui-1.12.1.min.js}"></script>-->
 <script th:src="@{/js/registration.js}"></script>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<div th:fragment="userDetailsTable">
+    <h5>Email</h5>
+    <p th:text="${userDetails.email}"></p>
+    <h5>Username</h5>
+    <p th:text="${userDetails.username}"></p>
+    <h5>First Name</h5>
+    <p th:text="${userDetails.firstName}"></p>
+    <h5>Last Name</h5>
+    <p th:text="${userDetails.lastName}"></p>
+    <h5>Iban</h5>
+    <p th:text="${userDetails.Iban}"></p>
+</div>
+</html>
