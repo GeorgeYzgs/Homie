@@ -23,10 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -124,6 +121,7 @@ public class MainController {
      * @param redirectAttributes informs the owner of the result of his decision
      * @return redirects to the owner's profile page
      */
+    //TODO fix attempt contains offer to match locale.
     @PostMapping("/manage-offers")
     public ModelAndView manageOffers(@RequestParam Integer rentalID, @RequestParam boolean isAccepted,
                                      Authentication auth, RedirectAttributes redirectAttributes) {
@@ -159,8 +157,12 @@ public class MainController {
      */
     @GetMapping("/view/{id}")
     public ModelAndView viewProperty(@PathVariable Integer id) {
+        Optional<Property> property = propertyService.findPropertyByID(id);
+        if (!property.isPresent()) {
+            return new ModelAndView("error/404");
+        }
         pageViewCount.merge(id, 1, Integer::sum);
-        return new ModelAndView("view-property", "property", propertyService.getPropertyByID(id));
+        return new ModelAndView("view-property", "property", property.get());
     }
 
     /**

@@ -56,11 +56,18 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public User getUserByID(Integer userID) { return userRepository.getOne(userID); }
+    public User getUserByID(Integer userID) {
+        return userRepository.getOne(userID);
+    }
 
     @Override
     public Collection<User> getUserList() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> findUserById(Integer userID) {
+        return userRepository.findById(userID);
     }
 
     public boolean isUsernamePresent(String username) {

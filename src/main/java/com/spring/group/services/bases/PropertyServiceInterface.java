@@ -5,6 +5,7 @@ import com.spring.group.models.user.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author George.Giazitzis
@@ -27,10 +28,6 @@ public interface PropertyServiceInterface {
      * @return the property linked to that id
      */
     Property getPropertyByID(Integer propertyID);
-
-    List<Property> getPropertiesByOwnerUser(User ownerUser);
-
-    List<Property> getPropertiesByTenantUser(User tenantUser);
 
     /**
      * Persists a collection of properties to our database, leveraging JPA saveALL method to create one transaction,
@@ -60,4 +57,19 @@ public interface PropertyServiceInterface {
      * @return "SUCCESS" if successful or an error message.
      */
     String submitOffer(Property property, int userID);
+
+
+    /**
+     * Queries the database to return an optional property by searching with ID
+     * A method to avoid exceptions when manually inputting urls, ensures the user will be redirected
+     * to a 404 page if the property does not exist
+     *
+     * @param propertyID the property id we are searching by
+     * @return an optional property
+     */
+    Optional<Property> findPropertyByID(Integer propertyID);
+
+    List<Property> getPropertiesByOwnerUser(User ownerUser);
+
+    List<Property> getPropertiesByTenantUser(User tenantUser);
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface RentalRepository extends JpaRepository<Rental, Integer> {
 
-    public List<Rental> findAllByTenant(User tenantUser);
+    List<Rental> findAllByTenant(User tenantUser);
 
-    public List<Rental> findAllByResidenceOwner(User ownerUser);
+    List<Rental> findAllByResidenceOwner(User ownerUser);
 }
