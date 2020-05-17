@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+<html lang="en"
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
@@ -45,10 +45,6 @@
     </section>
     <div class="parallax" th:style="'background-image:url(' + @{/img/intersection_top_down_2750.jpg} + ');'"></div>
 </main>
-
-<!--Temporarily, to be removed-->
-<div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
-
 
 <a th:replace="UtilFragments :: chat_button"></a>
 <div th:replace="UtilFragments :: chat_popup">

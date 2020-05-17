@@ -38,12 +38,15 @@ public class UserController {
     @Autowired
     private MessageSource messageSource;
 
+    /**
+     * The login controller, will return the login page or redirect to home if the user is already logged in.
+     *
+     * @param auth the logged user
+     * @return
+     */
     @GetMapping("/login")
     public String login(Authentication auth) {
-        if (auth != null) {
-            return "redirect:/";
-        }
-        return "login";
+        return auth == null ? "login" : "redirect:/";
     }
 
     /**
@@ -152,12 +155,16 @@ public class UserController {
     }
 
     /**
-     * A controller for users to reset their forgotten passwords.
+     * A controller for users to reset their forgotten passwords,
+     * redirects to home page if the user is already logged in.
      *
      * @return the forgot pass page
      */
     @GetMapping("/forgot-pass")
-    public ModelAndView forgotPass() {
+    public ModelAndView forgotPass(Authentication auth) {
+        if (auth != null) {
+            return new ModelAndView("redirect:/");
+        }
         return new ModelAndView("forgot-pass", "forgotUserPass", new RegisterUserDto());
     }
 
