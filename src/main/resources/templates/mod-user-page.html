@@ -16,24 +16,27 @@
 <!-- Main body -->
 <main class="bg-light pt-2">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-scrollable border-bottom mb-4 justify-content-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-scrollable border-bottom justify-content-center mb-4">
         <div class="navbar-expand" id="controlPanelToolbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item" th:classappend="!${#lists.isEmpty(currentUserDetails)} ? active : ''">
-                    <a class="nav-link async-nav-link" id="personalDetails" th:href="@{/my-profile/personal-details}"
-                       th:data-async-href="@{/async/my-profile/personal-details}"
+                <li class="nav-item" th:classappend="!${#lists.isEmpty(user)} ? active : ''">
+                    <a class="nav-link async-nav-link" id="personalDetails"
+                       th:data-async-href="@{/async/mod/user/{id}/personal-details (id=${userId})}"
+                       th:href="@{/mod/user/{id}/personal-details (id=${userId})}"
                        th:text="#{User.personal.info}"> </a>
                 </li>
                 <li class="nav-item"
                     th:classappend="${!#lists.isEmpty(userPropertiesOwned) || !#lists.isEmpty(userPropertiesRented)} ? active : ''">
-                    <a class="nav-link async-nav-link" id="properties" th:href="@{/my-profile/properties}"
-                       th:data-async-href="@{/async/my-profile/properties}"
+                    <a class="nav-link async-nav-link" id="properties"
+                       th:data-async-href="@{/async/mod/user/{id}/properties (id=${userId})}"
+                       th:href="@{/mod/user/{id}/properties (id=${userId})}"
                        th:text="#{User.properties}"></a>
                 </li>
                 <li class="nav-item"
                     th:classappend="${!#lists.isEmpty(userOffersReceived) || !#lists.isEmpty(userOffersSent)} ? active : ''">
-                    <a class="nav-link async-nav-link" th:data-async-href="@{/async/my-profile/offers}"
-                       th:href="@{/my-profile/offers}"
+                    <a class="nav-link async-nav-link"
+                       th:data-async-href="@{/async/mod/user/{id}/offers (id=${userId})}"
+                       th:href="@{/mod/user/{id}/offers (id=${userId})}"
                        th:text="#{User.offers}"></a>
                 </li>
                 <li class="nav-item" th:classappend="!${#lists.isEmpty(userMessages)} ? active : ''">
@@ -42,6 +45,14 @@
             </ul>
         </div>
     </nav>
+    <div class="alert alert-success" th:if="${messageSuccess}">
+        <p class="text text-center" th:text="${messageSuccess}"></p>
+    </div>
+    <div class="alert alert-danger" th:if="${messageDanger}">
+        <p class="text text-center" th:text="${messageDanger}"></p>
+    </div>
+
+
     <!--    <div th:if="${#authentication.principal.id != user.id}">-->
     <!--        <div sec:authorize-url="/mod/**">-->
     <!--            <form method="post" th:action="@{/mod/lock-user}">-->
@@ -100,12 +111,9 @@
     <!--        </div>-->
     <!--    </div>-->
     <div id="mainParent">
-        <div class="alert alert-success" th:if="${messageSuccess}">
-            <p class="text text-center" th:text="${messageSuccess}"></p>
-        </div>
-        <div class="alert alert-danger" th:if="${messageDanger}">
-            <p class="text text-center" th:text="${messageDanger}"></p>
-        </div>
+        <th:block th:if="!${#lists.isEmpty(user)}">
+            <div th:replace="control-panel/personal-details :: modPanel"></div>
+        </th:block>
         <th:block th:if="!${#lists.isEmpty(currentUserDetails)}">
             <div th:replace="control-panel/personal-details :: currentUserDetailsTable"></div>
         </th:block>
@@ -122,8 +130,6 @@
             <div th:replace="control-panel/offers :: userOffersSent"></div>
         </th:block>
     </div>
-
-
 </main>
 </section>
 <footer th:replace="fragments :: body_footer"></footer>

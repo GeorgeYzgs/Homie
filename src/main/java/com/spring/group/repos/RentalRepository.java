@@ -15,5 +15,5 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
 
     public List<Rental> findAllByTenant(User tenantUser);
 
-    public List<Rental> findAllByResidenceOwner(User ownerUser);
+    public List<Rental> findAllByIsPendingTrueAndResidenceOwner(User ownerUser);
 }

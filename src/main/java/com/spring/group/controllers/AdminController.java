@@ -34,7 +34,7 @@ public class AdminController {
      * @return the target user's profile page
      */
     @PostMapping("/change-role")
-    public ModelAndView changeUserRole(@RequestParam Integer userID, RedirectAttributes redirectAttributes) {
+    public ModelAndView changeUserRole(@RequestParam("id") Integer userID, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByID(userID);
         if (user.getUserRole().equals(UserRole.ADMIN)) {
             redirectAttributes.addFlashAttribute("messageDanger", "You cannot change the role of Admins.");

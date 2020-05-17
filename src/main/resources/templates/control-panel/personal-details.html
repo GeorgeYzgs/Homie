@@ -1,15 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-<div th:fragment="userDetailsTable">
-    <h5>Email</h5>
-    <p th:text="${userDetails.email}"></p>
-    <h5>Username</h5>
-    <p th:text="${userDetails.username}"></p>
-    <h5>First Name</h5>
-    <p th:text="${userDetails.firstName}"></p>
-    <h5>Last Name</h5>
-    <p th:text="${userDetails.lastName}"></p>
-    <h5>Iban</h5>
-    <p th:text="${userDetails.Iban}"></p>
-</div>
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="https://www.thymeleaf.org">
+
+<th:block th:if="!${#lists.isEmpty(user)}">
+    <div class="pb-4 py-4 row" th:fragment="modPanel">
+        <th:block th:with="userDetails=${user}">
+            <div class="col-sm-6 offset-1 pt-4 px-2">
+                <div class="row">
+                    <p class="text-secondary col-4" th:text="#{Email}"></p>
+                    <p class="col-6" th:text="${userDetails.email}"></p>
+                </div>
+                <div class="row">
+                    <p class="text-secondary col-4" th:text="#{Username}"></p>
+                    <p class="col-6" th:text="${userDetails.username}"></p>
+                </div>
+                <div class="row">
+                    <p class="text-secondary col-4" th:text="#{First.name}"></p>
+                    <p class="col-6" th:text="${userDetails.firstName}"></p>
+                </div>
+                <div class="row">
+                    <p class="text-secondary col-4" th:text="#{Last.name}"></p>
+                    <p class="col-6" th:text="${userDetails.lastName}"></p>
+                </div>
+                <div class="row">
+                    <p class="text-secondary col-4" th:text="#{Iban}"></p>
+                    <p class="col-6" th:text="${userDetails.Iban}"></p>
+                </div>
+            </div>
+        </th:block>
+        <th:block th:if="${#authentication.principal.id != user.id}">
+            <div class="border border-danger offset-1 col-sm-4 pt-4 mx-4">
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <h4 class="text-center" th:text="#{Admin.panel}"></h4>
+                </div>
+                <div sec:authorize="hasAuthority('MODERATOR')">
+                    <h4 class="text-center" th:text="#{Moderator.panel}"></h4>
+                </div>
+                <div sec:authorize-url="/mod/**">
+                    <div class="row pt-4">
+                        <div class="col-6">
+                            <p class="col-6 text-secondary mb-0" th:text="#{Status}"></p>
+                            <span class="col-6" th:text="${user.nonLocked} ? #{Active} : #{Banned}"></span>
+                        </div>
+                        <form class="col-4 text-center" method="post" th:action="@{/mod/lock-user}">
+                            <input name="id" th:hidden="hidden" th:value="${user.id}">
+                            <button class="btn btn-danger" th:text="${user.nonLocked} ? #{Ban}: #{Unban}"
+                                    type="submit">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div sec:authorize-url="/admin/**">
+                    <div class="row pt-4">
+                        <div class="col-6">
+                            <p class="col-6 text-secondary mb-0" th:text="#{Role}"></p>
+                            <span class="col-6" th:text="#{${user.userRole}}"></span>
+                        </div>
+                        <form class="col-4 text-center" method="post" th:action="@{/admin/change-role}">
+                            <input name="id" th:hidden="hidden" th:value="${user.id}">
+                            <button class="btn btn-primary"
+                                    th:text="${#strings.equals(user.userRole, 'USER')}? #{Promote}: #{Demote}"
+                                    type="submit">
+                            </button>
+                        </form>
+                    </div>
+                    <div class="row pt-4">
+                        <div class="col-6">
+                            <p class="col-10" th:text="#{Set.search.weight.for.all.properties}"></p>
+                        </div>
+                        <form class="col-4 align-self-center" method="post"
+                              th:action="@{/admin/change-all-properties-value}">
+                            <input name="userID" th:hidden="hidden" th:value="${user.id}">
+                            <div class="d-flex justify-content-around">
+                                <select name="value">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                                <button class="btn btn-primary" th:text="#{Set}" type="submit"></button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </th:block>
+    </div>
+</th:block>
+
+<th:block th:if="!${#lists.isEmpty(currentUserDetails)}">
+    <div class="col-sm-6 offset-1 pt-4 px-2" th:fragment="currentUserDetailsTable">
+        <th:block th:with="userDetails=${currentUserDetails}">
+            <div class="row">
+                <p class="text-secondary col-4" th:text="#{Email}"></p>
+                <p class="col-6" th:text="${userDetails.email}"></p>
+            </div>
+            <div class="row">
+                <p class="text-secondary col-4" th:text="#{Username}"></p>
+                <p class="col-6" th:text="${userDetails.username}"></p>
+            </div>
+            <div class="row">
+                <p class="text-secondary col-4" th:text="#{First.name}"></p>
+                <p class="col-6" th:text="${userDetails.firstName}"></p>
+            </div>
+            <div class="row">
+                <p class="text-secondary col-4" th:text="#{Last.name}"></p>
+                <p class="col-6" th:text="${userDetails.lastName}"></p>
+            </div>
+            <div class="row">
+                <p class="text-secondary col-4" th:text="#{Iban}"></p>
+                <p class="col-6" th:text="${userDetails.Iban}"></p>
+            </div>
+        </th:block>
+    </div>
+</th:block>
+
+
 </html>

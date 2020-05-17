@@ -1,41 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="https://www.thymeleaf.org">
 <body>
-<div th:fragment="userOffersReceived">
-    <h4>Offers Received</h4>
-    <table class="table table-responsive table-hover">
-        <tr>
-            <th>Residence</th>
-            <th>Price</th>
-            <th>Is Pending</th>
-            <th>Offer By</th>
-        </tr>
-        <tr th:each="offer : ${userOffersReceived}">
-            <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
-            <td th:text="${offer.agreedPrice}"></td>
-            <td th:text="${offer.pending}"></td>
-            <td th:text="${offer.tenant.username}"></td>
-        </tr>
-    </table>
-</div>
+<th:block th:if="!${#lists.isEmpty(userOffersReceived)}">
+    <div class="pb-4 text-center" th:fragment="userOffersReceived">
+        <h5 class="text-center" th:text="#{Offers.received}">Offers Receive</h5>
+        <div class="col-sm-8 offset-2">
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th th:text="#{Residence}">Residence</th>
+                    <th th:text="#{Price}">Price</th>
+                    <th th:text="#{Status}">Is Pending</th>
+                    <th th:text="#{Offer.by}">Offer By</th>
 
-<div th:fragment="userOffersSent">
-    <h4>Offers Sent</h4>
-    <table class="table table-responsive table-hover">
-        <tr>
-            <th>Residence</th>
-            <th>Price</th>
-            <th>Is Pending</th>
-            <th>Owner</th>
-        </tr>
-        <tr th:each="offer : ${userOffersSent}">
-            <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
-            <td th:text="${offer.agreedPrice}"></td>
-            <td th:text="${offer.pending}"></td>
-            <td th:text="${offer.residence.owner.username}"></td>
-        </tr>
-    </table>
-</div>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="offer : ${userOffersReceived}">
+                    <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
+                    <td th:text="${offer.agreedPrice}"></td>
+                    <td th:text="${offer.pending}? #{Pending}: #{Complete}"></td>
+                    <td th:text="${offer.tenant.username}"></td>
+                    <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == user.id}">
+                        <td>
+                            <form method="post" th:action="@{/manage-offers}">
+                                <input name="id" th:hidden="hidden" th:value="${offer.id}">
+                                <input hidden name="isAccepted" type="text" value="true">
+                                <button class="btn btn-outline-success" th:text="#{Accept}" type="submit">Accept Offer
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/manage-offers}">
+                                <input name="id" th:hidden="hidden" th:value="${offer.id}">
+                                <input hidden name="isAccepted" type="text" value="false">
+                                <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
+                                </button>
+                            </form>
+                        </td>
+                    </th:block>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:if="!${#lists.isEmpty(userOffersSent)}">
+    <div class="text-center" th:fragment="userOffersSent">
+        <h5 th:text="#{Offers.sent}">Offers Sent</h5>
+        <div class="col-sm-8 offset-2">
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th th:text="#{Residence}">Residence</th>
+                    <th th:text="#{Price}">Price</th>
+                    <th th:text="#{Status}">Is Pending</th>
+                    <th th:text="#{Owner}">Owner</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="offer : ${userOffersSent}">
+                    <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+', '+ ${offer.residence.address.number}"></td>
+                    <td th:text="${offer.agreedPrice}"></td>
+                    <td th:text="${offer.pending}? #{Pending}: #{Complete}"></td>
+                    <td th:text="${offer.residence.owner.username}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:if="${#lists.isEmpty(userOffersReceived) and #lists.isEmpty(userOffersSent)}">
+    <p class="text-center text-secondary" th:text="#{Nothing.found}">
+    </p>
+</th:block>
 
 </body>
 </html>
