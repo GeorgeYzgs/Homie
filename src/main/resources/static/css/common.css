@@ -36,6 +36,14 @@ html, body {
     background-color: #e0e0e0;
 }
 
+.btn-nav {
+    background-color: #eeeeee;
+}
+
+.btn-nav:hover {
+    background-color: #bdbdbd;
+}
+
 .navigation {
     background-color: #eeeeee;
 }
@@ -139,7 +147,15 @@ html, body {
 }
 
 @media screen and (max-width: 450px) {
-    .button-text {
+    .button-text-hide {
         display: none;
     }
+
+    button span.responsive-text-hide {
+        display: none;
+    }
+}
+
+.navbar-scrollable {
+    overflow-y: hidden;
 }

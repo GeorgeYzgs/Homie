@@ -1,8 +1,10 @@
 package com.spring.group.services.bases;
 
 import com.spring.group.models.property.Property;
+import com.spring.group.models.user.User;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author George.Giazitzis
@@ -21,10 +23,14 @@ public interface PropertyServiceInterface {
      * Leverages JPA getOne method to return a proxy reference of a property in an attempt to not constantly
      * query our database.
      *
-     * @param PropertyID the target property id we are searching by/
+     * @param propertyID the target property id we are searching by/
      * @return the property linked to that id
      */
-    Property getPropertyByID(Integer PropertyID);
+    Property getPropertyByID(Integer propertyID);
+
+    List<Property> getPropertiesByOwnerUser(User ownerUser);
+
+    List<Property> getPropertiesByTenantUser(User tenantUser);
 
     /**
      * Persists a collection of properties to our database, leveraging JPA saveALL method to create one transaction,

@@ -75,7 +75,8 @@ public class ModeratorController {
         user.setNonLocked(!user.isNonLocked());
         userService.updateUser(user);
         deleteActiveSession(userID);
-        redirectAttributes.addFlashAttribute("messageSuccess", "User has been banned / unbanned");
+        String message = user.isNonLocked() ? "User has been unbanned" : "User has been banned";
+        redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
 
@@ -96,7 +97,7 @@ public class ModeratorController {
     /**
      * A controller for locking / unlocking properties
      *
-     * @param propertyID                 the property id
+     * @param propertyID         the property id
      * @param redirectAttributes informs the user of the result of his attempt
      * @return redirects to the property page
      */
@@ -105,7 +106,8 @@ public class ModeratorController {
         Property property = propertyService.getPropertyByID(propertyID);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);
-        redirectAttributes.addFlashAttribute("messageSuccess", "Property has been locked / unlocked");
+        String message = property.isNonLocked() ? "Property has been unlocked" : "Property has been locked";
+        redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/view/" + propertyID);
     }
 }

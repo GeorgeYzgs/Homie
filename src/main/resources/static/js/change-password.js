@@ -1,7 +1,6 @@
 "use strict";
 
-// TODO Find better way to get base url
-let baseUrl = "/GroupProject"
+let url = "/GroupProject"
 let passMustContain = $('meta[name=password_must_contain]').attr("content");
 let passLength = $('meta[name=password_length]').attr("content");
 let passDigitsSymbols = $('meta[name=password_digits_symbols]').attr("content");
@@ -24,6 +23,7 @@ function updatePassStrengthBar(event) {
     let scoreMessages = getStrengthenPasswordMessages(scoreList[1]);
     let passwordStrengthBar = $("#passwordStrength");
     let errorList = $(event.currentTarget).parent().siblings("[data-target=error-list]");
+    console.log(errorList);
     let messageHeader = passMustContain;
 
     passwordStrengthBar.css("width", ((score > 100) ? 100 : score) + "%").attr("aria-valuenow", ((score > 100) ? 100 : score));
@@ -108,45 +108,14 @@ function scorePassword(pass) {
 }
 
 
-function showValidationMessages(event, response) {
-    let inputField = $(event.currentTarget);
-    let errorList = $(event.currentTarget).siblings("[data-target=error-list]");
-    let inputName = inputField.attr('name')
-    if (response.status === "error") {
-        let errors = response["errors"][inputName];
-        if (errors !== undefined) {
-            if (!inputField.hasClass("border-danger")) {
-                inputField.addClass("border-danger");
-            }
-            errorList.empty()
-            for (let i = 0; i < errors.length; i++) {
-                if (errors[i] != null) {
-                    errorList.append("<li>" + errors[i] + '</li>');
-                }
-            }
-        }
-        return true;
-    } else {
-        inputField.removeClass("border-danger").addClass("border-success");
-        errorList.empty();
-        return false;
-    }
-}
-
-
 $(document).ready(function () {
-
-    let form = $("#registerForm");
-    let emailInput = $("#email");
-    let usernameInput = $("#username");
+    let form = $("#updateForm");
     let passwordInput = $("#password");
     let password2Input = $("#password2");
     let showPassBtn = $("#showPassword");
     let isPassword2Enabled = false;
     let submitButton = $("#registerButton");
 
-    let isUsernameValid = false
-    let isEmailValid = false;
     let isPasswordValid = false;
     let arePasswordMatched = false;
 
@@ -161,35 +130,6 @@ $(document).ready(function () {
         inputField.toggleClass("eye-open eye-closed");
     })
 
-    usernameInput.on("focusout", function (event) {
-        $.ajax({
-            type: "POST",
-            url: baseUrl + "/validate/check-username",
-            timeout: 3000,
-            data: {
-                "_csrf": $("input[name*='_csrf']").val(),
-                "username": $.trim(usernameInput.val())
-            },
-            success: function (response) {
-                showValidationMessages(event, response) ? isUsernameValid = false : isUsernameValid = true;
-            }
-        })
-    });
-
-    emailInput.on("focusout", function (event) {
-        $.ajax({
-            type: "POST",
-            url: baseUrl + "/validate/check-email",
-            timeout: 3000,
-            data: {
-                "_csrf": $("input[name*='_csrf']").val(),
-                "email": $.trim(emailInput.val())
-            },
-            success: function (response) {
-                showValidationMessages(event, response) ? isEmailValid = false : isEmailValid = true;
-            }
-        })
-    })
 
     passwordInput.on("keyup", function (event) {
         if (passwordInput.val() !== "") {
@@ -229,7 +169,7 @@ $(document).ready(function () {
 
     submitButton.on('click', function (event) {
         event.preventDefault();
-        let isFormValid = isUsernameValid && isEmailValid && isPasswordValid && arePasswordMatched;
+        let isFormValid = isPasswordValid && arePasswordMatched;
         if (!isFormValid) {
             $("#registerButton").effect("shake", {distance: 10, times: 2}, 400);
             usernameInput.focusout();

@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * An array of all the endpoints the user can only access upon being authenticated
      */
-    private static final String[] LOGGED_USER_URLS = {"/manage-offers", "/submit-offer", "/my-profile",
+    private static final String[] LOGGED_USER_URLS = {"/manage-offers", "/submit-offer", "/my-profile", "/async/**",
             "/change-pass", "/list-new-property"};
 
     /**
@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * and a password encoder
      *
      * @param auth the authentication manager builder, default provided by spring security
-     * @throws Exception
+     * @throws Exception username not found exception when attempting to login.
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

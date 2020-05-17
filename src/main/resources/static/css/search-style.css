@@ -177,7 +177,7 @@
 }
 
 @media screen and (max-width: 450px) {
-    .button-text {
+    .button-text-hide {
         display: none;
     }
 }

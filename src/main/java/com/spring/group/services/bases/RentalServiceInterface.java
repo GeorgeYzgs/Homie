@@ -1,6 +1,9 @@
 package com.spring.group.services.bases;
 
 import com.spring.group.models.rental.Rental;
+import com.spring.group.models.user.User;
+
+import java.util.List;
 
 /**
  * @author George.Giazitzis
@@ -32,4 +35,8 @@ public interface RentalServiceInterface {
      * @return the result of handling the offer
      */
     String manageOffers(Rental rental, boolean isAccepted, int userID);
+
+    List<Rental> getRentalsByTenant(User tenant);
+
+    List<Rental> getRentalsByOwner(User owner);
 }
