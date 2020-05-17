@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * and a password encoder
      *
      * @param auth the authentication manager builder, default provided by spring security
-     * @throws Exception
+     * @throws Exception username not found exception when attempting to login.
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
