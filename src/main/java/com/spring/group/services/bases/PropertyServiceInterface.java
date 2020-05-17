@@ -39,16 +39,6 @@ public interface PropertyServiceInterface {
     Collection<Property> updateProperties(Collection<Property> updatedProperties);
 
     /**
-     * Utilized JPA findbyID method to fetch a property object EAGERLY,
-     * only to be used when getPropertyByID would return an exception, as it stresses the database.
-     *
-     * @param PropertyID the target property id we are searchinb by
-     * @return a full property object from our database.
-     * @see {@link PropertyServiceInterface#getPropertyByID}
-     */
-    Property getFullProperty(Integer PropertyID);
-
-    /**
      * Attempts to submit an offer for a property, by validating that the provided userID is not the property owner's ID,
      * the property is not locked or unavailable, and the user has not already submitted an offer for the provided property
      *

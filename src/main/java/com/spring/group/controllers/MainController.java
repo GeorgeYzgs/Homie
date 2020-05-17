@@ -15,6 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -170,12 +171,13 @@ public class MainController {
      * to not stress the database, currently updating every 5 minutes
      * (seconds minutes hours days months years)
      */
+    @Transactional
     @Scheduled(cron = "0 */5 * * * ?")
-    private void updateViewCount() {
+    public void updateViewCount() {
         System.out.println("Updating Property View Counts!");
         List<Property> updatedProperties = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : pageViewCount.entrySet()) {
-            Property property = propertyService.getFullProperty(entry.getKey());
+            Property property = propertyService.getPropertyByID(entry.getKey());
             property.setViews(property.getViews() + entry.getValue());
             updatedProperties.add(property);
         }

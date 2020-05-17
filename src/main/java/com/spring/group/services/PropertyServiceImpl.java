@@ -50,11 +50,6 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public Property getFullProperty(Integer propertyID) {
-        return propertyRepository.findById(propertyID).get();
-    }
-
-    @Override
     public Optional<Property> findPropertyByID(Integer propertyID) {
         return propertyRepository.findById(propertyID);
     }
