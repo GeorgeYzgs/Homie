@@ -5,27 +5,27 @@
 <th:block th:if="!${#lists.isEmpty(user)}">
     <div class="pb-4 py-4 row" th:fragment="modPanel">
         <th:block th:with="userDetails=${user}">
-            <div class="col-sm-6 offset-1 pt-4 px-2">
-                <div class="row">
+            <div class="col-sm-6 offset-1 pt-4 px-2 mb-2">
+                <div class="row form-group">
                     <p class="text-secondary col-4" th:text="#{Email}"></p>
-                    <p class="col-6" th:text="${userDetails.email}"></p>
+                    <p class="col-6" th:text="${userDetails.email}">
                 </div>
-                <div class="row">
+                <div class="row form-group">
                     <p class="text-secondary col-4" th:text="#{Username}"></p>
                     <p class="col-6" th:text="${userDetails.username}"></p>
                 </div>
-                <div class="row">
+                <div class="row form-group">
                     <p class="text-secondary col-4" th:text="#{First.name}"></p>
                     <p class="col-6" th:text="${userDetails.firstName}"></p>
                 </div>
-                <div class="row">
+                <div class="row form-group">
                     <p class="text-secondary col-4" th:text="#{Last.name}"></p>
                     <p class="col-6" th:text="${userDetails.lastName}"></p>
                 </div>
-                <div class="row">
-                    <p class="text-secondary col-4" th:text="#{Iban}"></p>
-                    <p class="col-6" th:text="${userDetails.Iban}"></p>
-                </div>
+                <!--                <div class="row">-->
+                <!--                    <p class="text-secondary col-4" th:text="#{Iban}"></p>-->
+                <!--                    <input class="col-6 form-control" th:value="${userDetails.Iban}"></p>-->
+                <!--                </div>-->
             </div>
         </th:block>
         <th:block th:if="${#authentication.principal.id != user.id}">

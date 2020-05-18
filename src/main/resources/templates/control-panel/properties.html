@@ -21,7 +21,7 @@
                 <tr th:each="property : ${userPropertiesOwned}">
                     <td th:text="${property.category}"></td>
                     <td th:text="${property.price}"></td>
-                    <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
+                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
                     <td th:text="${property.available}"></td>
                     <td th:text="${property.owner.username}"></td>
                 </tr>
@@ -47,10 +47,10 @@
                 <tr th:each="property : ${userPropertiesRenting}">
                     <td th:text="${property.category}"></td>
                     <td th:text="${property.price}"></td>
-                    <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
+                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
                     <td th:text="${property.available}"></td>
                     <td th:text="${property.owner.username}"></td>
-                    <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == user.id}">
+                    <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
                         <td>
                             <form method="post">
                                 <input name="id" th:hidden="hidden" th:value="${property.id}">
