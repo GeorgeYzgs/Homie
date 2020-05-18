@@ -44,6 +44,7 @@ public class ControlPanelController {
         List<Property> propertiesOwned = propertyService.getPropertiesByOwnerUser(currentUser);
         List<Property> propertiesRenting = propertyService.getPropertiesByTenantUser(currentUser);
         modelMap.addAttribute("user", currentUser);
+        modelMap.addAttribute("userId", currentUser.getId());
         modelMap.addAttribute("userPropertiesOwned", propertiesOwned);
         modelMap.addAttribute("userPropertiesRenting", propertiesRenting);
         return "user-page";
@@ -56,6 +57,7 @@ public class ControlPanelController {
         List<Rental> offersSent = rentalService.getRentalsByTenant(currentUser);
         List<Rental> offersReceived = rentalService.getRentalsByOwner(currentUser);
         modelMap.addAttribute("user", currentUser);
+        modelMap.addAttribute("userId", currentUser.getId());
         modelMap.addAttribute("userOffersSent", offersSent);
         modelMap.addAttribute("userOffersReceived", offersReceived);
         return "user-page";
