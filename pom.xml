@@ -93,8 +93,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- JPA Metamodel Generator -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
