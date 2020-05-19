@@ -24,7 +24,6 @@ $(document).ready(function () {
     let currentState = history.state;
     if (currentState == null) {
         let currentHrefList = getCurrentHref();
-        console.log(currentHrefList)
         history.replaceState(currentHrefList[0], "", currentHrefList[1].currentHref)
     }
 

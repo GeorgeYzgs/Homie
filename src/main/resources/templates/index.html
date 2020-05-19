@@ -3,6 +3,8 @@
 <head>
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:utext="#{Home.page.title}">Home</title>
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <link rel="stylesheet" th:href="@{/css/image_parallax.css}">
     <link rel="stylesheet" th:href="@{/css/carousel.css}">
     <link rel="stylesheet" th:href="@{/css/chat.css}">
 
@@ -51,6 +53,7 @@
 
 <footer th:replace="fragments :: body_footer"></footer>
 <div th:include="fragments :: scripts" th:remove="tag"></div>
+<script th:src="@{/js/search-functionality.js}"></script>
 <script th:src="@{/js/carousel.js}"></script>
 <script th:src="@{/js/chat.js}"></script>
 </body>

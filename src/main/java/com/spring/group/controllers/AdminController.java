@@ -72,8 +72,8 @@ public class AdminController {
      * @return the profile page of the target user
      */
     @PostMapping("/change-all-properties-value")
-    public ModelAndView changeAllPropertyValues(@RequestParam Integer userID,
-                                                @RequestParam Integer value, RedirectAttributes redirectAttributes) {
+    public ModelAndView changeAllPropertyValues(@RequestParam("userId") Integer userID,
+                                                @RequestParam("value") Integer value, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByID(userID);
         user.getPropertyCollection().forEach(p -> p.setSearchValue(value));
         propertyService.updateProperties(user.getPropertyCollection());

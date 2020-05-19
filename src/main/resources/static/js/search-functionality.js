@@ -1,6 +1,7 @@
 "use strict";
 
-let citiesSet = new Set();
+// let citiesSet = new Set();
+let city;
 let isCitySidebarSearchClicked = false;
 
 $(document).ready(function () {
@@ -13,36 +14,39 @@ $(document).ready(function () {
 
     $(document).bind('keypress', function (e) {
         if (e.key === "Enter" && isCitySidebarSearchClicked) {
-            populateCitiesTextArea($("#inputSearchQuery").val());
+            city = $("#inputSearchQuery").val();
+            populateCitiesTextArea();
             $("#inputSearchQuery").val('');
         }
     });
 
     // Initialize autocomplete Value source
-    $("#inputSearchQuery").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/GroupProject/autocomplete-utility/city/" + request.term + "/",
-                dataType: "json",
-                // data: {
-                //     q: request.term
-                // },
-                success: function (data) {
-                    response(data);
-                }
-            });
-        },
-        open: function () {
-            $('.ui-autocomplete').css('z-index', 3000);
-        },
-        minLength: 3,
-        select: function (event, ui) {
-            event.preventDefault();
-            citiesSet.add(ui.item.value);
-            populateCitiesTextArea();
-            $("#inputSearchQuery").val('');
-        }
-    })
+    $("#inputSearchQuery")
+        .autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/GroupProject/autocomplete-utility/city/" + $.trim(request.term) + "/",
+                    dataType: "json",
+                    // data: {
+                    //     q: request.term
+                    // },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            open: function () {
+                $('.ui-autocomplete').css('z-index', 3000);
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                event.preventDefault();
+                city = ui.item.value;
+                // citiesSet.add(ui.item.value);
+                populateCitiesTextArea();
+                $("#inputSearchQuery").val('');
+            }
+        })
         .on("focus", function () {
             /* the element with the search results */
             //
@@ -54,9 +58,7 @@ $(document).ready(function () {
                 setTimeout(() => uid.show(), 200)
 
             }
-        });
-
-    $("#inputSearchQuery")
+        })
         .on('click', function () {
             isCitySidebarSearchClicked = true;
         })
@@ -72,11 +74,10 @@ $(document).ready(function () {
 
 function populateCitiesTextArea() {
     $("#cityTextArea").empty();
-    citiesSet.forEach(city =>
-        $("#cityTextArea").append(
-            `
+    $("#cityTextArea").append(
+        `
             <span class="badge badge-pill badge-secondary mx-2">${city} <span class="btn badge badge-light badge-pill badge_x">X</span></span>
-            `))
+            `)
 }
 
 /*

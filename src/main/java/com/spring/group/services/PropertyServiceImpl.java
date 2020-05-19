@@ -1,15 +1,19 @@
 package com.spring.group.services;
 
 
+import com.spring.group.dto.property.specifications.PropertySpecificationBuilder;
+import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,4 +86,23 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         return property.getRentalCollection().stream().
                 filter(rental -> rental.getTenant().getId() == userID).anyMatch(Rental::isPending);
     }
+
+    @Override
+    public List<Property> searchProperties(List<SearchCriteria> searchCriteria) {
+        PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
+        searchCriteria.forEach(psb::with);
+        final Specification<Property> spec = psb.build();
+        return propertyRepository.findAll(spec);
+    }
+
+    @Override
+    public List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications) {
+        PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
+        searchCriteria.forEach(psb::with);
+        specifications.forEach(psb::with);
+        final Specification<Property> spec = psb.build();
+        if (spec == null) return new ArrayList<>();
+        return propertyRepository.findAll(spec);
+    }
+
 }

@@ -59,7 +59,7 @@ public class UserController {
 
     @GetMapping("/search")
     public String getSearchPage() {
-        return "full-search";
+        return "search-results";
     }
 
     /**

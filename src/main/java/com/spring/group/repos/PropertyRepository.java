@@ -3,6 +3,7 @@ package com.spring.group.repos;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,8 @@ import java.util.List;
  * @author George.Giazitzis
  */
 @Repository
-public interface PropertyRepository extends JpaRepository<Property, Integer> {
+public interface PropertyRepository extends JpaRepository<Property, Integer>,
+        JpaSpecificationExecutor<Property> {
 
     public List<Property> findAllByOwner(User ownerUser);
 

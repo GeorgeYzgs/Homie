@@ -1,6 +1,5 @@
 "use strict";
 
-// TODO Find better way to get base url
 let baseUrl = "/GroupProject"
 let passMustContain = $('meta[name=password_must_contain]').attr("content");
 let passLength = $('meta[name=password_length]').attr("content");

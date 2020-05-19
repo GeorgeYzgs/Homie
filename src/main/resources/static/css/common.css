@@ -20,7 +20,7 @@ html, body {
     border-color: #80ea6e;
 }
 
-.btn-green:focus {
+.btn-green:focus, .btn-green.focus {
     background-color: #80ea6e;
     border-color: #80ea6e;
     box-shadow: 0 0 0 0.2rem #D4F69B;

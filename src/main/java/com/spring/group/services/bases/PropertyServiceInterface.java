@@ -1,7 +1,9 @@
 package com.spring.group.services.bases;
 
+import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,4 +62,8 @@ public interface PropertyServiceInterface {
      * @return "SUCCESS" if successful or an error message.
      */
     String submitOffer(Property property, int userID);
+
+    List<Property> searchProperties(List<SearchCriteria> searchCriteria);
+
+    List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications);
 }
