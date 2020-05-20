@@ -1,154 +1,273 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<th:block>
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:utext="#{Search.results.page.title}">Search Results</title>
     <link rel="stylesheet" th:href="@{/css/search-style.css}">
-</head>
-<body class="bg-light">
-<nav class="pt-4 px-3 navigation">
-    <!-- Logo Band    -->
-    <nav class="" th:include="fragments :: logo_band"></nav>
-    <!-- Nav bar -->
-    <nav th:replace="fragments :: nav_bar"></nav>
-    <!-- Main body -->
-</nav>
+    <th:block th:if="${propertiesResults != null }">
+        <meta th:content="${propertiesResults.currentPage}" th:name="currentPage">
+    </th:block>
+    <th:block th:if="${propertiesResults != null }">
+        <meta th:content="${propertiesResults.totalPages}" th:name="totalPages">
+    </th:block>
+    </head>
+    <body class="bg-light">
+    <nav class="pt-4 px-3 navigation">
+        <!-- Logo Band    -->
+        <nav class="" th:include="fragments :: logo_band"></nav>
+        <!-- Nav bar -->
+        <nav th:replace="fragments :: nav_bar"></nav>
+        <!-- Main body -->
+    </nav>
 
-<main class="bg-light py-4 row justify-content-center" id="mainParent">
-    <section class="px-2">
-        <div class="alert alert-success" th:if="${messageSuccess}">
-            <p class="text text-center" th:text="${messageSuccess}"></p>
-        </div>
-    </section>
-    <div class="row container pt-4">
-        <!-- Sidebar -->
-        <nav class="col-sm-3 border-right pl-4" id="sidebar">
-            <div class="sidebar-header pb-2 border-bottom">
-                <h6 class="font-weight-bold" th:text="#{Filters}">Filters</h6>
+    <main class="bg-light py-4 row justify-content-center" id="mainParent">
+        <section class="px-2">
+            <div class="alert alert-success" th:if="${messageSuccess}">
+                <p class="text text-center" th:text="${messageSuccess}"></p>
             </div>
-            <div class="input-group">
-                <div class="input-group-prepend ">
-                    <i class="fa fa-map-marker input-group-text bg-secondary text-white py-2"></i>
+        </section>
+        <div class="row container pt-4">
+            <!-- Sidebar -->
+            <nav class="col-sm-3 border-right pl-4" id="sidebar">
+                <div class="sidebar-header pb-2 border-bottom">
+                    <h6 class="font-weight-bold" th:text="#{Filters}">Filters</h6>
                 </div>
-                <input class="form-control" id="inputSearchQuery"
-                       data-placement="top"
-                       data-toggle="tooltip" th:placeholder="#{Search.bar.example.placeholder}" title="Tooltip on top"
-                       type="text">
-            </div>
-            <div class="pt-2" id="cityTextArea">
-            </div>
-            <div class="py-3">
-                <label class="mb-0" for="categorySelect" th:text="#{Category}">Category</label>
-                <select class="custom-select form-control" id="categorySelect">
-                    <option th:text="#{All.categories}" value="ALL">All categories</option>
-                    <option th:text="#{Category.FLAT}" value="FLAT">Flat</option>
-                    <option th:text="#{Category.DETACHED_HOUSE}" value="DETACHED_HOUSE">Detached House</option>
-                    <option th:text="#{Category.WORK_PLACE}" value="WORK_PLACE">Work Place</option>
-                    <option th:text="#{Category.PLOT}" value="PLOT">Plot</option>
-                </select>
-            </div>
-            <div class="pb-2">
-                <label for="priceRangeSelect" th:text="#{Price}">Price</label>
-                <div class="input-group" id="priceRangeSelect">
+                <div class="input-group">
+                    <div class="input-group-prepend ">
+                        <i class="fa fa-map-marker input-group-text bg-secondary text-white py-2"></i>
+                    </div>
+                    <input class="form-control" data-placement="top"
+                           data-toggle="tooltip"
+                           id="inputSearchQuery" th:placeholder="#{Search.bar.example.placeholder}"
+                           title="Tooltip on top"
+                           type="text">
+                </div>
+                <div class="pt-2" id="cityTextArea">
+                </div>
+                <div class="py-3">
+                    <label class="mb-0" for="categorySelect" th:text="#{Category}">Category</label>
+                    <select class="custom-select form-control" id="categorySelect">
+                        <option th:selected="${#strings.equals(searchParams.category, 'ALL')}"
+                                th:text="#{All.categories}"
+                                value="ALL">All categories
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.category, 'FLAT')}"
+                                th:text="#{Category.FLAT}"
+                                value="FLAT">Flat
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.category, 'DETACHED_HOUSE')}"
+                                th:text="#{Category.DETACHED_HOUSE}"
+                                value="DETACHED_HOUSE">Detached House
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.category, 'WORK_PLACE')}"
+                                th:text="#{Category.WORK_PLACE}"
+                                value="WORK_PLACE">
+                            Work Place
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.category, 'PLOT')}"
+                                th:text="#{Category.PLOT}"
+                                value="PLOT">Plot
+                        </option>
+                    </select>
+                </div>
+                <div class="pb-2">
+                    <label for="priceRangeSelect" th:text="#{Price}">Price</label>
+                    <div class="input-group" id="priceRangeSelect">
                     <span class="input-group-prepend">
                         <span class="input-group-text bg-secondary text-white">&euro;</span>
                     </span>
-                    <input class="form-control" id="inputStartingPrice" th:placeholder="#{From}"
-                           type="number">
-                    <input class="form-control" id="inputEndingPrice" th:placeholder="#{To}"
-                           type="number">
+                        <th:block th:if="${searchParams.startPrice>0 or searchParams.endPrice>0}">
+                            <input class="form-control" id="inputStartingPrice" th:placeholder="#{From}"
+                                   th:value="${searchParams.startPrice}" type="number">
+                            <input class="form-control" id="inputEndingPrice" th:placeholder="#{To}"
+                                   th:value="${searchParams.endPrice}" type="number">
+                        </th:block>
+                        <th:block th:if="${(searchParams.startPrice==0 and searchParams.endPrice==0)
+                    or searchParams.startArea == null or searchParams.endArea== null }">
+                            <input class="form-control" id="inputStartingPrice" th:placeholder="#{From}"
+                                   type="number">
+                            <input class="form-control" id="inputEndingPrice" th:placeholder="#{To}"
+                                   type="number">
+                        </th:block>
+                    </div>
+                    <div class="row justify-content-center py-3 collapse" id="priceApply">
+                        <button class="btn bg-green text-white font-weight-bold" id="priceApplyBtn" th:text="#{Apply}">
+                            Apply
+                        </button>
+                    </div>
                 </div>
-                <div class="row justify-content-center py-3 collapse" id="priceApply">
-                    <button class="btn bg-green text-white font-weight-bold" id="priceApplyBtn" th:text="#{Apply}">
-                        Apply
-                    </button>
-                </div>
-            </div>
-            <div class="border-bottom pb-3">
-                <label for="areaRangeSelect" th:text="#{Area}">Area</label>
-                <div class="input-group" id="areaRangeSelect">
+                <div class="border-bottom pb-3">
+                    <label for="areaRangeSelect" th:text="#{Area}">Area</label>
+                    <div class="input-group" id="areaRangeSelect">
                 <span class="input-group-prepend">
                     <span class="input-group-text bg-secondary text-white">&#x33A1;</span>
                 </span>
-                    <input class="form-control" id="inputStartingArea" th:placeholder="#{From}"
-                           type="number">
-                    <input class="form-control" id="inputEndingArea" th:placeholder="#{To}"
-                           type="number">
+                        <th:block th:if="${searchParams.startArea>0 or searchParams.endArea>0}">
+                            <input class="form-control" id="inputStartingArea" th:placeholder="#{From}"
+                                   th:value="${searchParams.startArea}" type="number">
+                            <input class="form-control" id="inputEndingArea" th:placeholder="#{To}"
+                                   th:value="${searchParams.endArea}" type="number">
+                        </th:block>
+                        <th:block
+                                th:if="${(searchParams.startArea == 0 and searchParams.endArea == 0)
+                            or searchParams.startArea == null or searchParams.endArea== null }">
+                            <input class="form-control" id="inputStartingArea" th:placeholder="#{From}"
+                                   type="number">
+                            <input class="form-control" id="inputEndingArea" th:placeholder="#{To}"
+                                   type="number">
+                        </th:block>
+                    </div>
+                    <div class="row justify-content-center py-3 collapse" id="areaApply">
+                        <button class="btn bg-green text-white font-weight-bold" id="areaApplyBtn" th:text="#{Apply}">
+                            Apply
+                        </button>
+                    </div>
                 </div>
-                <div class="row justify-content-center py-3 collapse" id="areaApply">
-                    <button class="btn bg-green text-white font-weight-bold" id="areaApplyBtn" th:text="#{Apply}">
-                        Apply
-                    </button>
-                </div>
-            </div>
-            <div class="py-3">
-                <label for="roomsRangeSelect" th:text="#{Rooms}">Rooms</label>
-                <div class="input-group" id="roomsRangeSelect">
+                <div class="py-3">
+                    <label for="roomsRangeSelect" th:text="#{Rooms}">Rooms</label>
+                    <div class="input-group" id="roomsRangeSelect">
                 <span class="input-group-prepend">
                     <i class="input-group-text bg-secondary text-white fa fa-bed"></i>
                 </span>
-                    <input class="form-control" id="inputStartingRooms" th:placeholder="#{From}"
-                           type="number">
-                    <input class="form-control" id="inputEndingRooms" th:placeholder="#{To}"
-                           type="number">
+                        <th:block th:if="${searchParams.startRooms>0 or searchParams.endRooms>0}">
+                            <input class="form-control" id="inputStartingRooms" th:placeholder="#{From}"
+                                   th:value="${searchParams.startRooms}" type="number">
+                            <input class="form-control" id="inputEndingRooms" th:placeholder="#{To}"
+                                   th:value="${searchParams.endRooms}" type="number">
+                        </th:block>
+                        <th:block th:if="${(searchParams.startRooms == 0 and searchParams.endRooms == 0)
+                    or searchParams.startRooms == null or searchParams.endRooms== null}">
+                            <input class="form-control" id="inputStartingRooms" th:placeholder="#{From}"
+                                   type="number">
+                            <input class="form-control" id="inputEndingRooms" th:placeholder="#{To}"
+                                   type="number">
+                        </th:block>
+                    </div>
+                    <div class="row justify-content-center py-3 collapse" id="roomsApply">
+                        <button class="btn bg-green text-white font-weight-bold" id="roomsApplyBtn" th:text="#{Apply}">
+                            Apply
+                        </button>
+                    </div>
                 </div>
-                <div class="row justify-content-center py-3 collapse" id="roomsApply">
-                    <button class="btn bg-green text-white font-weight-bold" id="roomsApplyBtn" th:text="#{Apply}">
-                        Apply
-                    </button>
-                </div>
-            </div>
-            <div class="py-3 border-bottom">
-                <label for="floorsRangeSelect" th:text="#{Floors}">Floors</label>
-                <div class="input-group" id="floorsRangeSelect">
+                <div class="py-3 border-bottom">
+                    <label for="floorsRangeSelect" th:text="#{Floors}">Floors</label>
+                    <div class="input-group" id="floorsRangeSelect">
                 <span class="input-group-prepend">
                     <i class="input-group-text bg-secondary text-white fa fa-building"></i>
                 </span>
-                    <input class="form-control" id="inputStartingFloors" th:placeholder="#{From}"
-                           type="number">
-                    <input class="form-control" id="inputEndingFloors" th:placeholder="#{To}"
-                           type="number">
+                        <th:block th:if="${searchParams.startFloors>0 or searchParams.endFloors>0}">
+                            <input class="form-control" id="inputStartingFloors" th:placeholder="#{From}"
+                                   th:value="${searchParams.startFloors}" type="number">
+                            <input class="form-control" id="inputEndingFloors" th:placeholder="#{To}"
+                                   th:value="${searchParams.endFloors}" type="number">
+                        </th:block>
+                        <th:block th:if="${(searchParams.startFloors == 0 and searchParams.endFloors == 0)
+                    or searchParams.startFloors == null or searchParams.endFloors == null}">
+                            <input class="form-control" id="inputStartingFloors" th:placeholder="#{From}"
+                                   type="number">
+                            <input class="form-control" id="inputEndingFloors" th:placeholder="#{To}"
+                                   type="number">
+                        </th:block>
+                    </div>
+                    <div class="row justify-content-center py-3 collapse" id="floorsApply">
+                        <button class="btn bg-green text-white font-weight-bold" id="floorsApplyBtn" th:text="#{Apply}">
+                            Apply
+                        </button>
+                    </div>
                 </div>
-                <div class="row justify-content-center py-3 collapse" id="floorsApply">
-                    <button class="btn bg-green text-white font-weight-bold" id="floorsApplyBtn" th:text="#{Apply}">
-                        Apply
-                    </button>
-                </div>
-            </div>
-            <div class="py-3 border-bottom">
-                <label class="mb-0" for="heatingSelect" th:text="#{Heating}">Heating</label>
-                <select class="custom-select form-control " id="heatingSelect">
-                    <option th:text="#{All.categories}" value="ALL">All categories</option>
-                    <option th:text="#{HeatingType.AUTONOMOUS}" value="AUTONOMOUS">Autonomous Heating</option>
-                    <option th:text="#{HeatingType.CENTRAL}" value="CENTRAL">Central Heating</option>
-                    <option th:text="#{HeatingType.NONE}" value="NONE">No heating</option>
-                </select>
-            </div>
-        </nav>
-
-        <!-- Main body -->
-        <section class="col-sm-8 bg-light" id="propertiesParentMain">
-            <div class="row">
-                <div class="col-sm-4 offset-8">
-                    <label class="mb-0" for="sortBySelect" th:text="#{Sort.by}">Sort by</label>
-                    <select class="custom-select form-control " id="sortBySelect">
-                        <option th:text="#{Automatic}" value="AUTOMATIC">Automatic</option>
-                        <option th:text="#{Price.ascending}" value="PRICE_ASC">Price Ascending</option>
-                        <option th:text="#{Price.descending}" value="PRICE_DESC">Price Descending</option>
-                        <option th:text="#{Area.ascending}" value="AREA_ASC">Area Ascending</option>
-                        <option th:text="#{Area.descending}" value="AREA_DESC">Area Descending</option>
+                <div class="py-3 border-bottom">
+                    <label class="mb-0" for="heatingSelect" th:text="#{Heating}">Heating</label>
+                    <select class="custom-select form-control " id="heatingSelect">
+                        <option th:selected="${#strings.equals(searchParams.heating,'ALL')}" th:text="#{All.categories}"
+                                value="ALL">All categories
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.heating,'AUTONOMOUS')}"
+                                th:text="#{HeatingType.AUTONOMOUS}"
+                                value="AUTONOMOUS">Autonomous Heating
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.heating,'CENTRAL')}"
+                                th:text="#{HeatingType.CENTRAL}"
+                                value="CENTRAL">Central Heating
+                        </option>
+                        <option th:selected="${#strings.equals(searchParams.heating,'NONE')}"
+                                th:text="#{HeatingType.NONE}"
+                                value="NONE">No heating
+                        </option>
                     </select>
                 </div>
-            </div>
-            <nav aria-label="Page navigation" class="pt-4 bg-light" id="pageNavContainer">
             </nav>
-            <div id="resultsContainer">
-            </div>
-        </section>
-    </div>
-</main>
-<footer th:replace="fragments :: body_footer"></footer>
-<div th:include="fragments :: scripts" th:remove="tag"></div>
-<script th:src="@{/js/custom-search.js}"></script>
-</body>
+
+            <!-- Main body -->
+            <section class="col-sm-8 bg-light" id="propertiesParentMain">
+                <div class="row">
+                    <div class="col-sm-4 offset-8">
+                        <label class="mb-0" for="sortBySelect" th:text="#{Sort.by}">Sort by</label>
+                        <select class="custom-select form-control " id="sortBySelect">
+                            <option th:selected="${#strings.equals(sortType,'AUTOMATIC')}" th:text="#{Automatic}"
+                                    value="AUTOMATIC">Automatic
+                            </option>
+                            <option th:selected="${#strings.equals(sortType,'PRICE_ASC')}" th:text="#{Price.ascending}"
+                                    value="PRICE_ASC">Price Ascending
+                            </option>
+                            <option th:selected="${#strings.equals(sortType,'PRICE_DESC')}"
+                                    th:text="#{Price.descending}"
+                                    value="PRICE_DESC">Price Descending
+                            </option>
+                            <option th:selected="${#strings.equals(sortType,'AREA_ASC')}" th:text="#{Area.ascending}"
+                                    value="AREA_ASC">Area Ascending
+                            </option>
+                            <option th:selected="${#strings.equals(sortType,'AREA_DESC')}" th:text="#{Area.descending}"
+                                    value="AREA_DESC">Area Descending
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <nav aria-label="Page navigation" class="pt-4 bg-light" id="pageNavContainer">
+                </nav>
+                <div id="resultsContainer">
+                    <th:block th:if="${propertiesResults != null and not #lists.isEmpty(propertiesResults.properties)}">
+                        <th:block th:with="properties=${propertiesResults.properties}">
+                            <th:block th:each="property : ${properties}">
+                                <div class="btn btn-light pt-2">
+                                    <div class="row border-top py-3">
+                                        <div class="col-sm-4">
+                                            <img class="rounded object-fit_cover img-responsive"
+                                                 height="250"
+                                                 src="https://q-cf.bstatic.com/images/hotel/max1024x768/189/189426432.jpg">
+                                        </div>
+                                        <div class="col-sm-7 text-left">
+                                            <h5 class="font-weight-bold">
+                                                <span th:text="${property.category}"></span> <span
+                                                    th:text="${property.area}"></span> τ.μ. προς ενοικίαση
+                                            </h5>
+                                            <p class="mb-0"
+                                               th:text="${property.address.city + ' ' + property.address.state}">
+                                                Aθήνα (Κέντρο)
+                                            </p>
+                                            <p class="pt-0" th:text="${#strings.abbreviate(property.description,150)}">
+                                                03-05-2020
+                                            </p>
+                                            <p class="pt-1">
+                        <span class="border rounded bg-green text-white p-1 font-weight-bold">
+                        <span th:text="${property.price}">180</span>&euro;/μήνα
+                        </span>
+                                                <span class="pl-1"><span th:text="${property.area}">83</span>τμ</span>
+                                                <span class="pl-1"
+                                                      th:text="${property.price/property.area}">2<span>&euro;</span>/τμ</span>
+                                                <span class="pl-1"><span th:text="${property.numberOfRooms}">4</span>υπνοδωμάτια</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </th:block>
+                    </th:block>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer th:replace="fragments :: body_footer"></footer>
+    <div th:include="fragments :: scripts" th:remove="tag"></div>
+    <script th:src="@{/js/custom-search.js}"></script>
+    </body>
 </html>

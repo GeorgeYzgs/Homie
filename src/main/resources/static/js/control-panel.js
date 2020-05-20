@@ -1,8 +1,4 @@
 "use strict"
-// TODO Find better way to get base url
-// let baseUrl = "/GroupProject"
-
-// let baseUrl = window.location.hostname;
 
 function getCurrentHref() {
     let currentHref = $("#controlPanelToolbar").find("li.active a").attr("href");
@@ -47,9 +43,6 @@ $(document).ready(function () {
         //This is where we update the address bar with the 'url' parameter
         history.pushState({asyncUrl: asyncUrl}, "", regularUrl);
 
-        // $(window).bind('popstate', function(event){
-        //     window.history.back()
-        // });
     })
     $(window).bind('popstate', function (event) {
         let state = event.originalEvent.state;

@@ -51,7 +51,7 @@
                 <a class="nav-link" th:href="@{/}" th:text="#{Home.page.title}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/search}" th:text="#{Search}">Search</a>
+                <a class="nav-link" th:href="@{/custom-search}" th:text="#{Search}">Search</a>
             </li>
             <li sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/list-new-property}" th:text="#{Add.property}">Add Property</a>

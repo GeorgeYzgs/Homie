@@ -1,6 +1,7 @@
 "use strict"
 
 let baseUrl = "/GroupProject"
+let url = window.location.href;
 
 let city = "";
 let isCitySidebarSearchClicked = false;
@@ -44,8 +45,8 @@ function getSearchResults() {
             totalPages = response.totalPages;
             setPagination();
             response.properties.forEach(p => $("#resultsContainer").append(populateResults(p)));
-            history.pushState({asyncUrl: this.url}, "", this.url.replace('/async', ''));
             $("#priceApply, #areaApply, #roomsApply, #floorsApply").removeClass("show");
+            history.pushState({asyncUrl: this.url}, "", this.url.replace('/async', ''));
         }
     });
 }
@@ -60,13 +61,13 @@ function populateResults(property) {
                     </div>
                     <div class="col-sm-7 text-left">
                         <h5 class="font-weight-bold">
-                            <span>${property.category}</span> <span>${property.area}</span> τ.μ. προς ενοικίαση
+                            ${property.category} ${property.area}τ.μ. προς ενοικίαση
                         </h5>
-                        <p class="mb-0">
-                            <span>${property.address.city}  ${property.address.state}</span>
+                        <p class="mb-0" >
+                            ${property.address.city}  ${property.address.state}
                         </p>
                         <p class="pt-0">
-                            ${truncateString(property.description, 50)}
+                            ${truncateString(property.description, 150)}
                         </p>
                         <p class="pt-1">
                         <span class="border rounded bg-green text-white p-1 font-weight-bold">
@@ -100,7 +101,6 @@ function setPagination() {
             </a>
         </li>
         `
-
 
     for (let i = 1; i <= totalPages; i++) {
         let isDisabled = function () {
@@ -142,7 +142,38 @@ function populateCitiesTextArea() {
             `)
 }
 
+function updateGlobalVariables() {
+    let inputStartPrice = $.trim($("#inputStartingPrice").val());
+    let inputEndPrice = $.trim($("#inputEndingPrice").val());
+    let inputStartArea = $.trim($("#inputStartingArea").val());
+    let inputEndArea = $.trim($("#inputEndingArea").val());
+    let inputStartRooms = $.trim($("#inputStartingRooms").val());
+    let inputEndRooms = $.trim($("#inputEndingRooms").val());
+    let inputStartFloors = $.trim($("#inputStartingFloors").val());
+    let inputEndFloors = $.trim($("#inputEndingFloors").val());
+
+    category = $("#categorySelect").find(":selected").val();
+    heating = $("#heatingSelect").find(":selected").val();
+    sortBy = $("#sortBySelect").find(":selected").val();
+    startPrice = ($.isNumeric(inputStartPrice)) ? inputStartPrice : 0;
+    endPrice = ($.isNumeric(inputEndPrice)) ? inputEndPrice : 0;
+    startArea = ($.isNumeric(inputStartArea)) ? inputStartArea : 0;
+    endArea = ($.isNumeric(inputEndArea)) ? inputEndArea : 0;
+    startRooms = ($.isNumeric(inputStartRooms)) ? inputStartRooms : 0;
+    endRooms = ($.isNumeric(inputEndRooms)) ? inputEndRooms : 0;
+    startFloors = ($.isNumeric(inputStartFloors)) ? inputStartFloors : 0;
+    endFloors = ($.isNumeric(inputEndFloors)) ? inputEndFloors : 0;
+    if ($('meta[name=currentPage]').attr("content")) currentPage = $('meta[name=currentPage]').attr("content");
+    if ($('meta[name=totalPages]').attr("content")) totalPages = $('meta[name=totalPages]').attr("content");
+    setPagination();
+}
+
 $(document).ready(function () {
+    let currentState = history.state;
+    if (currentState == null && !url.includes("/custom-search")) {
+        history.replaceState({asyncUrl: url.replace("/search", "/async/search")}, "", url);
+    }
+    updateGlobalVariables();
 
     $(document).bind('keypress', function (e) {
         if (e.key === "Enter" && isCitySidebarSearchClicked) {
@@ -292,5 +323,25 @@ $(document).ready(function () {
         currentPage = $(event.currentTarget).data("page");
         getSearchResults();
     })
-
 })
+
+$(window).bind('popstate', function (event) {
+    let state = event.originalEvent.state;
+    console.log(state)
+    if (state !== null) {
+        let asyncUrl = state.asyncUrl;
+        $.ajax({
+            type: "GET",
+            url: asyncUrl,
+            timeout: 3000,
+            success: function (response) {
+                $("#resultsContainer").empty();
+                currentPage = response.currentPage;
+                totalPages = response.totalPages;
+                setPagination();
+                response.properties.forEach(p => $("#resultsContainer").append(populateResults(p)));
+                $("#priceApply, #areaApply, #roomsApply, #floorsApply").removeClass("show");
+            }
+        });
+    }
+});

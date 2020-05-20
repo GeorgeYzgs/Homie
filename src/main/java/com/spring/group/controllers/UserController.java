@@ -57,11 +57,6 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/search")
-    public String getSearchPage() {
-        return "search-results";
-    }
-
     /**
      * A controller that returns the registration page, or the main page if the user is already logged in
      *

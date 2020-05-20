@@ -22,6 +22,11 @@ public class SearchParamsPojo {
     private Integer startFloors;
     private Integer endFloors;
 
+    public SearchParamsPojo() {
+        this.category = "ALL";
+        this.heating = "ALL";
+    }
+
     public SearchParamsPojo(String category, String heating, String sortBy, Integer startPrice, Integer endPrice, Integer startArea, Integer endArea, Integer startRooms, Integer endRooms, Integer startFloors, Integer endFloors) {
         this.category = category;
         this.heating = heating;
@@ -36,7 +41,6 @@ public class SearchParamsPojo {
         this.endFloors = endFloors;
     }
 
-    //    TODO Implement sortBy
     public List<SearchCriteria> toSearchCriteria() {
         List<SearchCriteria> searchCriteriaList = new ArrayList<>();
         if (this.category != null && !this.category.equals("ALL"))

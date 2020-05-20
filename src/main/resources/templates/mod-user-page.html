@@ -51,65 +51,6 @@
     <div class="alert alert-danger" th:if="${messageDanger}">
         <p class="text text-center" th:text="${messageDanger}"></p>
     </div>
-
-
-    <!--    <div th:if="${#authentication.principal.id != user.id}">-->
-    <!--        <div sec:authorize-url="/mod/**">-->
-    <!--            <form method="post" th:action="@{/mod/lock-user}">-->
-    <!--                Active:-->
-    <!--                <div th:text="${user.nonLocked}"></div>-->
-    <!--                <input name="id" th:hidden="hidden" th:value="${user.id}">-->
-    <!--                <button class="btn btn-danger" type="submit">Ban/Unban</button>-->
-    <!--            </form>-->
-    <!--        </div>-->
-    <!--        <div sec:authorize-url="/admin/**">-->
-    <!--            <br>-->
-    <!--            <form method="post" th:action="@{/admin/change-role}">-->
-    <!--                Role:-->
-    <!--                <div th:text="${user.userRole}"></div>-->
-    <!--                <input name="id" th:hidden="hidden" th:value="${user.id}">-->
-    <!--                <button class="btn btn-primary" type="submit">Promote/Demote</button>-->
-    <!--            </form>-->
-    <!--            <br>-->
-    <!--            <form method="post" th:action="@{/admin/change-all-properties-value}">-->
-    <!--                Set Value on ALL Properties:-->
-    <!--                <input name="userID" th:hidden="hidden" th:value="${user.id}">-->
-    <!--                <select name="value">-->
-    <!--                    <option>1</option>-->
-    <!--                    <option>2</option>-->
-    <!--                    <option>3</option>-->
-    <!--                    <option>4</option>-->
-    <!--                    <option>5</option>-->
-    <!--                </select>-->
-    <!--                <button class="btn btn-primary" type="submit">Set Search Value</button>-->
-    <!--            </form>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
-
-    <!--    <div th:if="${#authentication.principal.id == user.id}">-->
-    <!--        &lt;!&ndash;                Implement change account stuff here...&ndash;&gt;-->
-    <!--    </div>-->
-
-    <!--    <div class="container" id="container">-->
-
-    <!--        <div class="table-responsive table-hover">-->
-    <!--            <table class="table">-->
-    <!--                <tr>-->
-    <!--                    <th>Category</th>-->
-    <!--                    <th>Price</th>-->
-    <!--                    <th>City / Address</th>-->
-    <!--                    <th>Available</th>-->
-    <!--                </tr>-->
-    <!--                <tr th:each="property : ${user.propertyCollection}">-->
-    <!--                    <td th:text="${property.category}"></td>-->
-    <!--                    <td th:text="${property.price}"></td>-->
-    <!--                    <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>-->
-    <!--                    <td th:text="${property.available}"></td>-->
-    <!--                </tr>-->
-    <!--            </table>-->
-    <!--        </div>-->
-    <!--    </div>-->
     <div id="mainParent">
         <th:block th:if="!${#lists.isEmpty(user)}">
             <div th:replace="control-panel/personal-details :: modPanel"></div>
