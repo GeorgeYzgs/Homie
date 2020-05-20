@@ -54,6 +54,7 @@
                         <td>
                             <form method="post">
                                 <input name="id" th:hidden="hidden" th:value="${property.id}">
+                                <input name="price" th:hidden="hidden" th:value="${property.price}">
                                 <button class="btn btn-outline-success" th:text="#{Pay.rent}" type="submit">Pay rent
                                 </button>
                             </form>
