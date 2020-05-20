@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -40,6 +41,15 @@
             <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
             <td th:text="${property.available}"></td>
             <td th:text="${property.owner.username}"></td>
+            <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == 1}">
+                <td>
+                    <form method="post" th:action="@{/pay}">
+                        <input name="id" th:hidden="hidden" th:value="${property.id}">
+                        <input name="price" th:hidden="hidden" th:value="${property.price}">
+                        <button class="btn btn-outline-success" type="submit">Pay rent</button>
+                    </form>
+                </td>
+            </div>
         </tr>
     </table>
 </div>
