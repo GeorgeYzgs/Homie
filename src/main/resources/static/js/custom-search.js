@@ -16,6 +16,8 @@ let startRooms = 0;
 let endRooms = 0;
 let startFloors = 0;
 let endFloors = 0;
+let currentPage = 1;
+let totalPages = 0;
 
 function getSearchResults() {
     $.ajax({
@@ -33,12 +35,16 @@ function getSearchResults() {
             startRooms: startRooms,
             endRooms: endRooms,
             startFloors: startFloors,
-            endFloors: endFloors
+            endFloors: endFloors,
+            page: currentPage
         },
         success: function (response) {
             console.log(response);
             $("#resultsContainer").empty();
-            response.forEach(p => $("#resultsContainer").append(populateResults(p)));
+            currentPage = response.currentPage;
+            totalPages = response.totalPages;
+            setPagination();
+            response.properties.forEach(p => $("#resultsContainer").append(populateResults(p)));
             history.pushState({asyncUrl: this.url}, "", this.url.replace('/async', ''));
             $("#priceApply, #areaApply, #roomsApply, #floorsApply").removeClass("show");
         }
@@ -75,8 +81,50 @@ function populateResults(property) {
                 </div>
             </div>
 `
-
     return html;
+}
+
+function setPagination() {
+    let html = `<ul class="pagination justify-content-end pagination-sm">`;
+    let hasPrevious = function () {
+        return (currentPage > 1 ? "" : ' style="visibility: hidden;"');
+    }
+    let hasNext = function () {
+        return (currentPage < totalPages ? "" : ' style="visibility: hidden;"');
+    }
+
+    html += `
+         <li class="page-item">
+            <a class="page-link text-secondary bg-light border-0" ${hasPrevious()} data-page="${currentPage - 1}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        `
+
+
+    for (let i = 1; i <= totalPages; i++) {
+        let isDisabled = function () {
+            return (i === currentPage ? "disabled" : "");
+        }
+        let isTextDark = function () {
+            return (i === currentPage ? "text-dark" : "text-secondary");
+        }
+        html += `
+        <li class="page-item ${isDisabled()}"><a class="page-link ${isTextDark()} bg-light border-0" data-page="${i}">${i}</a></li>
+        `
+    }
+
+    html += `
+        <li class="page-item">
+            <a class="page-link text-secondary bg-light border-0" ${hasNext()} data-page="${currentPage + 1}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+        `;
+    html += `</ul>`
+    $("#pageNavContainer").empty().append(html);
 }
 
 function truncateString(str, num) {
@@ -236,6 +284,12 @@ $(document).ready(function () {
         if ($.isNumeric(endingFloorsInput)) {
             endFloors = endingFloorsInput;
         }
+        getSearchResults();
+    })
+
+    $("#pageNavContainer").on('click', ".page-link", function (event) {
+        event.preventDefault();
+        currentPage = $(event.currentTarget).data("page");
         getSearchResults();
     })
 

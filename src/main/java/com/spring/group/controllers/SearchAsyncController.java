@@ -1,10 +1,12 @@
 package com.spring.group.controllers;
 
 import com.spring.group.dto.property.specifications.SearchCriteria;
-import com.spring.group.pojo.PropertyJsonResponse;
+import com.spring.group.pojo.PropertyCollectionResponse;
 import com.spring.group.pojo.SearchParamsPojo;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,15 +25,17 @@ public class SearchAsyncController {
     PropertyServiceInterface propertyService;
 
     @GetMapping("/async/search")
-    public List<PropertyJsonResponse> getSearchResults(SearchParamsPojo searchParamsPojo,
-                                                       @RequestParam("city") String city, Locale userLocale) {
+    public PropertyCollectionResponse getSearchResults(SearchParamsPojo searchParamsPojo,
+                                                       @RequestParam("city") String city,
+                                                       @RequestParam(name = "page", defaultValue = "1") int pageNumber,
+                                                       Locale userLocale) {
         List<SearchCriteria> searchCriteria = searchParamsPojo.toSearchCriteria();
         List<Specification> specifications = new ArrayList<>();
         if (city != null && !city.isEmpty()) {
             specifications.add(getPropertiesByCity(city));
         }
-        List<PropertyJsonResponse> propertiesRes = propertyService.searchPropertiesJsonResponse(searchCriteria, specifications, userLocale);
-//        properties.forEach(p -> System.out.println("Id: " + p.getId() + " Area: " + p.getArea() + " Category: " + p.getCategory()));
+        Pageable reqCount = PageRequest.of(pageNumber - 1, 10);
+        PropertyCollectionResponse propertiesRes = propertyService.searchPropertiesJsonResponse(searchCriteria, specifications, userLocale, reqCount);
         return propertiesRes;
     }
 }

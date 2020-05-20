@@ -9,7 +9,7 @@ import org.springframework.context.MessageSource;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PropertyJsonResponse {
+public class PropertyResponse {
 
     @Autowired
     MessageSource messageSource;
@@ -23,7 +23,7 @@ public class PropertyJsonResponse {
     private int area;
     private int floor;
 
-    public PropertyJsonResponse(int id, String description, int price, Address address, String category, List<String> photosUrlList, int numberOfRooms, int area, int floor) {
+    public PropertyResponse(int id, String description, int price, Address address, String category, List<String> photosUrlList, int numberOfRooms, int area, int floor) {
         this.id = id;
         this.description = description;
         this.price = price;
@@ -35,7 +35,7 @@ public class PropertyJsonResponse {
         this.floor = floor;
     }
 
-    public PropertyJsonResponse(Property property) {
+    public PropertyResponse(Property property) {
         this.id = property.getId();
         this.description = property.getDescription();
         this.price = property.getPrice();

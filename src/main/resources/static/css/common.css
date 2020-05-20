@@ -43,7 +43,7 @@ html, body {
 }
 
 .text-green {
-    color: #80ea6e;
+    color: #80ea6e !important;
 }
 
 .footer {
