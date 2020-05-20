@@ -165,6 +165,10 @@ function updateGlobalVariables() {
     endFloors = ($.isNumeric(inputEndFloors)) ? inputEndFloors : 0;
     if ($('meta[name=currentPage]').attr("content")) currentPage = $('meta[name=currentPage]').attr("content");
     if ($('meta[name=totalPages]').attr("content")) totalPages = $('meta[name=totalPages]').attr("content");
+    if ($('meta[name=searchCity]').attr("content")) {
+        city = $('meta[name=searchCity]').attr("content");
+        populateCitiesTextArea();
+    }
     setPagination();
 }
 

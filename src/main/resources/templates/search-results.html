@@ -10,6 +10,9 @@
     <th:block th:if="${propertiesResults != null }">
         <meta th:content="${propertiesResults.totalPages}" th:name="totalPages">
     </th:block>
+    <th:block th:if="${searchCity != null }">
+        <meta th:content="${searchCity}" th:name="searchCity">
+    </th:block>
     </head>
     <body class="bg-light">
     <nav class="pt-4 px-3 navigation">
