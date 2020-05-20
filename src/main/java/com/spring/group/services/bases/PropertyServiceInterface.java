@@ -4,7 +4,6 @@ import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 import com.spring.group.pojo.PropertyCollectionResponse;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
@@ -70,8 +69,10 @@ public interface PropertyServiceInterface {
 
     List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications);
 
-    public PropertyCollectionResponse searchPropertiesJsonResponse(List<SearchCriteria> searchCriteria,
-                                                                   List<Specification> specifications,
-                                                                   Locale userLocale,
-                                                                   Pageable pageable);
+    public PropertyCollectionResponse getAllPropertiesByUserCriteria(List<SearchCriteria> searchCriteria,
+                                                                     List<Specification> specifications,
+                                                                     int pageNumber,
+                                                                     int pageLimit,
+                                                                     String sortType,
+                                                                     Locale userLocale);
 }

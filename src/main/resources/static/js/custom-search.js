@@ -27,7 +27,7 @@ function getSearchResults() {
             city: city,
             category: category,
             heating: heating,
-            sortBy: sortBy,
+            sort: sortBy,
             startPrice: startPrice,
             endPrice: endPrice,
             startArea: startArea,
@@ -39,7 +39,6 @@ function getSearchResults() {
             page: currentPage
         },
         success: function (response) {
-            console.log(response);
             $("#resultsContainer").empty();
             currentPage = response.currentPage;
             totalPages = response.totalPages;
@@ -215,7 +214,8 @@ $(document).ready(function () {
     })
 
     $("#sortBySelect").on("change", function (event) {
-        console.log($(this).find(":selected").val());
+        sortBy = $(this).find(":selected").val();
+        getSearchResults()
     })
 
 

@@ -1,9 +1,11 @@
 package com.spring.group.services;
 
 
+import com.spring.group.dto.property.SortTypes;
 import com.spring.group.dto.property.specifications.PropertySpecificationBuilder;
 import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
+import com.spring.group.models.property.Property_;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 import com.spring.group.pojo.PropertyCollectionResponse;
@@ -13,7 +15,9 @@ import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,27 +120,52 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public PropertyCollectionResponse searchPropertiesJsonResponse(List<SearchCriteria> searchCriteria,
-                                                                   List<Specification> specifications,
-                                                                   Locale userLocale,
-                                                                   Pageable pageable) {
+    public PropertyCollectionResponse getAllPropertiesByUserCriteria(List<SearchCriteria> searchCriteria,
+                                                                     List<Specification> specifications,
+                                                                     int pageNumber,
+                                                                     int pageLimit,
+                                                                     String sortType,
+                                                                     Locale userLocale) {
+
         PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
         searchCriteria.forEach(psb::with);
         specifications.forEach(psb::with);
         final Specification<Property> spec = psb.build();
         if (spec == null) return new PropertyCollectionResponse();
+        Pageable pageable = getPageable(pageNumber, pageLimit, sortType);
         Page<Property> propertiesSlice = propertyRepository.findAll(spec, pageable);
+        return pageToPropertyCollectionRes(propertiesSlice, pageable, userLocale);
+    }
+
+    private Pageable getPageable(int pageNumber, int pageLimit, String sortType) {
+        if (!sortType.equals("AUTOMATIC") && SortTypes.contains(sortType)) {
+            String[] sortArgs = sortType.split("_");
+            switch (sortArgs[0]) {
+                case "PRICE":
+                    if (sortArgs[1].equals("DESC"))
+                        return PageRequest.of(pageNumber - 1, pageLimit, Sort.by(Property_.PRICE).descending());
+                    return PageRequest.of(pageNumber - 1, pageLimit, Sort.by(Property_.PRICE).ascending());
+                case "AREA":
+                    if (sortArgs[1].equals("DESC"))
+                        return PageRequest.of(pageNumber - 1, pageLimit, Sort.by(Property_.AREA).descending());
+                    return PageRequest.of(pageNumber - 1, pageLimit, Sort.by(Property_.AREA).ascending());
+            }
+        }
+        return PageRequest.of(pageNumber - 1, pageLimit);
+    }
+
+    private PropertyCollectionResponse pageToPropertyCollectionRes(Page<Property> properties, Pageable pageable, Locale userLocale) {
         PropertyCollectionResponse response = new PropertyCollectionResponse();
         response.setProperties(
-                propertiesSlice.getContent().stream()
+                properties.getContent().stream()
                         .map(p -> {
                             PropertyResponse res = new PropertyResponse(p);
                             res.setCategory(messageSource.getMessage(res.getCategory(), null, userLocale));
                             return res;
                         }).collect(Collectors.toList())
         );
-        response.setTotalPages(propertiesSlice.getTotalPages());
-        // Zoro based pagination
+        response.setTotalPages(properties.getTotalPages());
+        // Zero based pagination
         response.setCurrentPage(pageable.getPageNumber() + 1);
         return response;
     }
