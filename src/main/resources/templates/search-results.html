@@ -4,10 +4,12 @@
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:utext="#{Search.results.page.title}">Search Results</title>
     <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <th:block th:if="${propertiesResults != null }">
+    <th:block
+            th:if="${propertiesResults != null && propertiesResults.currentPage!=null && propertiesResults.currentPage > 0}">
         <meta th:content="${propertiesResults.currentPage}" th:name="currentPage">
     </th:block>
-    <th:block th:if="${propertiesResults != null }">
+    <th:block
+            th:if="${propertiesResults != null && propertiesResults.totalPages != null && propertiesResults.totalPages > 0 }">
         <meta th:content="${propertiesResults.totalPages}" th:name="totalPages">
     </th:block>
     <th:block th:if="${searchCity != null }">

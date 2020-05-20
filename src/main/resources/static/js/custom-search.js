@@ -1,6 +1,6 @@
 "use strict"
 
-let baseUrl = "/GroupProject"
+let baseUrl = window.location.pathname;
 let url = window.location.href;
 
 let city = "";
@@ -23,7 +23,7 @@ let totalPages = 0;
 function getSearchResults() {
     $.ajax({
         type: "GET",
-        url: baseUrl + "/async/search",
+        url: baseUrl.replace("/search", "/async/search"),
         data: {
             city: city,
             category: category,

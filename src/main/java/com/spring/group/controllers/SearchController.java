@@ -42,17 +42,9 @@ public class SearchController {
         return propertiesRes;
     }
 
-    @GetMapping("/custom-search")
-    public String getSearchPage(ModelMap modelMap) {
-        SearchParamsPojo searchParamsPojo = new SearchParamsPojo();
-        modelMap.addAttribute("searchParams", searchParamsPojo);
-        modelMap.addAttribute("sortType", "AUTOMATIC");
-        return "search-results";
-    }
-
     @GetMapping("/search")
     public String getSearchResults(SearchParamsPojo searchParamsPojo,
-                                   @RequestParam("city") String city,
+                                   @RequestParam(name = "city", defaultValue = "") String city,
                                    @RequestParam(name = "page", defaultValue = "1") int pageNumber,
                                    @RequestParam(name = "sort", defaultValue = "AUTOMATIC") String sortType,
                                    Locale userLocale,
