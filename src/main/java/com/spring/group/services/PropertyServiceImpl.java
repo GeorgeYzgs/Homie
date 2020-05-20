@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author George.Giazitzis
@@ -49,8 +50,8 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public Property getFullProperty(Integer PropertyID) {
-        return propertyRepository.findById(PropertyID).get();
+    public Optional<Property> findPropertyByID(Integer propertyID) {
+        return propertyRepository.findById(propertyID);
     }
 
     @Override

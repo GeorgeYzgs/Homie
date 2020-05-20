@@ -15,6 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -159,8 +157,12 @@ public class MainController {
      */
     @GetMapping("/view/{id}")
     public ModelAndView viewProperty(@PathVariable Integer id) {
+        Optional<Property> property = propertyService.findPropertyByID(id);
+        if (!property.isPresent()) {
+            return new ModelAndView("error/404");
+        }
         pageViewCount.merge(id, 1, Integer::sum);
-        return new ModelAndView("view-property", "property", propertyService.getPropertyByID(id));
+        return new ModelAndView("view-property", "property", property.get());
     }
 
     /**
@@ -168,12 +170,13 @@ public class MainController {
      * to not stress the database, currently updating every 5 minutes
      * (seconds minutes hours days months years)
      */
+    @Transactional
     @Scheduled(cron = "0 */5 * * * ?")
-    private void updateViewCount() {
+    public void updateViewCount() {
         System.out.println("Updating Property View Counts!");
         List<Property> updatedProperties = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : pageViewCount.entrySet()) {
-            Property property = propertyService.getFullProperty(entry.getKey());
+            Property property = propertyService.getPropertyByID(entry.getKey());
             property.setViews(property.getViews() + entry.getValue());
             updatedProperties.add(property);
         }

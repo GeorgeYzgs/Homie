@@ -5,6 +5,7 @@ import com.spring.group.models.user.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author George.Giazitzis
@@ -28,10 +29,6 @@ public interface PropertyServiceInterface {
      */
     Property getPropertyByID(Integer propertyID);
 
-    List<Property> getPropertiesByOwnerUser(User ownerUser);
-
-    List<Property> getPropertiesByTenantUser(User tenantUser);
-
     /**
      * Persists a collection of properties to our database, leveraging JPA saveALL method to create one transaction,
      * making it lighter for our database.
@@ -42,16 +39,6 @@ public interface PropertyServiceInterface {
     Collection<Property> updateProperties(Collection<Property> updatedProperties);
 
     /**
-     * Utilized JPA findbyID method to fetch a property object EAGERLY,
-     * only to be used when getPropertyByID would return an exception, as it stresses the database.
-     *
-     * @param PropertyID the target property id we are searchinb by
-     * @return a full property object from our database.
-     * @see {@link PropertyServiceInterface#getPropertyByID}
-     */
-    Property getFullProperty(Integer PropertyID);
-
-    /**
      * Attempts to submit an offer for a property, by validating that the provided userID is not the property owner's ID,
      * the property is not locked or unavailable, and the user has not already submitted an offer for the provided property
      *
@@ -60,4 +47,19 @@ public interface PropertyServiceInterface {
      * @return "SUCCESS" if successful or an error message.
      */
     String submitOffer(Property property, int userID);
+
+
+    /**
+     * Queries the database to return an optional property by searching with ID
+     * A method to avoid exceptions when manually inputting urls, ensures the user will be redirected
+     * to a 404 page if the property does not exist
+     *
+     * @param propertyID the property id we are searching by
+     * @return an optional property
+     */
+    Optional<Property> findPropertyByID(Integer propertyID);
+
+    List<Property> getPropertiesByOwnerUser(User ownerUser);
+
+    List<Property> getPropertiesByTenantUser(User tenantUser);
 }

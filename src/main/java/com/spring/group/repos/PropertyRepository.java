@@ -15,8 +15,8 @@ import java.util.List;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Integer> {
 
-    public List<Property> findAllByOwner(User ownerUser);
+    List<Property> findAllByOwner(User ownerUser);
 
     @Query("SELECT p FROM properties p, rentals r where r member of p.rentalCollection and r.startDate is not null and r.endDate is null and r.tenant = :tenant")
-    public List<Property> findAllByTenant(@Param("tenant") User tenantUser);
+    List<Property> findAllByTenant(@Param("tenant") User tenantUser);
 }

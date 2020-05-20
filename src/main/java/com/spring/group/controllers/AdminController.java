@@ -43,7 +43,8 @@ public class AdminController {
         UserRole role = user.getUserRole().equals(UserRole.USER) ? UserRole.MODERATOR : UserRole.USER;
         user.setUserRole(role);
         userService.updateUser(user);
-        redirectAttributes.addFlashAttribute("messageSuccess", "User role has been changed");
+        String message = user.getUserRole().equals(UserRole.USER) ? "User has been demoted" : "User has been promoted";
+        redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
 

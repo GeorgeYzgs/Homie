@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Optional;
+
 /**
  * @author George.Giazitzis
  */
@@ -49,7 +51,9 @@ public class ModeratorController {
      */
     @GetMapping("/user/{id}")
     public ModelAndView displayUser(@PathVariable Integer id) {
-        return new ModelAndView("user-page", "user", userService.getUserByID(id));
+        Optional<User> user = userService.findUserById(id);
+        return user.map(value -> new ModelAndView("user-page", "user", value))
+                .orElseGet(() -> new ModelAndView("error/404"));
     }
 
     /**
