@@ -13,14 +13,14 @@ public class SearchParamsPojo {
     private String category;
     private String heating;
     private String sortBy;
-    private Integer startPrice;
-    private Integer endPrice;
-    private Integer startArea;
-    private Integer endArea;
-    private Integer startRooms;
-    private Integer endRooms;
-    private Integer startFloors;
-    private Integer endFloors;
+    private int startPrice;
+    private int endPrice;
+    private int startArea;
+    private int endArea;
+    private int startRooms;
+    private int endRooms;
+    private int startFloors;
+    private int endFloors;
 
     public SearchParamsPojo() {
         this.category = "ALL";

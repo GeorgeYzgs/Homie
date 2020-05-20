@@ -195,9 +195,6 @@ $(document).ready(function () {
                 $.ajax({
                     url: "/GroupProject/autocomplete-utility/city/" + $.trim(request.term) + "/",
                     dataType: "json",
-                    // data: {
-                    //     q: request.term
-                    // },
                     success: function (data) {
                         response(data);
                     }
@@ -209,7 +206,7 @@ $(document).ready(function () {
             minLength: 3,
             select: function (event, ui) {
                 event.preventDefault();
-                city = ui.item.value;
+                city = $.trim(ui.item.value);
                 populateCitiesTextArea();
                 $("#inputSearchQuery").val('');
             }
