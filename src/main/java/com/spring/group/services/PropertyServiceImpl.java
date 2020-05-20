@@ -6,9 +6,11 @@ import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
+import com.spring.group.pojo.PropertyJsonResponse;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * @author George.Giazitzis
@@ -26,6 +30,9 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
 
     @Autowired
     private PropertyRepository propertyRepository;
+
+    @Autowired
+    MessageSource messageSource;
 
     @Override
     public Property insertProperty(Property property) {
@@ -105,4 +112,19 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         return propertyRepository.findAll(spec);
     }
 
+    @Override
+    public List<PropertyJsonResponse> searchPropertiesJsonResponse(List<SearchCriteria> searchCriteria, List<Specification> specifications, Locale userLocale) {
+        PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
+        searchCriteria.forEach(psb::with);
+        specifications.forEach(psb::with);
+        final Specification<Property> spec = psb.build();
+        if (spec == null) return new ArrayList<>();
+        List<Property> properties = propertyRepository.findAll(spec);
+        return properties.stream()
+                .map(p -> {
+                    PropertyJsonResponse res = new PropertyJsonResponse(p);
+                    res.setCategory(messageSource.getMessage(res.getCategory(), null, userLocale));
+                    return res;
+                }).collect(Collectors.toList());
+    }
 }

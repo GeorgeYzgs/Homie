@@ -1,8 +1,8 @@
 package com.spring.group.controllers;
 
 import com.spring.group.dto.property.specifications.SearchCriteria;
-import com.spring.group.models.property.Property;
-import com.spring.group.pojo.SearchPojo;
+import com.spring.group.pojo.PropertyJsonResponse;
+import com.spring.group.pojo.SearchParamsPojo;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.spring.group.dto.property.specifications.PropertySpecificationsCustom.getPropertiesByCity;
 
@@ -22,14 +23,15 @@ public class SearchAsyncController {
     PropertyServiceInterface propertyService;
 
     @GetMapping("/async/search")
-    public String getSearchResults(SearchPojo searchPojo, @RequestParam("city") String city) {
-        List<SearchCriteria> searchCriteria = searchPojo.toSearchCriteria();
+    public List<PropertyJsonResponse> getSearchResults(SearchParamsPojo searchParamsPojo,
+                                                       @RequestParam("city") String city, Locale userLocale) {
+        List<SearchCriteria> searchCriteria = searchParamsPojo.toSearchCriteria();
         List<Specification> specifications = new ArrayList<>();
         if (city != null && !city.isEmpty()) {
             specifications.add(getPropertiesByCity(city));
         }
-        List<Property> properties = propertyService.searchProperties(searchCriteria, specifications);
-        properties.forEach(p -> System.out.println("Id: " + p.getId() + " Area: " + p.getArea() + " Category: " + p.getCategory()));
-        return "Hi";
+        List<PropertyJsonResponse> propertiesRes = propertyService.searchPropertiesJsonResponse(searchCriteria, specifications, userLocale);
+//        properties.forEach(p -> System.out.println("Id: " + p.getId() + " Area: " + p.getArea() + " Category: " + p.getCategory()));
+        return propertiesRes;
     }
 }

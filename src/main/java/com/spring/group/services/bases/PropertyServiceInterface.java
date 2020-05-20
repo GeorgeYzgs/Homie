@@ -3,10 +3,12 @@ package com.spring.group.services.bases;
 import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
+import com.spring.group.pojo.PropertyJsonResponse;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author George.Giazitzis
@@ -66,4 +68,6 @@ public interface PropertyServiceInterface {
     List<Property> searchProperties(List<SearchCriteria> searchCriteria);
 
     List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications);
+
+    List<PropertyJsonResponse> searchPropertiesJsonResponse(List<SearchCriteria> searchCriteria, List<Specification> specifications, Locale userLocale);
 }

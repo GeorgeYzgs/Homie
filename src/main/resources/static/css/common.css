@@ -6,6 +6,22 @@ html, body {
     overflow-x: hidden;
 }
 
+.btn-facebook {
+    background-color: #4267B2;
+}
+
+.btn-facebook:hover {
+    background-color: #2E58B3;
+}
+
+.btn-google {
+    background-color: #e2e6ea;
+}
+
+.btn-google:hover {
+    background-color: #D5D8DB;
+}
+
 .bg-green {
     background-color: #80ea6e;
 }

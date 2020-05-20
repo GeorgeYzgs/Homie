@@ -37,10 +37,53 @@ function getSearchResults() {
         },
         success: function (response) {
             console.log(response);
+            $("#resultsContainer").empty();
+            response.forEach(p => $("#resultsContainer").append(populateResults(p)));
             history.pushState({asyncUrl: this.url}, "", this.url.replace('/async', ''));
             $("#priceApply, #areaApply, #roomsApply, #floorsApply").removeClass("show");
         }
     });
+}
+
+function populateResults(property) {
+    let html = `
+<div class="btn btn-light pt-4">
+                <div class="row border-top py-3">
+                    <div class="col-sm-4">
+                        <img class="rounded object-fit_cover img-responsive"
+                             height="250" src="https://q-cf.bstatic.com/images/hotel/max1024x768/189/189426432.jpg">
+                    </div>
+                    <div class="col-sm-7 text-left">
+                        <h5 class="font-weight-bold">
+                            <span>${property.category}</span> <span>${property.area}</span> τ.μ. προς ενοικίαση
+                        </h5>
+                        <p class="mb-0">
+                            <span>${property.address.city}  ${property.address.state}</span>
+                        </p>
+                        <p class="pt-0">
+                            ${truncateString(property.description, 50)}
+                        </p>
+                        <p class="pt-1">
+                        <span class="border rounded bg-green text-white p-1 font-weight-bold">
+                        ${property.price}&euro;/μήνα
+                        </span>
+                            <span class="pl-1">${property.area} τμ</span>
+                            <span class="pl-1">${property.price / property.area}<span>&euro;</span>/τμ</span>
+                            <span class="pl-1">${property.numberOfRooms} δωμάτια</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+`
+
+    return html;
+}
+
+function truncateString(str, num) {
+    if (str.length <= num) {
+        return str
+    }
+    return str.slice(0, num) + '...'
 }
 
 function populateCitiesTextArea() {
@@ -58,6 +101,7 @@ $(document).ready(function () {
         if (e.key === "Enter" && isCitySidebarSearchClicked) {
             city = $.trim($("#inputSearchQuery").val());
             populateCitiesTextArea();
+            $('#inputSearchQuery').autocomplete('close');
             $("#inputSearchQuery").val('');
         }
     });

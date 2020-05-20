@@ -8,7 +8,7 @@ import com.spring.group.models.property.Property_;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchPojo {
+public class SearchParamsPojo {
 
     private String category;
     private String heating;
@@ -22,7 +22,7 @@ public class SearchPojo {
     private Integer startFloors;
     private Integer endFloors;
 
-    public SearchPojo(String category, String heating, String sortBy, Integer startPrice, Integer endPrice, Integer startArea, Integer endArea, Integer startRooms, Integer endRooms, Integer startFloors, Integer endFloors) {
+    public SearchParamsPojo(String category, String heating, String sortBy, Integer startPrice, Integer endPrice, Integer startArea, Integer endArea, Integer startRooms, Integer endRooms, Integer startFloors, Integer endFloors) {
         this.category = category;
         this.heating = heating;
         this.sortBy = sortBy;

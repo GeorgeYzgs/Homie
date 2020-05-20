@@ -33,9 +33,11 @@
     <div class="parallax d-flex justify-content-center align-items-center"
          th:style="'background-image:url(' + @{/img/athens_jumbotron_1280.jpg} + ');'">
         <div>
-            <h1 class="text-white font-weight-bold">House</h1>
-            <h1 class="text-white font-weight-bold" style="animation-delay:2s">Room</h1>
-            <h1 class="text-white font-weight-bold" style="animation-delay:4s">Apartment <span class="blinking">|</span>
+            <h1 class="text-white font-weight-bold" th:text="#{Room}">Room</h1>
+            <h1 class="text-white font-weight-bold" style="animation-delay:2s" th:text="#{Flat}">Flat</h1>
+            <h1 class="text-white font-weight-bold" style="animation-delay:4s"><span
+                    th:text="#{House}">House</span><span
+                    class="blinking">|</span>
             </h1>
         </div>
     </div>
