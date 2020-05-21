@@ -34,7 +34,7 @@ public class AdminController {
      * @return the target user's profile page
      */
     @PostMapping("/change-role")
-    public ModelAndView changeUserRole(@RequestParam Integer userID, RedirectAttributes redirectAttributes) {
+    public ModelAndView changeUserRole(@RequestParam("id") Integer userID, RedirectAttributes redirectAttributes) {
         User user = userService.getUserByID(userID);
         if (user.getUserRole().equals(UserRole.ADMIN)) {
             redirectAttributes.addFlashAttribute("messageDanger", "You cannot change the role of Admins.");
@@ -43,8 +43,7 @@ public class AdminController {
         UserRole role = user.getUserRole().equals(UserRole.USER) ? UserRole.MODERATOR : UserRole.USER;
         user.setUserRole(role);
         userService.updateUser(user);
-        String message = user.getUserRole().equals(UserRole.USER) ? "User has been demoted" : "User has been promoted";
-        redirectAttributes.addFlashAttribute("messageSuccess", message);
+        redirectAttributes.addFlashAttribute("messageSuccess", "User role has been changed");
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
 

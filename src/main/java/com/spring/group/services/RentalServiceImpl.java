@@ -44,21 +44,21 @@ public class RentalServiceImpl implements RentalServiceInterface {
 
     @Override
     public List<Rental> getRentalsByOwner(User owner) {
-        return rentalRepository.findAllByResidenceOwner(owner);
+        return rentalRepository.findAllByIsPendingTrueAndResidenceOwner(owner);
     }
 
     @Override
     public String manageOffers(Rental rental, boolean isAccepted, int userID) {
         if (userID != rental.getResidence().getOwner().getId()) {
-            return "You can only manage offers to your properties!";
+            return "Offer.not.of.own.property";
         }
         if (!rental.isPending()) {
-            return "This offer has already been managed.";
+            return "Offer.already.managed";
         }
         if (handleOffer(rental, isAccepted)) {
-            return "Offer accepted!";
+            return "Offer.accepted";
         }
-        return "Offer declined";
+        return "Offer.declined";
     }
 
     private boolean handleOffer(Rental rental, boolean isAccepted) {

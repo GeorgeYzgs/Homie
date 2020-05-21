@@ -123,16 +123,15 @@ public class MainController {
      * @return redirects to the owner's profile page
      */
     @PostMapping("/manage-offers")
-    public ModelAndView manageOffers(@RequestParam Integer rentalID, @RequestParam boolean isAccepted,
-                                     Authentication auth, RedirectAttributes redirectAttributes) {
+    public ModelAndView manageOffers(@RequestParam("id") Integer rentalID, @RequestParam("isAccepted") boolean isAccepted,
+                                     Authentication auth, RedirectAttributes redirectAttributes, Locale userLocale) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         Rental rental = rentalService.getRentalByID(rentalID);
         String attempt = rentalService.manageOffers(rental, isAccepted, loggedUser.getId());
-        if (!attempt.contains("Offer")) {
-            redirectAttributes.addFlashAttribute("messageDanger", attempt);
-        }
-        redirectAttributes.addFlashAttribute("messageSuccess", attempt);
-        return new ModelAndView("redirect:/my-profile");
+        redirectAttributes.addFlashAttribute(
+                (attempt.contains("accepted")) ? "messageSuccess" : "messageDanger",
+                messageSource.getMessage(attempt, null, userLocale));
+        return new ModelAndView("redirect:/my-profile/offers");
     }
 
     /**
