@@ -7,6 +7,7 @@ let startPrice = 0;
 let endPrice = 0;
 let startArea = 0;
 let endArea = 0;
+let isCollapsed = true;
 
 $(document).ready(function () {
 
@@ -21,6 +22,7 @@ $(document).ready(function () {
             e.preventDefault();
             city = $.trim($("#inputSearchQuery").val());
             populateCitiesTextArea();
+            if (isCollapsed) $("#searchButton").trigger("click");
             $("#inputSearchQuery").val('');
             $("#inputSearchQuery").autocomplete("close");
         }
@@ -92,6 +94,13 @@ $(document).ready(function () {
         event.preventDefault();
         window.location.href = baseUrl + `search?city=${city}&startPrice=${startPrice}&endPrice=${endPrice}&startArea=${startArea}&endArea=${endArea}`;
     })
+
+    $('#advanceSearchCollapse').on('show.bs.collapse', function () {
+        isCollapsed = false;
+    })
+        .on('hide.bs.collapse', function () {
+            isCollapsed = true;
+        })
 
     $(document).on('click', '.badge_x', function () {
         $(this).parent().remove();
