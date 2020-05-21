@@ -1,20 +1,24 @@
 package com.spring.group.controllers;
 
 import com.spring.group.models.property.Property;
+import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.MyUserDetails;
 import com.spring.group.models.user.User;
 import com.spring.group.models.user.UserRole;
 import com.spring.group.services.bases.PropertyServiceInterface;
+import com.spring.group.services.bases.RentalServiceInterface;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,6 +33,9 @@ public class ModeratorController {
 
     @Autowired
     private PropertyServiceInterface propertyService;
+
+    @Autowired
+    private RentalServiceInterface rentalService;
 
     @Autowired
     private SessionRegistry sessionRegistry;
@@ -50,10 +57,41 @@ public class ModeratorController {
      * @return the user page of that user
      */
     @GetMapping("/user/{id}")
-    public ModelAndView displayUser(@PathVariable Integer id) {
+    public String displayUser(@PathVariable Integer id, ModelMap modelMap) {
         Optional<User> user = userService.findUserById(id);
-        return user.map(value -> new ModelAndView("user-page", "user", value))
-                .orElseGet(() -> new ModelAndView("error/404"));
+        if (user.isPresent()) {
+            modelMap.addAttribute("userId", id);
+            modelMap.addAttribute("user", userService.getUserByID(id));
+            return "mod-user-page";
+        }
+        return "error/404";
+    }
+
+    @GetMapping("/user/{id}/personal-details")
+    public String displayUserDetails(@PathVariable Integer id, ModelMap modelMap) {
+        modelMap.addAttribute("userId", id);
+        modelMap.addAttribute("user", userService.getUserByID(id));
+        return "mod-user-page";
+    }
+
+    @GetMapping("/user/{id}/properties")
+    public String displayProperties(@PathVariable Integer id, ModelMap modelMap) {
+        List<Property> propertiesOwned = propertyService.getPropertiesByOwnerUser(userService.getUserByID(id));
+        List<Property> propertiesRenting = propertyService.getPropertiesByTenantUser(userService.getUserByID(id));
+        modelMap.addAttribute("userId", id);
+        modelMap.addAttribute("userPropertiesOwned", propertiesOwned);
+        modelMap.addAttribute("userPropertiesRenting", propertiesRenting);
+        return "mod-user-page";
+    }
+
+    @GetMapping("/user/{id}/offers")
+    public String displayOffers(@PathVariable Integer id, ModelMap modelMap) {
+        List<Rental> offersSent = rentalService.getRentalsByTenant(userService.getUserByID(id));
+        List<Rental> offersReceived = rentalService.getRentalsByOwner(userService.getUserByID(id));
+        modelMap.addAttribute("userId", id);
+        modelMap.addAttribute("userOffersSent", offersSent);
+        modelMap.addAttribute("userOffersReceived", offersReceived);
+        return "mod-user-page";
     }
 
     /**
@@ -65,7 +103,7 @@ public class ModeratorController {
      * @return the target user's profile page.
      */
     @PostMapping("/lock-user")
-    public ModelAndView lockUser(@RequestParam Integer userID, Authentication auth, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockUser(@RequestParam("id") Integer userID, Authentication auth, RedirectAttributes redirectAttributes) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         User user = userService.getUserByID(userID);
         if (loggedUser.getId() == user.getId()) {
@@ -106,7 +144,7 @@ public class ModeratorController {
      * @return redirects to the property page
      */
     @PostMapping("/lock-property")
-    public ModelAndView lockProperty(@RequestParam Integer propertyID, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockProperty(@RequestParam("id") Integer propertyID, RedirectAttributes redirectAttributes) {
         Property property = propertyService.getPropertyByID(propertyID);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);

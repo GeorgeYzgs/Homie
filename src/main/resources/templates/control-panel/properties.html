@@ -1,58 +1,84 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
-      xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="userPropertiesOwned">
-    <h4>Property Owned</h4>
-    <table class="table table-responsive table-hover">
-        <tr>
-            <th>Category</th>
-            <th>Price</th>
-            <th>City / Address</th>
-            <th>Available</th>
-            <th>Owner</th>
-        </tr>
-        <tr th:each="property : ${userPropertiesOwned}">
-            <td th:text="${property.category}"></td>
-            <td th:text="${property.price}"></td>
-            <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
-            <td th:text="${property.available}"></td>
-            <td th:text="${property.owner.username}"></td>
-        </tr>
-    </table>
-</div>
-<div th:fragment="userPropertiesRenting">
-    <h4>Property Renting</h4>
-    <table class="table table-responsive table-hover">
-        <tr>
-            <th>Category</th>
-            <th>Price</th>
-            <th>City / Address</th>
-            <th>Available</th>
-            <th>Owner</th>
-        </tr>
-        <tr th:each="property : ${userPropertiesRenting}">
-            <td th:text="${property.category}"></td>
-            <td th:text="${property.price}"></td>
-            <td th:text="${property.address.city} +','+ ${property.address.street}+','+ ${property.address.number}"></td>
-            <td th:text="${property.available}"></td>
-            <td th:text="${property.owner.username}"></td>
-            <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == 1}">
-                <td>
-                    <form method="post" th:action="@{/pay}">
-                        <input name="id" th:hidden="hidden" th:value="${property.id}">
-                        <input name="price" th:hidden="hidden" th:value="${property.price}">
-                        <button class="btn btn-outline-success" type="submit">Pay rent</button>
-                    </form>
-                </td>
-            </div>
-        </tr>
-    </table>
-</div>
+<th:block th:if="!${#lists.isEmpty(userPropertiesOwned)}">
+    <div class="pb-4 text-center" th:fragment="userPropertiesOwned">
+        <h5 class="text-center" th:text="#{Property.owned}">Property Owned</h5>
+        <div class="col-sm-10 offset-1">
+            <table class="table table-responsive table-hover">
+                <tbody>
+                <tr>
+                    <th th:text="#{Category}"></th>
+                    <th th:text="#{Price} + '(&euro;)'"></th>
+                    <th th:text="#{City} + '/'+ #{Address}"></th>
+                    <th th:text="#{Availability}"></th>
+                    <th th:text="#{Owner}"></th>
+                </tr>
+                <tr th:each="property : ${userPropertiesOwned}">
+                    <td th:text="${property.category}"></td>
+                    <td th:text="${property.price}"></td>
+                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
+                    <td th:text="${property.available}"></td>
+                    <td th:text="${property.owner.username}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+<th:block th:if="!${#lists.isEmpty(userPropertiesRenting)}">
+    <div class="border-top pt-4 text-center" th:fragment="userPropertiesRenting">
+        <h5 class="text-center" th:text="#{Property.renting}">Property Renting</h5>
+        <div class="col-sm-10 offset-1">
+            <table class="table table-responsive table-hover align-self-center">
+                <tbody class="align-self-center">
+                <tr>
+                    <th th:text="#{Category}"></th>
+                    <th th:text="#{Price} + '(&euro;)'"></th>
+                    <th th:text="#{City} + '/'+ #{Address}"></th>
+                    <th th:text="#{Availability}"></th>
+                    <th th:text="#{Owner}"></th>
+                    <th class="text-danger">Under construction!</th>
+                </tr>
+                <tr th:each="property : ${userPropertiesRenting}">
+                    <td th:text="${property.category}"></td>
+                    <td th:text="${property.price}"></td>
+                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
+                    <td th:text="${property.available}"></td>
+                    <td th:text="${property.owner.username}"></td>
+                    <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
+                        <td>
+                            <form method="post" th:action="@{/pay}">
+                                <input name="id" th:hidden="hidden" th:value="${property.id}">
+                                <input name="price" th:hidden="hidden" th:value="${property.price}">
+                                <button class="btn btn-outline-success" th:text="#{Pay.rent}" type="submit">Pay rent
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/manage-offers}">
+                                <input name="id" th:hidden="hidden" th:value="${property.id}">
+                                <input hidden name="isAccepted" type="text" value="false">
+                                <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
+                                </button>
+                            </form>
+                        </td>
+                    </th:block>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:if="${#lists.isEmpty(userPropertiesOwned) and #lists.isEmpty(userPropertiesRenting)}">
+    <p class="text-center text-secondary" th:text="#{Nothing.found}">
+    </p>
+</th:block>
 
 </body>
 </html>
