@@ -1,6 +1,7 @@
 package com.spring.group.services;
 
 import com.spring.group.models.property.Property;
+import com.spring.group.models.rental.PaymentLog;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 import com.spring.group.repos.RentalRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,5 +77,21 @@ public class RentalServiceImpl implements RentalServiceInterface {
         }
         rentalRepository.save(rental);
         return false;
+    }
+
+    @Override
+    public boolean hasPaidRent(Rental rental) {
+        return rental.getPaymentLogs().stream().map(PaymentLog::getTransactionTime)
+                .map(timestamp -> timestamp.atZone(ZoneOffset.UTC).getMonth())
+                .anyMatch(month -> month.equals(Instant.now().atZone(ZoneOffset.UTC).getMonth()));
+    }
+
+    @Override
+    public void closeRental(Rental rental) {
+        rental.setEndDate(Instant.now());
+        Property property = rental.getResidence();
+        property.setAvailable(true);
+        propertyService.insertProperty(property);
+        insertRental(rental);
     }
 }
