@@ -173,7 +173,6 @@ public class TokenService {
         resetPassTokenRepository.save(token);
     }
 
-    //TODO to be tested.
     public void informPayment(User user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());

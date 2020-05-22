@@ -33,7 +33,7 @@ public class PaymentController {
     @Autowired
     private TokenService tokenService;
 
-    //TODO rewrite this better.
+    //TODO rewrite this better, change price input to match agreed price, id to match rental id.
     @PostMapping("/pay")
     public String processPayment(@RequestParam("id") String id, @RequestParam("price") Double price,
                                  RedirectAttributes redirectAttributes) throws PayPalRESTException {
@@ -42,9 +42,6 @@ public class PaymentController {
             redirectAttributes.addFlashAttribute("messageDanger", "You have already paid rent for this month");
             return "redirect:/my-profile/properties";
         }
-        System.out.println(price);
-        System.out.println(rental.getAgreedPrice());
-        System.out.println(rental.getAgreedPrice() == price);
         if (price != rental.getAgreedPrice()) {
             redirectAttributes.addFlashAttribute("messageDanger", "That is not the agreed price for the rent");
             return "redirect:/my-profile/properties";
@@ -78,7 +75,7 @@ public class PaymentController {
         return "redirect:/my-profile/properties";
     }
 
-    //TODO to be tested.
+    //TODO email owner and tenant, change button display on html ?
     @PostMapping("/close-contract")
     public String closeContract(@RequestParam("id") Integer id, Authentication auth, RedirectAttributes redirectAttributes) {
         Rental rental = rentalService.getRentalByID(id);
