@@ -1,6 +1,6 @@
 package com.spring.group.controllers;
 
-import com.spring.group.dto.PropertyDTO;
+import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.MyUserDetails;
@@ -37,16 +37,12 @@ public class MainController {
 
     @Autowired
     private PropertyServiceInterface propertyService;
-
     @Autowired
     private PhotoServiceImpl photoServiceImpl;
-
     @Autowired
     private UserServiceInterface userService;
-
     @Autowired
     private RentalServiceInterface rentalService;
-
     @Autowired
     private MessageSource messageSource;
 
@@ -99,17 +95,19 @@ public class MainController {
      */
     @PostMapping("/submit-offer")
     public ModelAndView submitOffer(@RequestParam Integer propertyID, @RequestParam Integer price,
-                                    Authentication auth, RedirectAttributes redirectAttributes) {
+                                    Authentication auth, RedirectAttributes redirectAttributes, Locale userLocale) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         Property property = propertyService.getPropertyByID(propertyID);
         String attempt = propertyService.submitOffer(property, loggedUser.getId());
         if (!attempt.equals("SUCCESS")) {
-            redirectAttributes.addFlashAttribute("messageDanger", attempt);
+            redirectAttributes.addFlashAttribute("messageDanger",
+                    messageSource.getMessage(attempt, null, userLocale));
             return new ModelAndView("redirect:/view/" + propertyID);
         }
         User tenant = userService.getUserByID(loggedUser.getId());
         rentalService.insertRental(new Rental(price, property, tenant));
-        redirectAttributes.addFlashAttribute("messageSuccess", "Offer submitted successfully!");
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                messageSource.getMessage("Offer.submit.success", null, userLocale));
         return new ModelAndView("redirect:/view/" + propertyID);
     }
 
@@ -162,6 +160,50 @@ public class MainController {
         }
         pageViewCount.merge(id, 1, Integer::sum);
         return new ModelAndView("view-property", "property", property.get());
+    }
+
+    /**
+     * A controller that returns the page of a property including the Collection of photos as updatable input
+     *
+     * @param id the target property id
+     * @return the target property page
+     */
+    @GetMapping("/update/{id}")
+    public String updateProperty(@PathVariable Integer id, ModelMap modelMap) {
+        Optional<Property> property = propertyService.findPropertyByID(id);
+        if (!property.isPresent()) {
+            return "error/404";
+        }
+        modelMap.addAttribute("propertyDTO", new PropertyDTO(property.get()));
+        modelMap.addAttribute("photosCollection", property.get().getPhotoCollection());
+        return "update-property";
+    }
+
+    /**
+     * A controller that handles form submission for updating properties
+     *
+     * @param propertyDTO        the object to be validated
+     * @param bindingResult      validates the object for errors
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
+     * @return redirects to the home page if successful, otherwise returns the insert property
+     * @throws IOException if the parsing of the provided photos of the property fails.
+     */
+    @PostMapping("/update-property")
+    public ModelAndView updateProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
+                                       BindingResult bindingResult, Authentication auth,
+                                       RedirectAttributes redirectAttributes,
+                                       @RequestParam("photoToBeDel") Optional<List<Integer>> photoToBeDel,
+                                       Locale userLocale) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("update-property");
+        }
+        photoToBeDel.ifPresent(photoServiceImpl::removePhotosById);
+        Property property = propertyService.insertProperty(propertyService.unWrapUpdatableProperty(propertyDTO));
+        photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
+        redirectAttributes.addFlashAttribute("messageSuccess",
+                messageSource.getMessage("property.updated.success", null, userLocale));
+        return new ModelAndView("redirect:/");
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.spring.group.dto;
+package com.spring.group.dto.property;
 
 import com.spring.group.models.Address;
 import com.spring.group.models.property.Category;
@@ -19,9 +19,11 @@ import java.util.Collection;
  * The main property data transfer object that unwraps into a property entity
  * its linked address, along with a collection of photos provided for the property.
  */
+@ValidHeating
 public class PropertyDTO {
 
-    @NotBlank(message = "{Not.blank}")
+    private int propertyID;
+    @NotNull(message = "{Not.blank}")
     @Size(min = 4, max = 25, message = "{Size}")
     private String description;
 
@@ -45,6 +47,8 @@ public class PropertyDTO {
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 99999, message = "{Range}")
     private int address_zipCode;
+    @NotNull(message = "{Not.blank}")
+    @Range(min = 0, max = 999, message = "{Range}")
     private int numberOfRooms;
 
     @NotNull(message = "{Not.blank}")
@@ -66,9 +70,37 @@ public class PropertyDTO {
     public PropertyDTO() {
     }
 
+    //TODO to beatify these shit with the reflection BEAN methods
+    public PropertyDTO(Property property) {
+        this.propertyID = property.getId();
+        this.description = property.getDescription();
+        this.price = property.getPrice();
+        this.address_street = property.getAddress().getStreet();
+        this.address_city = property.getAddress().getCity();
+        this.address_number = property.getAddress().getNumber();
+        this.address_zipCode = property.getAddress().getZipCode();
+        this.address_state = property.getAddress().getState();
+        this.area = property.getArea();
+        this.category = property.getCategory();
+        this.floor = property.getFloor();
+        this.heatingFuel = property.getHeatingFuel();
+        this.heatingType = property.getHeatingType();
+        this.numberOfRooms = property.getNumberOfRooms();
+//        this.photoCollection=property.getPhotoCollection();
+    }
+
+    //TODO to beatify these shit with the reflection BEAN methods
     public Property unWrapProperty(User owner) {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
         return new Property(description, price, tempAddress, category, numberOfRooms, area, floor, heatingType, heatingFuel, owner);
+    }
+
+    public int getPropertyID() {
+        return propertyID;
+    }
+
+    public void setPropertyID(int propertyID) {
+        this.propertyID = propertyID;
     }
 
     public String getDescription() {
