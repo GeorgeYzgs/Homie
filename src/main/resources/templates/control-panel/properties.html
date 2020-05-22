@@ -60,8 +60,9 @@
                             </form>
                         </td>
                         <td>
-                            <form method="post" th:action="@{/close-contract}">
+                            <form method="post" th:action="@{/manage-offers}">
                                 <input name="id" th:hidden="hidden" th:value="${property.id}">
+                                <input hidden name="isAccepted" type="text" value="false">
                                 <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
                                 </button>
                             </form>

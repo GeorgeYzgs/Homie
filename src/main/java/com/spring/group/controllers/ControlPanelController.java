@@ -23,10 +23,8 @@ public class ControlPanelController {
 
     @Autowired
     private UserServiceInterface userService;
-
     @Autowired
     private PropertyServiceInterface propertyService;
-
     @Autowired
     private RentalServiceInterface rentalService;
 

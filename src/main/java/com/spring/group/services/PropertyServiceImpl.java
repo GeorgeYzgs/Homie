@@ -1,6 +1,7 @@
 package com.spring.group.services;
 
 
+import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
@@ -57,16 +58,16 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     @Override
     public String submitOffer(Property property, int userID) {
         if (userID == property.getOwner().getId()) {
-            return "You cannot submit an offer for your own property";
+            return "property.noOffer.myOwn";
         }
         if (hasPendingOffer(property, userID)) {
-            return "You have already submitted an offer for this property";
+            return "property.noOffer.submitted";
         }
         if (!property.isAvailable()) {
-            return "This property is no longer available";
+            return "property.unavailable";
         }
         if (!property.isNonLocked()) {
-            return "You cannot submit an offer for a locked property";
+            return "property.noOffer.locked";
         }
         return "SUCCESS";
     }
@@ -82,5 +83,25 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     private boolean hasPendingOffer(Property property, int userID) {
         return property.getRentalCollection().stream().
                 filter(rental -> rental.getTenant().getId() == userID).anyMatch(Rental::isPending);
+    }
+
+    //TODO beatify this fucking SHIT
+    @Override
+    public Property unWrapUpdatableProperty(PropertyDTO propertyDTO) {
+        Property persistent = getPropertyByID(propertyDTO.getPropertyID());
+        persistent.setCategory(propertyDTO.getCategory());
+        persistent.setArea(propertyDTO.getArea());
+        persistent.setDescription(propertyDTO.getDescription());
+        persistent.setFloor(propertyDTO.getFloor());
+        persistent.setHeatingFuel(propertyDTO.getHeatingFuel());
+        persistent.setHeatingType(propertyDTO.getHeatingType());
+        persistent.setNumberOfRooms(propertyDTO.getNumberOfRooms());
+        persistent.setPrice(propertyDTO.getPrice());
+        persistent.getAddress().setCity(propertyDTO.getAddress_city());
+        persistent.getAddress().setNumber(propertyDTO.getAddress_number());
+        persistent.getAddress().setState(propertyDTO.getAddress_state());
+        persistent.getAddress().setStreet(propertyDTO.getAddress_street());
+        persistent.getAddress().setZipCode(propertyDTO.getAddress_zipCode());
+        return persistent;
     }
 }

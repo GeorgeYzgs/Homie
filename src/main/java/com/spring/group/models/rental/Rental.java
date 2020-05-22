@@ -85,7 +85,6 @@ public class Rental {
         return residence;
     }
 
-
     public void setResidence(Property residence) {
         this.residence = residence;
     }

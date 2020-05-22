@@ -1,5 +1,6 @@
 package com.spring.group.services.bases;
 
+import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 
@@ -62,4 +63,6 @@ public interface PropertyServiceInterface {
     List<Property> getPropertiesByOwnerUser(User ownerUser);
 
     List<Property> getPropertiesByTenantUser(User tenantUser);
+
+    Property unWrapUpdatableProperty(PropertyDTO propertyDTO);
 }

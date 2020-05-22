@@ -103,13 +103,13 @@ public class TokenService {
     public String validateConfirmationToken(String confirmationToken) {
         Optional<ConfirmationToken> token = checkConfirmationToken(confirmationToken);
         if (!token.isPresent()) {
-            return "This is an invalid token";
+            return "token.invalid";
         }
         ConfirmationToken validToken = token.get();
         User user = userServiceImpl.checkEmail(validToken.getUser().getEmail()).get();
         if (validToken.getExpirationDate().isBefore(Instant.now())) {
             createConfirmEmail(user);
-            return "This token has expired, a new token has been emailed to you";
+            return "token.expired.mail";
         }
         user.setEnabled(true);
         userServiceImpl.updateUser(user);
@@ -127,14 +127,14 @@ public class TokenService {
     public String validateResetToken(String resetPassToken) {
         Optional<ResetPassToken> token = checkResetPassToken(resetPassToken);
         if (!token.isPresent()) {
-            return "This is an invalid token";
+            return "token.invalid";
         }
         ResetPassToken validToken = token.get();
         if (validToken.isUsed()) {
-            return "This token has already been used";
+            return "token.used";
         }
         if (validToken.getExpirationDate().isBefore(Instant.now())) {
-            return "This token has expired, please request another token";
+            return "token.expired.request";
         }
         return validToken.getUser().getEmail();
     }
@@ -149,10 +149,10 @@ public class TokenService {
     public String forgotPass(String email) {
         Optional<User> user = userServiceImpl.checkEmail(email);
         if (!user.isPresent()) {
-            return "There is no account linked to that email";
+            return "token.noAccount";
         }
         if (!user.get().getAuthProvider().equals(AuthProvider.Homie)) {
-            return "You can only issue passwords resets for Homie accounts";
+            return "token.noReset";
         }
         createResetEmail(user.get());
         return "SUCCESS";

@@ -6,13 +6,11 @@ import com.spring.group.models.user.User;
 import com.spring.group.repos.UserRepository;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -30,9 +28,6 @@ public class UserServiceImpl implements UserServiceInterface {
 
     @Autowired
     private TokenService tokenService;
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Override
     public User insertUser(User user) {
@@ -86,12 +81,12 @@ public class UserServiceImpl implements UserServiceInterface {
      * @param dto the data access object to be unwrapped
      * @return "SUCCESS" or an error message
      */
-    public String registerUser(RegisterUserDto dto, Locale userLocale) {
+    public String registerUser(RegisterUserDto dto) {
         if (checkUserName(dto.getUsername()).isPresent()) {
-            return messageSource.getMessage("Username.unavailable", null, userLocale);
+            return "Username.unavailable";
         }
         if (checkEmail(dto.getEmail()).isPresent()) {
-            return messageSource.getMessage("Email.unavailable", null, userLocale);
+            return "Email.unavailable";
         }
         User user = dto.unwrapDTO();
         insertUser(user);
@@ -108,16 +103,16 @@ public class UserServiceImpl implements UserServiceInterface {
      * @param userID the id of the logged user to be linked to a user in our database
      * @return
      */
-    public String changePass(RegisterUserDto dto, int userID, Locale userLocale) {
+    public String changePass(RegisterUserDto dto, int userID) {
         User user = getUserByID(userID);
         if (!user.getAuthProvider().equals(AuthProvider.Homie)) {
-            return "You can only change passwords on Homie accounts";
+            return "user.homie.password.cannot";
         }
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            return messageSource.getMessage("Password.not.matches.old.password", null, userLocale);
+            return "Password.not.matches.old.password";
         }
         if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            return messageSource.getMessage("Password.cannot.match.old.password", null, userLocale);
+            return "Password.cannot.match.old.password";
         }
         user.setPassword(dto.getPassword());
         insertUser(user);

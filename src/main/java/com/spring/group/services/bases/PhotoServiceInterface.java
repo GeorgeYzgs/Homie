@@ -3,6 +3,7 @@ package com.spring.group.services.bases;
 import com.spring.group.models.property.Photo;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author George.Giazitzis
@@ -25,4 +26,8 @@ public interface PhotoServiceInterface {
      * @return a collection of photos that was saved.
      */
     Collection<Photo> insertPhotoAlbum(Collection<Photo> photoAlbum);
+
+    void removePhotoById(Integer id);
+
+    void removePhotosById(List<Integer> id);
 }
