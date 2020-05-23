@@ -141,86 +141,50 @@
         <div class="chat-header">
             <h4 class="chat-title"><strong>Chat</strong></h4> <a class="btn btn-xs btn-secondary" id="minimizeChat">&mdash;</a>
         </div>
-        <div class="chat-body" id="chat-content">
-            <div class="media media-chat">
-                <div class="media-body">
-                    <p>Hi</p>
-                    <p>How are you ...???</p>
-                    <p>What are you doing tomorrow?<br> Can we come up a bar?</p>
-                    <p class="meta">
-                        <time datetime="2018">23:58</time>
-                    </p>
-                </div>
+        <div class="chat-body px-4 py-1" id="chat-content">
+            <div class="row justify-content-center" id="chatStatusMessage">
+                <p class="font-weight-normal text-wrap text-secondary">Chat disconnected</p>
             </div>
-            <div class="media media-meta-day">Today</div>
-            <div class="media media-chat media-chat-reverse">
-                <div class="media-body">
-                    <p>Hiii, I'm good.</p>
-                    <p>How are you doing?</p>
-                    <p>Long time no see! Tomorrow office. will be free on sunday.</p>
-                    <p class="meta">
-                        <time datetime="2018">00:06</time>
-                    </p>
-                </div>
+            <div class="row justify-content-start">
+                <p class="msg-receive font-weight-normal text-wrap col-12">Hi</p>
             </div>
-            <div class="media media-chat">
-                <div class="media-body">
-                    <p>Okay</p>
-                    <p>We will go on sunday? </p>
-                    <p class="meta">
-                        <time datetime="2018">00:07</time>
-                    </p>
-                </div>
+            <div class="row justify-content-start">
+                <p class="msg-receive font-weight-normal text-wrap col-12">How are you ...???</p>
             </div>
-            <div class="media media-chat media-chat-reverse">
-                <div class="media-body">
-                    <p>That's awesome!</p>
-                    <p>I will meet you Sandon Square sharp at 10 AM</p>
-                    <p>Is that okay?</p>
-                    <p class="meta">
-                        <time datetime="2018">00:09</time>
-                    </p>
-                </div>
+            <div class="row justify-content-start">
+                <p class="msg-receive font-weight-normal text-wrap col-12">What are you doing tomorrow?Can we come up a
+                    bar?</p>
             </div>
-            <div class="media media-chat">
-                <div class="media-body">
-                    <p>Okay i will meet you on Sandon Square </p>
-                    <p class="meta">
-                        <time datetime="2018">00:10</time>
-                    </p>
-                </div>
+            <div class="row justify-content-end">
+                <p class="msg-send badge badge-pill text-wrap text-right font-weight-normal ">Hiii, I'm good.</p>
             </div>
-            <div class="media media-chat media-chat-reverse">
-                <div class="media-body">
-                    <p>Do you have pictures of Matley Marriage?</p>
-                    <p class="meta">
-                        <time datetime="2018">00:10</time>
-                    </p>
-                </div>
+            <div class="row justify-content-end">
+                <p class="msg-send badge badge-pill text-wrap text-right font-weight-normal ">How are you
+                    doing?</p>
             </div>
-            <div class="media media-chat">
-                <div class="media-body">
-                    <p>Sorry I don't have. i changed my phone.</p>
-                    <p class="meta">
-                        <time datetime="2018">00:12</time>
-                    </p>
-                </div>
+            <div class="row justify-content-end">
+                <p class="msg-send badge badge-pill text-wrap text-right font-weight-normal ">Long time no see! Tomorrow
+                    office. will be free on sunday.</p>
             </div>
-            <div class="media media-chat media-chat-reverse">
-                <div class="media-body">
-                    <p>Okay then see you on sunday!!</p>
-                    <p class="meta">
-                        <time datetime="2018">00:12</time>
-                    </p>
-                </div>
+            <div class="row justify-content-start">
+                <p class="msg-receive font-weight-normal text-wrap">Hi</p>
             </div>
+            <div class="row justify-content-start">
+                <p class="msg-receive font-weight-normal text-wrap">How are you ...???</p>
+            </div>
+            <div class="row justify-content-end">
+                <p class="msg-send badge badge-pill text-wrap text-right font-weight-normal ">Hiii, I'm good.</p>
+            </div>
+            <div class="row justify-content-end">
+                <p class="msg-send badge badge-pill text-wrap text-right font-weight-normal ">How are you
+                    doing?</p>
+            </div>
+
         </div>
-        <div class="publisher bt-1 border-light"><input class="publisher-input" placeholder="Write something"
-                                                        type="text"> <span
-                class="publisher-btn file-group"> <i class="fa fa-paperclip file-browser"></i> <input
-                type="file"> </span> <a class="publisher-btn" data-abc="true" href="#"><i
-                class="fa fa-smile"></i></a> <a class="publisher-btn text-info" data-abc="true" href="#"><i
-                class="fa fa-paper-plane"></i></a></div>
+        <div class="publisher bt-1 border-light">
+            <input class="publisher-input" id="chatInput" placeholder="Write something" type="text">
+            <a class="publisher-btn text-info" data-abc="true" id="sendMsgBtn"> <i class="fa fa-paper-plane"></i></a>
+        </div>
     </div>
 </div>
 

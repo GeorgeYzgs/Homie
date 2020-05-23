@@ -54,7 +54,7 @@
     bottom: 1%;
     right: 2%;
     margin: 0;
-    z-index: 3;
+    z-index: 1030;
 }
 
 .btn-circle {
@@ -226,23 +226,8 @@ h4.chat-title {
     min-width: 0
 }
 
-.media-chat .media-body p {
-    position: relative;
-    padding: 6px 8px;
-    margin: 4px 0;
-    background-color: #f5f6f7;
-    border-radius: 3px;
-    font-weight: 100;
-}
-
 .media > * {
     margin: 0 8px
-}
-
-.media-chat .media-body p.meta {
-    background-color: transparent !important;
-    padding: 0;
-    opacity: .8
 }
 
 .media-meta-day {
@@ -259,7 +244,7 @@ h4.chat-title {
 .media {
     padding: 16px 12px;
     -webkit-transition: background-color .2s linear;
-    transition: background-color .2s linear
+    transition: background-color .2s linear;
 }
 
 .media-meta-day::before {
@@ -298,25 +283,26 @@ h4.chat-title {
     margin-bottom: 0
 }
 
-.media {
-    padding: 16px 12px;
-    -webkit-transition: background-color .2s linear;
-    transition: background-color .2s linear
+.msg-receive {
+    position: relative;
+    padding: 0.2rem 0.5rem;
+    margin: 0.3rem 3rem 0.3rem 0rem;
+    border-radius: 3px;
+    font-weight: 100;
 }
 
-.media-chat.media-chat-reverse .media-body p {
+.msg-send {
+    padding: 0.5rem 0.5rem 0.6rem 0.6rem;
+    margin-left: 3rem;
+    margin-top: 0.2rem;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    flex-direction: row-reverse;
     float: right;
     clear: right;
     background-color: #48b0f7;
-    color: #fff
-}
-
-.media-chat .media-body p {
-    position: relative;
-    padding: 6px 8px;
-    margin: 4px 0;
-    background-color: #f5f6f7;
-    border-radius: 3px
+    color: #fff;
+    font-size: 100%
 }
 
 .border-light {

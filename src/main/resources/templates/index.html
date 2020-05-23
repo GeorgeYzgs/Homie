@@ -7,6 +7,8 @@
     <link rel="stylesheet" th:href="@{/css/image_parallax.css}">
     <link rel="stylesheet" th:href="@{/css/carousel.css}">
     <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 </head>
 <body class="bg-light">
@@ -55,6 +57,9 @@
 <div th:include="fragments :: scripts" th:remove="tag"></div>
 <script th:src="@{/js/search-functionality.js}"></script>
 <script th:src="@{/js/carousel.js}"></script>
-<script th:src="@{/js/chat.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script th:src="@{/js/websockets-chat.js}"></script>
+
 </body>
 </html>

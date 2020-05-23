@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/mod/**").hasAnyAuthority("ADMIN", "MODERATOR")
                 .antMatchers(LOGGED_USER_URLS).authenticated()
-                .antMatchers("/**", "/async/**").permitAll()
+                .antMatchers("/**", "/async/**", "/chat").permitAll()
                 .and().formLogin()
                 .loginPage("/login")
                 .and().oauth2Login()
