@@ -286,7 +286,7 @@ h4.chat-title {
 .msg-receive {
     position: relative;
     padding: 0.2rem 0.5rem;
-    margin: 0.3rem 3rem 0.3rem 0rem;
+    margin: 0.3rem 3rem 0.3rem 1rem;
     border-radius: 3px;
     font-weight: 100;
 }
@@ -294,6 +294,7 @@ h4.chat-title {
 .msg-send {
     padding: 0.5rem 0.5rem 0.6rem 0.6rem;
     margin-left: 3rem;
+    margin-right: 0.51rem;
     margin-top: 0.2rem;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: reverse;

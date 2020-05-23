@@ -48,19 +48,6 @@ public class ChatController {
                 .create(SimpMessageType.MESSAGE);
         headerAccessor.setSessionId(msg.getTo());
         headerAccessor.setLeaveMutable(true);
-//        System.out.println(connectedUsersRegistry.getConnectedUsers());
-//        connectedUsersRegistry.getConnectedUsers();
-//        if (msg.getTo().equals("groupchat")) {
-//            ArrayList<String> recipientUsernames = userRegistry.getUsers().stream()
-//                    .map(SimpUser::getName)
-//                    .filter(username -> !username.equals(principal.getName()))
-//                    .collect(Collectors.toCollection(ArrayList::new));
-//            for (String username : recipientUsernames) {
-//                simpMessagingTemplate.convertAndSendToUser(username, "/queue/specific-user", out);
-//            }
-//        } else {
-//            simpMessagingTemplate.convertAndSendToUser(sessionId, "/queue/specific-user", out);
-//        }
         simpMessagingTemplate.convertAndSendToUser(msg.getTo(), "/queue/specific-user", outMsg, headerAccessor.getMessageHeaders());
     }
 }

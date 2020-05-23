@@ -38,7 +38,6 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
     @Autowired
     private ConnectedUsersRegistry connectedModeratorsRegistry;
 
-
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
@@ -88,7 +87,7 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
                 outputMessage
-                        .setMessage(userToken.getName() + " is connected")
+                        .setMessage(userToken.getName() + " connected")
                         .setStatus(OutputMessage.MODERATOR_CONNECTED)
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
                         .setAssignedModerator(userToken.getName(), accessor.getSessionId());
@@ -99,7 +98,7 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
                 outputMessage
-                        .setMessage(userToken.getName() + " is disconnected")
+                        .setMessage(userToken.getName() + " disconnected")
                         .setStatus(OutputMessage.MODERATOR_DISCONNECTED)
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()));
 
@@ -143,7 +142,7 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
                         .setTo(accessor.getSessionId())
                         .setStatus(OutputMessage.MESSAGE_CONNECTED)
-                        .setMessage("The chat is available")
+                        .setMessage(randomMod + " connected")
                         .setAssignedModerator(randomMod.getUsername(), randomMod.getUserSession());
                 return chatStatusMsg;
             }

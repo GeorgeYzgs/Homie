@@ -46,11 +46,15 @@ function connectChatWebSocket() {
                     if (selfSessionId !== metadata["moderator"]["sessionId"]) {
                         assignedModUsername = metadata["moderator"]["username"];
                         assignedModSessionId = metadata["moderator"]["sessionId"];
-                    }
-                    chatStatusMsg.empty().append(`
+                        chatStatusMsg.empty().append(`
                             <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
                             `);
-                    chatInput.attr("disabled", false);
+                    } else {
+                        chatStatusMsg.empty().append(`
+                            <p class="font-weight-normal text-wrap text-secondary">Chat connected</p>
+                            `);
+                        chatInput.attr("disabled", false);
+                    }
                     break;
                 case "MOD_DISCONNECTED":
                 case "DISCONNECTED":
@@ -76,7 +80,7 @@ function connectChatWebSocket() {
             currentRecipientSessionId = payload["from"];
             chatContainer.append(`
             <div class="row justify-content-start">
-                <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                <p class="font-weight-normal text-wrap text-secondary msg-receive">${payload["message"]}</p>
             </div>`);
             hasChatMessages = true;
             scrollDownChat();
