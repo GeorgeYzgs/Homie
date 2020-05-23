@@ -28,13 +28,13 @@ import java.util.Locale;
 public class ControlPanelAsyncController {
 
     @Autowired
-    UserServiceInterface userService;
-
+    private UserServiceInterface userService;
     @Autowired
-    PropertyServiceInterface propertyService;
-
+    private PropertyServiceInterface propertyService;
     @Autowired
-    RentalServiceInterface rentalService;
+    private RentalServiceInterface rentalService;
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     MessageSource messageSource;

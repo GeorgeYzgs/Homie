@@ -22,13 +22,11 @@ import java.util.List;
 public class ControlPanelController {
 
     @Autowired
-    UserServiceInterface userService;
-
+    private UserServiceInterface userService;
     @Autowired
-    PropertyServiceInterface propertyService;
-
+    private PropertyServiceInterface propertyService;
     @Autowired
-    RentalServiceInterface rentalService;
+    private RentalServiceInterface rentalService;
 
     @GetMapping("/personal-details")
     public String displayPersonalDetails(Authentication auth, ModelMap modelMap) {

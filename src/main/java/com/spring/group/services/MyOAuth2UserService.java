@@ -72,7 +72,6 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
      * @param user         the user to be authorised
      * @param authProvider the given authentication provider
      */
-    // TODO Move messages to messagesources
     private void authAttempt(User user, AuthProvider authProvider) {
         if (!user.getAuthProvider().equals(authProvider)) {
             String msg = "You are signed up with " + user.getAuthProvider() + " account." +

@@ -2,67 +2,91 @@
 <html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
-    <title th:text="#{Register.page.title}"></title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/search-style.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <th:block th:include="fragments :: headerfiles">
+    </th:block>
+    <title id="pageTitle" th:text="#{view.Title}">View Property</title>
 </head>
 
-<!--//TODO-Under Construction Page-->
+<!--//TODO-Test-->
 <body class="bg-light">
-<!--<header th:include="fragments :: body_header"></header>-->
-<section class="px-3 pt-4">
-    <!--Logo Navbar-->
-    <header>
-        <!-- Logo band -->
-        <nav th:replace="fragments :: logo_band"></nav>
-        <!-- Navigation Band -->
-        <nav th:replace="fragments :: nav_bar"></nav>
-    </header>
-    <!-- Toolbar -->
-    <div class="alert alert-success" th:if="${messageSuccess}">
-        <p class="text text-center" th:text="${messageSuccess}"></p>
-    </div>
-    <div class="alert alert-danger" th:if="${messageDanger}">
-        <p class="text text-center" th:text="${messageDanger}"></p>
-    </div>
-    <div class="row container pt-4">
+<nav class="pt-4 px-0 navigation">
+    <!-- Logo Band    -->
+    <nav class="" th:include="fragments :: logo_band"></nav>
+    <!-- Nav bar -->
+    <nav th:replace="fragments :: nav_bar"></nav>
+    <!-- Main body -->
+</nav>
+<!-- Toolbar -->
+<div class="alert alert-success" th:if="${messageSuccess}">
+    <p class="text text-center" th:text="${messageSuccess}"></p>
+</div>
+<div class="alert alert-danger" th:if="${messageDanger}">
+    <p class="text text-center" th:text="${messageDanger}"></p>
+</div>
 
-        <div class="btn btn-light ">
-            <div class="row border-top py-3">
-                <!--                <div class="col-sm-4">-->
-                <!--                    <img class="rounded object-fit_cover img-responsive"-->
-                <!--                         height="250" th:src="@{property.Photo}">-->
-                <!--                </div>-->
-                <div class="col-sm-7 text-left">
-                    <h5 class="font-weight-bold" th:text="*{property.description}">
-                        Διαμέρισμα 90 τ.μ. προς ενοικίαση
-                    </h5>
-                    <p class="mb-0" th:text="*{property.address.city}"></p>
-                    <p class="pt-0">
-                        03-05-2020
-                    </p>
-                    <p class="pt-1">
-                        <span class="border rounded bg-green p-1 font-weight-bold">
-                            <span th:text="*{property.price}"></span>&euro;/μήνα</span>
-                        <span class="pl-1">90 τμ</span>
-                        <span class="pl-1">2&euro;/τμ</span>
-                        <span class="pl-1">3 υπνοδωμάτια</span>
-                    </p>
-                </div>
-                <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id != property.owner.id}">
-                    <form method="post" th:action="@{/submit-offer}">
-                        <input min="0" name="price" type="number"/>
-                        <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
-                        <button class="btn btn-primary" type="submit">Submit Offer</button>
-                    </form>
+<h2 th:text="#{view.Title}">View Property</h2>
 
-                </div>
+<div class="row container pt-4">
+
+    <div class="btn btn-light ">
+        <div class="row border-top py-3">
+            <div class="col-sm-4">
+
+                <img alt="Property Entry photo" class="rounded object-fit_cover img-responsive"
+                     height="250"
+                     th:id="imageView" th:src="@{${!#bools.isTrue(property.getPhotoCollection().isEmpty())  ?
+                     property.getPhotoCollectionURL().toArray()[0]
+                     : 'http://placehold.it/250?text=No%20Image'}} "/>
+            </div>
+            <div class="col-sm-7 text-left">
+                <h5 class="font-weight-bold" th:text="${property.description}">
+                    Διαμέρισμα 90 τ.μ. προς ενοικίαση
+                </h5>
+                <p class="mb-0" th:text="#{'category.'+${property.category.name()}}">
+                    Κατηγορία
+                </p>
+
+                <p class="mb-0" th:text="${property.address.city}">
+                    Αθήνα (Κέντρο)
+                </p>
+
+                <p class="mb-0">
+                    <span th:text="${property.address.street}">Παπατρέχα</span> &nbsp;
+                    <span th:text="${property.address.number}">199</span>
+                </p>
+                <p class="mb-0" th:text="${property.address.state}">
+                    Νέα Ιωνία
+                </p>
+                <p class="mb-0" th:text="${property.address.zipCode}">
+                    14235
+                </p>
+                <p class="pt-0" th:text="#{view.since}+${#dates.format(property.updatedDate,'dd/MMM/yyyy')}">
+                    03-05-2020
+                </p>
+                <p class="pt-1">
+                    <span th:text="#{'heatingFuel.'+${property.heatingFuel.name()}}">Αυτόνομη</span> &nbsp;
+                    <span th:text="#{'heatingType.'+${property.heatingType.name()}}">Πετρέλαιο</span>
+                </p>
+                <p class="pt-1">
+                        <span class="border rounded bg-green text-white p-1 font-weight-bold"
+                              th:text="${property.price}+'&nbsp;&euro;/'+#{monthMsg}">
+                        200&euro;/μήνα
+                        </span>
+                    <span class="pl-1" th:utext="${property.area}+'&nbsp;'+#{squareMeter}">90 τμ</span>
+                    <span class="pl-1"
+                          th:utext="${((property.area!=0)?property.price/property.area:0)}+'&nbsp;&euro;/'+#{squareMeter}">2&euro;/τμ</span>
+                    <span class="pl-1" th:text="${property.numberOfRooms}+'&nbsp;'+#{roomMsg}">3 υπνοδωμάτια</span>
+                </p>
             </div>
 
-
+            <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id != property.owner.id}">
+                <form method="post" th:action="@{/submit-offer}">
+                    <input min="0" name="price" type="number"/>
+                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                    <button class="btn btn-primary" type="submit">Submit Offer</button>
+                </form>
+            </div>
             <div sec:authorize-url="/mod/**">
                 <form method="post" th:action="@{/mod/lock-property}">
                     Active:
@@ -88,6 +112,33 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<a th:replace="UtilFragments :: chat_button"></a>
+<div th:replace="UtilFragments :: chat_popup">
+</div>
+
+
+<div th:include="fragments :: scripts" th:remove="tag"></div>
+<footer th:replace="fragments :: body_footer"></footer>
+<script th:src="@{/js/carousel.js}"></script>
+<script th:src="@{/js/chat.js}"></script>
+
+<script th:if="${!#bools.isTrue(property.getPhotoCollection().isEmpty())}" th:inline="javascript">
+    $(document).ready(function () {
+        document.querySelector('#imageView').addEventListener("click", onClickImage)
+        let countImage = 0;
+
+        function onClickImage() {
+            const image = document.querySelector('#imageView');
+            let imageURLS = [[${property.getPhotoCollectionURL().toArray()}]];
+            countImage = (countImage === (imageURLS.length - 1)) ? 0 : (countImage + 1);
+            image.setAttribute('src', imageURLS[countImage]);
+        };
+    });
+
+</script>
+
+
 </body>
 </html>

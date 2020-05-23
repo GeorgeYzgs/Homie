@@ -1,6 +1,7 @@
 package com.spring.group.services.bases;
 
 import com.spring.group.dto.property.specifications.SearchCriteria;
+import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 import com.spring.group.pojo.PropertyCollectionResponse;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author George.Giazitzis
@@ -75,4 +77,21 @@ public interface PropertyServiceInterface {
                                                                      int pageLimit,
                                                                      String sortType,
                                                                      Locale userLocale);
+
+
+    /**
+     * Queries the database to return an optional property by searching with ID
+     * A method to avoid exceptions when manually inputting urls, ensures the user will be redirected
+     * to a 404 page if the property does not exist
+     *
+     * @param propertyID the property id we are searching by
+     * @return an optional property
+     */
+    Optional<Property> findPropertyByID(Integer propertyID);
+
+    List<Property> getPropertiesByOwnerUser(User ownerUser);
+
+    List<Property> getPropertiesByTenantUser(User tenantUser);
+
+    Property unWrapUpdatableProperty(PropertyDTO propertyDTO);
 }

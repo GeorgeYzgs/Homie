@@ -13,12 +13,18 @@ public class PaymentLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "paymentlog_id")
     private int id;
-    private int paidAmount;
+    private Double paidAmount;
     private Instant transactionTime;
     @ManyToOne
     private Rental rental;
 
     public PaymentLog() {
+    }
+
+    public PaymentLog(Double paidAmount, Rental rental) {
+        this.paidAmount = paidAmount;
+        this.transactionTime = Instant.now();
+        this.rental = rental;
     }
 
     public int getId() {
@@ -29,11 +35,11 @@ public class PaymentLog {
         this.id = id;
     }
 
-    public int getPaidAmount() {
+    public Double getPaidAmount() {
         return paidAmount;
     }
 
-    public void setPaidAmount(int paidAmount) {
+    public void setPaidAmount(Double paidAmount) {
         this.paidAmount = paidAmount;
     }
 

@@ -57,4 +57,14 @@ public interface UserServiceInterface {
      * @return a collection of all users
      */
     Collection<User> getUserList();
+
+    /**
+     * Queries the database to return an optional user by searching with ID
+     * A method to avoid exceptions when manually inputting urls, ensures the user will be redirected
+     * to a 404 page if the user does not exist
+     *
+     * @param userID the user id we are searching by
+     * @return an optional user
+     */
+    Optional<User> findUserById(Integer userID);
 }

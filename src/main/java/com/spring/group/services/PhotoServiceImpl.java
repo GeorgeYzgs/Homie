@@ -37,6 +37,16 @@ public class PhotoServiceImpl implements PhotoServiceInterface {
         return photoRepository.saveAll(photoAlbum);
     }
 
+    @Override
+    public void removePhotoById(Integer id) {
+        photoRepository.deleteById(id);
+    }
+
+    @Override
+    public void removePhotosById(List<Integer> ids) {
+        ids.forEach(this::removePhotoById);
+    }
+
     /**
      * Filters the uploaded files the user has provided to only include certain extensions, uploads them to AWS
      * and then stores the collection of uploaded files to our database

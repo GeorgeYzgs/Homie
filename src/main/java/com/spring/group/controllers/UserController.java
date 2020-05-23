@@ -31,10 +31,8 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
-
     @Autowired
     private TokenService tokenService;
-
     @Autowired
     private MessageSource messageSource;
 
@@ -88,9 +86,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
-        String attempt = userServiceImpl.registerUser(dto, userLocale);
+        String attempt = userServiceImpl.registerUser(dto);
         if (!attempt.equals("SUCCESS")) {
-            return new ModelAndView("register", "messageDanger", attempt);
+            return new ModelAndView("register", "messageDanger",
+                    messageSource.getMessage(attempt, null, userLocale));
         }
         redirectAttributes.addFlashAttribute("messageSuccess",
                 messageSource.getMessage("Register.success.email.sent", null, userLocale));
@@ -107,7 +106,8 @@ public class UserController {
     public ModelAndView confirmUserAccount(@PathVariable String token, Locale userLocale) {
         String attempt = tokenService.validateConfirmationToken(token);
         if (!attempt.equals("SUCCESS")) {
-            return new ModelAndView("login", "messageDanger", attempt);
+            return new ModelAndView("login", "messageDanger",
+                    messageSource.getMessage(attempt, null, userLocale));
         }
         return new ModelAndView("login", "messageSuccess", messageSource.getMessage("Account.activated", null, userLocale));
     }
@@ -140,9 +140,10 @@ public class UserController {
             return new ModelAndView("change-pass");
         }
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
-        String attempt = userServiceImpl.changePass(dto, loggedUser.getId(), userLocale);
+        String attempt = userServiceImpl.changePass(dto, loggedUser.getId());
         if (!attempt.equals("SUCCESS")) {
-            return new ModelAndView("change-pass", "messageDanger", attempt);
+            return new ModelAndView("change-pass", "messageDanger",
+                    messageSource.getMessage(attempt, null, userLocale));
         }
         redirectAttributes.addFlashAttribute("messageSuccess",
                 messageSource.getMessage("Password.change.success", null, userLocale));
@@ -181,7 +182,8 @@ public class UserController {
         }
         String attempt = tokenService.forgotPass(dto.getEmail());
         if (!attempt.equals("SUCCESS")) {
-            return new ModelAndView("forgot-pass", "messageDanger", attempt);
+            return new ModelAndView("forgot-pass", "messageDanger",
+                    messageSource.getMessage(attempt, null, userLocale));
         }
         redirectAttributes.addFlashAttribute("messageSuccess",
                 messageSource.getMessage("Reset.email.sent", null, userLocale));
@@ -195,10 +197,10 @@ public class UserController {
      * @return the reset pass page if successful, otherwise redirects to the login page
      */
     @GetMapping("/reset-password/{token}")
-    public ModelAndView resetUserPassword(@PathVariable String token, RedirectAttributes redirectAttributes) {
+    public ModelAndView resetUserPassword(@PathVariable String token, RedirectAttributes redirectAttributes, Locale userLocale) {
         String attempt = tokenService.validateResetToken(token);
         if (!attempt.contains("@")) {
-            redirectAttributes.addFlashAttribute("messageDanger", attempt);
+            redirectAttributes.addFlashAttribute("messageDanger", messageSource.getMessage(attempt, null, userLocale));
             return new ModelAndView("redirect:/login");
         }
         RegisterUserDto dto = new RegisterUserDto();
@@ -225,7 +227,7 @@ public class UserController {
         }
         String attempt = tokenService.validateResetToken(dto.getToken());
         if (!attempt.contains("@")) {
-            redirectAttributes.addFlashAttribute("messageDanger", attempt);
+            redirectAttributes.addFlashAttribute("messageDanger", messageSource.getMessage(attempt, null, userLocale));
             return new ModelAndView("redirect:/login");
         }
         tokenService.setNewPass(dto, attempt);

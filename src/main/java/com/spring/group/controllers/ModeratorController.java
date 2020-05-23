@@ -9,6 +9,7 @@ import com.spring.group.services.bases.PropertyServiceInterface;
 import com.spring.group.services.bases.RentalServiceInterface;
 import com.spring.group.services.bases.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author George.Giazitzis
@@ -29,15 +32,14 @@ public class ModeratorController {
 
     @Autowired
     private UserServiceInterface userService;
-
     @Autowired
     private PropertyServiceInterface propertyService;
-
     @Autowired
-    RentalServiceInterface rentalService;
-
+    private RentalServiceInterface rentalService;
     @Autowired
     private SessionRegistry sessionRegistry;
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * A controller to access registered users data
@@ -57,9 +59,13 @@ public class ModeratorController {
      */
     @GetMapping("/user/{id}")
     public String displayUser(@PathVariable Integer id, ModelMap modelMap) {
-        modelMap.addAttribute("userId", id);
-        modelMap.addAttribute("user", userService.getUserByID(id));
-        return "mod-user-page";
+        Optional<User> user = userService.findUserById(id);
+        if (user.isPresent()) {
+            modelMap.addAttribute("userId", id);
+            modelMap.addAttribute("user", userService.getUserByID(id));
+            return "mod-user-page";
+        }
+        return "error/404";
     }
 
     @GetMapping("/user/{id}/personal-details")
@@ -98,21 +104,26 @@ public class ModeratorController {
      * @return the target user's profile page.
      */
     @PostMapping("/lock-user")
-    public ModelAndView lockUser(@RequestParam("id") Integer userID, Authentication auth, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockUser(@RequestParam("id") Integer userID, Authentication auth,
+                                 RedirectAttributes redirectAttributes, Locale userLocale) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         User user = userService.getUserByID(userID);
         if (loggedUser.getId() == user.getId()) {
-            redirectAttributes.addFlashAttribute("messageDanger", "Did you just try to ban yourself?");
+            redirectAttributes.addFlashAttribute("messageDanger",
+                    messageSource.getMessage("ban.yourself", null, userLocale));
             return new ModelAndView("redirect:/mod/user/" + userID);
         }
         if (!user.getUserRole().equals(UserRole.USER)) {
-            redirectAttributes.addFlashAttribute("messageDanger", "You can only ban / un-ban users.");
+            redirectAttributes.addFlashAttribute("messageDanger",
+                    messageSource.getMessage("ban.admin", null, userLocale));
             return new ModelAndView("redirect:/mod/user/" + userID);
         }
         user.setNonLocked(!user.isNonLocked());
         userService.updateUser(user);
         deleteActiveSession(userID);
-        String message = user.isNonLocked() ? "User has been unbanned" : "User has been banned";
+        String message = user.isNonLocked()
+                ? messageSource.getMessage("user.unbanned", null, userLocale)
+                : messageSource.getMessage("user.banned", null, userLocale);
         redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/mod/user/" + userID);
     }
@@ -139,11 +150,14 @@ public class ModeratorController {
      * @return redirects to the property page
      */
     @PostMapping("/lock-property")
-    public ModelAndView lockProperty(@RequestParam("id") Integer propertyID, RedirectAttributes redirectAttributes) {
+    public ModelAndView lockProperty(@RequestParam("id") Integer propertyID, RedirectAttributes redirectAttributes,
+                                     Locale userLocale) {
         Property property = propertyService.getPropertyByID(propertyID);
         property.setNonLocked(!property.isNonLocked());
         propertyService.insertProperty(property);
-        String message = property.isNonLocked() ? "Property has been unlocked" : "Property has been locked";
+        String message = property.isNonLocked()
+                ? messageSource.getMessage("property.unlocked", null, userLocale)
+                : messageSource.getMessage("property.locked", null, userLocale);
         redirectAttributes.addFlashAttribute("messageSuccess", message);
         return new ModelAndView("redirect:/view/" + propertyID);
     }

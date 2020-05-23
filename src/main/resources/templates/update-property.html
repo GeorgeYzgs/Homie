@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <th:block th:include="fragments :: headerfiles">
     </th:block>
-
-    <title id="pageTitle" th:text="#{insert.Title}">Insert</title>
+    <link rel="stylesheet" th:href="@{/css/updateProperty.css}">
+    <title id="pageTitle" th:text="#{Home.update}">Update</title>
 
 </head>
 <body class="bg-light">
@@ -25,10 +26,10 @@
 </div>
 
 <div class="container pt-4">
-    <h3 th:text="#{insert.Title}">Insert Entry</h3>
-    <form enctype="multipart/form-data" th:action="@{/list-new-property}" th:method="post"
+    <h3 th:text="#{Home.update}">Update Entry</h3>
+    <form enctype="multipart/form-data" th:action="@{/update-property}" th:method="post"
           th:object="${propertyDTO}">
-
+        <input hidden th:field="*{propertyID}" th:value="*{propertyID}"/>
         <div class="row">
             <p class="alert alert-danger" th:errors="*{global}"
                th:if="${#fields.hasErrors('global')}">Invalid
@@ -37,14 +38,14 @@
                 <label class="mb-0" th:for="description" th:text="#{insertForm.description}">Please
                     Provide Description
                     of Property</label>
-                <input required th:field="*{description}" type="text"/>
+                <input required th:field="*{description}" th:value="*{description}" type="text"/>
                 <p class="alert alert-danger" th:errors="*{description}"
                    th:if="${#fields.hasErrors('description')}"> Invalid Description</p>
             </div>
             <div class="col-6">
                 <label class="mb-0" th:for="category" th:text="#{insertForm.category}">Please Provide
                     Category</label>
-                <select name="category" th:field="*{category}">
+                <select name="category" th:field="*{category}" th:value="*{category}">
                     <option th:each="ctgr : ${T(com.spring.group.models.property.Category).values() }"
                             th:text="#{'category.'+${ctgr}}" th:value="${ctgr}"></option>
                 </select>
@@ -60,7 +61,7 @@
                     Provide Number of
                     Rooms of Property
                 </label>
-                <input min="0" required th:field="*{numberOfRooms}" type="number"/>
+                <input min="0" required th:field="*{numberOfRooms}" th:value="*{numberOfRooms}" type="number"/>
                 <p class="alert alert-danger" th:errors="*{numberOfRooms}"
                    th:if="${#fields.hasErrors('numberOfRooms')}">
                     Invalid
@@ -69,7 +70,7 @@
             <div class="col-4">
                 <label class="mb-0" th:for="floor" th:text="#{insertForm.floor}">Please Provide Area
                     of Property</label>
-                <input min="0" required th:field="*{floor}" type="number"/>
+                <input min="0" required th:field="*{floor}" th:value="*{floor}" type="number"/>
                 <p class="alert alert-danger" th:errors="*{floor}"
                    th:if="${#fields.hasErrors('floor')}">Invalid
                     Description</p>
@@ -77,7 +78,7 @@
             <div class="col-4">
                 <label class="mb-0" th:for="area" th:text="#{insertForm.area}">Please Provide Area
                     of Property</label>
-                <input min="0" required th:field="*{area}" type="number"/>
+                <input min="0" required th:field="*{area}" th:value="*{area}" type="number"/>
                 <p class="alert alert-danger" th:errors="*{area}"
                    th:if="${#fields.hasErrors('area')}">Invalid
                     Description</p>
@@ -89,7 +90,7 @@
             <div class="col-6">
                 <label class="mb-0" th:for="heatingType" th:text="#{insertForm.heatingType}">Please
                     Provide heating</label>
-                <select name="heatingType" th:field="*{heatingType}">
+                <select name="heatingType" th:field="*{heatingType}" th:value="*{heatingType}">
                     <option th:each="htng : ${T(com.spring.group.models.property.HeatingType).values() }"
                             th:text="#{'heatingType.'+${htng}}" th:value="${htng}"></option>
                 </select>
@@ -100,7 +101,7 @@
             <div class="col-6">
                 <label class="mb-0" th:for="heatingFuel" th:text="#{insertForm.heatingFuel}">Please
                     Provide heating</label>
-                <select name="heatingFuel" th:field="*{heatingFuel}">
+                <select name="heatingFuel" th:field="*{heatingFuel}" th:value="*{heatingFuel}">
                     <option th:each="htngf : ${T(com.spring.group.models.property.HeatingFuel).values() }"
                             th:text="#{'heatingFuel.'+${htngf}}" th:value="${htngf}"></option>
                 </select>
@@ -115,7 +116,7 @@
             <div class="col-6">
                 <label class="mb-0" th:for="address_street" th:text="#{insertForm.street}">Please
                     Provide street</label>
-                <input required th:field="*{address_street}" type="text"/>
+                <input required th:field="*{address_street}" th:value="*{address_street}" type="text"/>
                 <p class="alert alert-danger" th:errors="*{address_street}"
                    th:if="${#fields.hasErrors('address_street')}">
                     Invalid
@@ -125,7 +126,7 @@
                 <label class="mb-0" th:for="address_number" th:text="#{insertForm.streetnumber}">Please
                     Provide street
                     number</label>
-                <input required th:field="*{address_number}" type="number"/>
+                <input required th:field="*{address_number}" th:value="*{address_number}" type="number"/>
                 <p class="alert alert-danger" th:errors="*{address_number}"
                    th:if="${#fields.hasErrors('address_number')}">
                     Invalid
@@ -137,7 +138,8 @@
             <div class="col-5">
                 <label class="mb-0" th:for="address_city" th:text="#{insertForm.city}">Please Provide
                     city</label>
-                <input id="inputSearchQuery" required th:field="*{address_city}" type="text"/>
+                <input id="inputSearchQuery" required th:field="*{address_city}" th:value="*{address_city}"
+                       type="text"/>
                 <p class="alert alert-danger" th:errors="*{address_city}"
                    th:if="${#fields.hasErrors('address_city')}">Invalid
                     value </p>
@@ -146,7 +148,7 @@
             <div class="col-4">
                 <label class="mb-0" th:for="address_state" th:text="#{insertForm.state}">Please Provide
                     state</label>
-                <input required th:field="*{address_state}" type="text"/>
+                <input required th:field="*{address_state}" th:value="*{address_state}" type="text"/>
                 <p class="alert alert-danger" th:errors="*{address_state}"
                    th:if="${#fields.hasErrors('address_state')}">Invalid
                     value </p>
@@ -155,7 +157,7 @@
                 <label class="mb-0" th:for="address_zipCode" th:text="#{insertForm.zipcode}">Please
                     Provide zip
                     code</label>
-                <input min="0" required th:field="*{address_zipCode}" type="number"/>
+                <input min="0" required th:field="*{address_zipCode}" th:value="*{address_zipCode}" type="number"/>
                 <p class="alert alert-danger" th:errors="*{address_zipCode}"
                    th:if="${#fields.hasErrors('address_zipCode')}">
                     Invalid value </p>
@@ -168,7 +170,7 @@
                     Provide
                     Renting Price of
                     Property</label>
-                <input min="0" required th:field="*{price}" type="number"/>
+                <input min="0" required th:field="*{price}" th:value="*{price}" type="number"/>
                 <label class="mb-0" th:accept="Integer" th:for="price" th:text="&#8364">e
                     &#8364</label>
                 <p class="alert alert-danger" th:errors="*{price}"
@@ -177,8 +179,21 @@
             </div>
         </div>
 
+        <div class="row" id="presentPhotos" th:if="${!photosCollection.isEmpty()}">
+            <label class="col-12" for="presentPhotos"><h4 th:text="#{update.remove.photos}">Please Select Photos to
+                Remove :</h4>
+            </label>
+            <th:block th:each="ph : ${photosCollection}">
+                <input class=col-1 th:id="${#ids.seq('ph')}" th:name="photoToBeDel" th:value="${ph.getId()}"
+                       type="checkbox"/>
+                <label id="imgLabel" th:for="${#ids.prev('ph')}"><img alt="Bad Url"
+                                                                      th:src="${ph.getImageUrl()}"/></label>
+            </th:block>
+        </div>
+
+
         <div class="row">
-            <div class="col-2 left">
+            <div class="col-4 left">
                 <label class="mb-0" th:for="photoCollection" th:text="#{insertForm.photo}">Please
                     Provide Photos</label>
                 <input th:accept="'image/*'" th:field="*{photoCollection}" th:multiple="multiple"
@@ -194,6 +209,11 @@
     </form>
 
 </div>
+
+
+<!--Temporarily, to be removed-->
+<div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.isOauth2()}"> Not a Homie Account</div>
+<div sec:authorize-url="/mod/**"><a th:href="@{/mod/users}">User List</a></div>
 
 <a th:replace="UtilFragments :: chat_button"></a>
 <div th:replace="UtilFragments :: chat_popup">

@@ -5,7 +5,9 @@ import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * @author George.Giazitzis
@@ -52,8 +54,13 @@ public class Property {
 
     @ManyToOne
     private User owner;
+    @Basic
+    private Instant creationDate;
+    @Basic
+    private Instant updatedDate;
 
     public Property() {
+        this.updatedDate = Instant.now();
     }
 
     public Property(String description, int price, Address address, Category category, int numberOfRooms,
@@ -71,6 +78,7 @@ public class Property {
         this.owner = owner;
         this.searchValue = 2;
         this.isNonLocked = true;
+        this.updatedDate = Instant.now();
     }
 
     public boolean isNonLocked() {
@@ -153,6 +161,10 @@ public class Property {
         this.photoCollection = photoCollection;
     }
 
+    public Collection<String> getPhotoCollectionURL() {
+        return photoCollection.stream().map(Photo::getImageUrl).collect(Collectors.toList());
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -207,5 +219,21 @@ public class Property {
 
     public void setFloor(int floor) {
         this.floor = floor;
+    }
+
+    public Instant getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Instant getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Instant updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }
