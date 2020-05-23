@@ -36,9 +36,6 @@ public class ControlPanelAsyncController {
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
-    MessageSource messageSource;
-
     @GetMapping("/personal-details")
     public String displayPersonalDetails(Authentication auth, ModelMap modelMap) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();

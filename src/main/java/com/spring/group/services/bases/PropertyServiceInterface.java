@@ -1,7 +1,7 @@
 package com.spring.group.services.bases;
 
-import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.dto.property.PropertyDTO;
+import com.spring.group.dto.property.specifications.SearchCriteria;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.user.User;
 import com.spring.group.pojo.PropertyCollectionResponse;
@@ -34,10 +34,6 @@ public interface PropertyServiceInterface {
      */
     Property getPropertyByID(Integer propertyID);
 
-    List<Property> getPropertiesByOwnerUser(User ownerUser);
-
-    List<Property> getPropertiesByTenantUser(User tenantUser);
-
     /**
      * Persists a collection of properties to our database, leveraging JPA saveALL method to create one transaction,
      * making it lighter for our database.
@@ -55,7 +51,7 @@ public interface PropertyServiceInterface {
      * @return a full property object from our database.
      * @see {@link PropertyServiceInterface#getPropertyByID}
      */
-    Property getFullProperty(Integer PropertyID);
+//    Property getFullProperty(Integer PropertyID);
 
     /**
      * Attempts to submit an offer for a property, by validating that the provided userID is not the property owner's ID,
