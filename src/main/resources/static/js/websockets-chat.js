@@ -9,15 +9,16 @@ let socket;
 let stompClient;
 let isConnected;
 
-let currentUsername = "";
-let currentSessionId = "";
+let selfUsername = "";
+let selfSessionId = "";
 let assignedModUsername = "";
 let assignedModSessionId = "";
-let currentRecipient = "";
+let currentRecipientSessionId = "";
 let chatContainer = $("#chat-content");
 let chatStatusMsg = $("#chatStatusMessage");
 let chatInput = $("#chatInput");
 let sendMsgBtn = $("#sendMsgBtn");
+let hasChatMessages = false;
 
 function connectChatWebSocket() {
     socket = new SockJS(pathname + '/chat')
@@ -26,46 +27,58 @@ function connectChatWebSocket() {
         console.log("Frame:")
         console.log(frame)
         isConnected = true;
-        if (frame["headers"]["user-name"]) currentUsername = frame["headers"]["user-name"];
+        // if (frame["headers"]["user-name"]) currentUsername = frame["headers"]["user-name"];
         chatContainer.empty();
         chatContainer.append(chatStatusMsg);
         stompClient.subscribe('/user/queue/online', function (message) {
-                console.log(message)
-                let payload = JSON.parse(message.body);
-                let status = payload["status"];
-                let metadata = payload["metadata"];
-                // currentSessionId = payload["to"]
-                if (status === "CONNECTED") {
-                    if (metadata) {
-                        if (currentUsername !== metadata["moderator"]["username"]) {
-                            assignedModUsername = metadata["moderator"]["username"];
-                            assignedModSessionId = metadata["moderator"]["sessionId"];
-                        }
+            console.log(message)
+            let payload = JSON.parse(message.body);
+            let status = payload["status"];
+            let metadata = payload["metadata"];
+            switch (status) {
+                case "USER_IDENTIFIER":
+
+                    selfSessionId = metadata["userDetails"]["sessionId"]
+                    selfUsername = metadata["userDetails"]["username"]
+                    break;
+                case "CHAT_CONNECTED":
+                case "MOD_CONNECTED":
+                    if (selfSessionId !== metadata["moderator"]["sessionId"]) {
+                        assignedModUsername = metadata["moderator"]["username"];
+                        assignedModSessionId = metadata["moderator"]["sessionId"];
                     }
                     chatStatusMsg.empty().append(`
-                    <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
-                `);
+                            <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                            `);
                     chatInput.attr("disabled", false);
-                } else if (status === "DISCONNECTED") {
-                    chatStatusMsg.empty().append(`
-                    <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
-                `)
+                    break;
+                case "MOD_DISCONNECTED":
+                case "DISCONNECTED":
+                    if (hasChatMessages) {
+                        chatContainer.append(`
+                            <div class="row justify-content-center">
+                                <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                            </div>`);
+                    } else {
+                        chatStatusMsg.empty().append(`
+                            <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                        `);
+                    }
                     chatInput.attr("disabled", true);
-                } else if (status === "UserIdentifier") {
-                    let metadata = payload["metadata"]["userdetails"];
-                    currentSessionId = metadata["sessionId"]
-                    if (metadata["username"]) currentUsername = metadata["username"];
-                }
+                    break;
+
+            }
             }
         )
         stompClient.subscribe('/user/queue/specific-user', function (response) {
             console.log(response)
             let payload = JSON.parse(response.body);
-            currentRecipient = payload["from"];
+            currentRecipientSessionId = payload["from"];
             chatContainer.append(`
             <div class="row justify-content-start">
                 <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
             </div>`);
+            hasChatMessages = true;
             scrollDownChat();
         })
     });
@@ -101,8 +114,8 @@ function sendMessage(message) {
     if (!isConnected) connectChatWebSocket();
     appendOutgoingMessage(message);
     let outgoingMsg = {
-        'from': (currentSessionId) ? currentSessionId : currentUsername,
-        'to': (assignedModSessionId) ? assignedModSessionId : currentRecipient,
+        'from': selfSessionId,
+        'to': (assignedModSessionId) ? assignedModSessionId : currentRecipientSessionId,
         'message': message
     };
     stompClient.send("/app/chat", {}, JSON.stringify(outgoingMsg));

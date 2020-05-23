@@ -24,7 +24,7 @@ public class ConnectedUser {
         this.username = username;
     }
 
-    public String getUserSessions() {
+    public String getUserSession() {
         return userSessionId;
     }
 

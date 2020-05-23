@@ -17,8 +17,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -37,7 +36,7 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    private ConnectedUsersRegistry connectedUsersRegistry;
+    private ConnectedUsersRegistry connectedModeratorsRegistry;
 
 
     @Override
@@ -52,79 +51,120 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
 
                 if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())
                         && accessor.getDestination().equals("/user/queue/specific-user")) {
-                    // When a MODERATOR connects
-                    if (accessor.getHeader("simpUser") != null
-                            && (accessor.getHeader("simpUser") instanceof UsernamePasswordAuthenticationToken
-                            || accessor.getHeader("simpUser") instanceof OAuth2AuthenticationToken)) {
-                        UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) accessor.getHeader("simpUser");
-                        if (userToken.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(UserRole.MODERATOR.toString()))) {
-                            ConnectedUser connectedUser = new ConnectedUser(userToken.getName(), accessor.getSessionId(), UserRole.MODERATOR.toString());
-                            connectedUsersRegistry.addUser(connectedUser.getUsername(), connectedUser);
-                            OutputMessage outputMessage = new OutputMessage();
-                            outputMessage
-                                    .setMessage("The chat is connected")
-                                    .setStatus(OutputMessage.MESSAGE_CONNECTED)
-                                    .setFrom(userToken.getName())
-                                    .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
-                                    .setAssignedModerator(userToken.getName(), accessor.getSessionId());
-                            simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
-//                            System.out.println(connectedUsersRegistry.getConnectedUsers());
-                        }
+                    if (isModerator(accessor)) {
+                        ConnectedUser connectedUser =
+                                new ConnectedUser(accessor.getUser().getName(), accessor.getSessionId(), UserRole.MODERATOR.toString());
+                        connectedModeratorsRegistry.addUser(connectedUser.getUsername(), connectedUser);
+                        sendMessageUserIdentifier(accessor);
+                        sendMessageModeratorConnected(accessor);
                     } else {
-                        // When someone connects
-                        String sessionId = accessor.getSessionId();
-                        // SessionId has to go to the HEADERS as well
-                        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
-                                .create(SimpMessageType.MESSAGE);
-                        headerAccessor.setSessionId(sessionId);
-                        headerAccessor.setLeaveMutable(true);
-                        OutputMessage userIdentifierMsg = new OutputMessage();
-                        userIdentifierMsg
-                                .setStatus("UserIdentifier")
-                                .setUserIdentifier("", sessionId);
-                        simpMessagingTemplate.convertAndSendToUser(accessor.getSessionId(), "/queue/online",
-                                userIdentifierMsg,
-                                headerAccessor.getMessageHeaders());
-                        OutputMessage chatStatusMsg = new OutputMessage();
-                        chatStatusMsg
-                                .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
-                                .setTo(accessor.getSessionId());
-                        if (connectedUsersRegistry.getConnectedUsers().isEmpty()) {
-                            chatStatusMsg
-                                    .setStatus(OutputMessage.MESSAGE_DISCONNECTED)
-                                    .setMessage("The chat is currently unavailable");
-                        } else {
-                            chatStatusMsg
-                                    .setStatus(OutputMessage.MESSAGE_CONNECTED)
-                                    .setMessage("The chat is available");
-
-                        }
-                        simpMessagingTemplate.convertAndSendToUser(accessor.getSessionId(), "/queue/online",
-                                chatStatusMsg,
-                                headerAccessor.getMessageHeaders());
+                        // When someone other than a moderator connects
+                        sendMessageUserIdentifier(accessor);
+                        sendMessageChatConnectionStatus(accessor);
                     }
                 }
 
                 // When a MODERATOR disconnects
                 if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
-                    if (accessor.getHeader("simpUser") != null
-                            && (accessor.getHeader("simpUser") instanceof UsernamePasswordAuthenticationToken
-                            || accessor.getHeader("simpUser") instanceof OAuth2AuthenticationToken)) {
-                        UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) accessor.getHeader("simpUser");
-//            System.out.println(userToken.getPrincipal());
-                        if (userToken.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(UserRole.MODERATOR.toString()))) {
-                            connectedUsersRegistry.removeUser(userToken.getName());
-                            simpMessagingTemplate.convertAndSend("/user/queue/online",
-                                    new OutputMessage(OutputMessage.MESSAGE_DISCONNECTED,
-                                            "The chat is currently unavailable",
-                                            new SimpleDateFormat("HH:mm").format(new Date())));
-//                            System.out.println(connectedUsersRegistry.getConnectedUsers());
-                        }
+                    if (isModerator(accessor)) {
+                        connectedModeratorsRegistry.removeUser(accessor.getUser().getName());
+                        sendMessageModeratorDisconnected(accessor);
                     }
                 }
                 return message;
             }
+
+            private boolean isModerator(StompHeaderAccessor accessor) {
+                if (accessor.getHeader("simpUser") != null
+                        && accessor.getHeader("simpUser") instanceof AbstractAuthenticationToken) {
+                    AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
+                    return (userToken != null
+                            && userToken.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(UserRole.MODERATOR.toString())));
+                }
+                return false;
+            }
+
+            private void sendMessageModeratorConnected(StompHeaderAccessor accessor) {
+                AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
+                OutputMessage outputMessage = new OutputMessage();
+                outputMessage
+                        .setMessage(userToken.getName() + " is connected")
+                        .setStatus(OutputMessage.MODERATOR_CONNECTED)
+                        .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
+                        .setAssignedModerator(userToken.getName(), accessor.getSessionId());
+                simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
+            }
+
+            private void sendMessageModeratorDisconnected(StompHeaderAccessor accessor) {
+                AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
+                OutputMessage outputMessage = new OutputMessage();
+                outputMessage
+                        .setMessage(userToken.getName() + " is disconnected")
+                        .setStatus(OutputMessage.MODERATOR_DISCONNECTED)
+                        .setTime(new SimpleDateFormat("HH:mm").format(new Date()));
+
+                simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
+            }
+
+            private void sendMessageUserIdentifier(StompHeaderAccessor accessor) {
+                String sessionId = accessor.getSessionId();
+                // SessionId has to go to the HEADERS as well
+                SimpMessageHeaderAccessor headerAccessor = getMessageHeaders(sessionId);
+                OutputMessage userIdentifierMsg = new OutputMessage();
+                userIdentifierMsg
+                        .setStatus(OutputMessage.USER_IDENTIFIER)
+                        .setUserIdentifier(
+                                (accessor.getUser() != null) ? accessor.getUser().getName() : "",
+                                sessionId);
+                simpMessagingTemplate.convertAndSendToUser(sessionId, "/queue/online",
+                        userIdentifierMsg,
+                        headerAccessor.getMessageHeaders());
+
+            }
+
+            private void sendMessageChatConnectionStatus(StompHeaderAccessor accessor) {
+                String sessionId = accessor.getSessionId();
+                SimpMessageHeaderAccessor headerAccessor = getMessageHeaders(sessionId);
+                OutputMessage chatStatusMsg;
+                if (connectedModeratorsRegistry.getConnectedUsers().isEmpty()) {
+                    chatStatusMsg = getMessageChatDisconnected(accessor);
+                } else {
+                    chatStatusMsg = getMessageChatConnected(accessor);
+                }
+                simpMessagingTemplate.convertAndSendToUser(sessionId, "/queue/online",
+                        chatStatusMsg,
+                        headerAccessor.getMessageHeaders());
+            }
+
+            private OutputMessage getMessageChatConnected(StompHeaderAccessor accessor) {
+                OutputMessage chatStatusMsg = new OutputMessage();
+                ConnectedUser randomMod = connectedModeratorsRegistry.getRandomUser();
+                chatStatusMsg
+                        .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
+                        .setTo(accessor.getSessionId())
+                        .setStatus(OutputMessage.MESSAGE_CONNECTED)
+                        .setMessage("The chat is available")
+                        .setAssignedModerator(randomMod.getUsername(), randomMod.getUserSession());
+                return chatStatusMsg;
+            }
+
+            private OutputMessage getMessageChatDisconnected(StompHeaderAccessor accessor) {
+                OutputMessage chatStatusMsg = new OutputMessage();
+                chatStatusMsg
+                        .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
+                        .setTo(accessor.getSessionId())
+                        .setStatus(OutputMessage.MESSAGE_DISCONNECTED)
+                        .setMessage("The chat is currently unavailable");
+                return chatStatusMsg;
+            }
+
+            private SimpMessageHeaderAccessor getMessageHeaders(String sessionId) {
+                SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
+                        .create(SimpMessageType.MESSAGE);
+                headerAccessor.setSessionId(sessionId);
+                headerAccessor.setLeaveMutable(true);
+                return headerAccessor;
+            }
         });
     }
 }
-

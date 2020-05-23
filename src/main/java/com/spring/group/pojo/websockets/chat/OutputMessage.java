@@ -7,8 +7,11 @@ public class OutputMessage {
 
     public static final String MESSAGE_SUCCESS = "SUCCESS";
     public static final String MESSAGE_FAIL = "FAIL";
-    public static final String MESSAGE_CONNECTED = "CONNECTED";
-    public static final String MESSAGE_DISCONNECTED = "DISCONNECTED";
+    public static final String USER_IDENTIFIER = "USER_IDENTIFIER";
+    public static final String MODERATOR_CONNECTED = "MOD_CONNECTED";
+    public static final String MODERATOR_DISCONNECTED = "MOD_DISCONNECTED";
+    public static final String MESSAGE_CONNECTED = "CHAT_CONNECTED";
+    public static final String MESSAGE_DISCONNECTED = "CHAT_DISCONNECTED";
 
     private String status;
     private String from;
@@ -100,7 +103,7 @@ public class OutputMessage {
         HashMap<String, String> moderatorHashMap = new HashMap<>();
         moderatorHashMap.put("username", username);
         moderatorHashMap.put("sessionId", sessionId);
-        this.metadata.put("userdetails", moderatorHashMap);
+        this.metadata.put("userDetails", moderatorHashMap);
     }
 
 }

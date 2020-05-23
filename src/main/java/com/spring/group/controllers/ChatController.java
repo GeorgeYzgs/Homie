@@ -41,7 +41,7 @@ public class ChatController {
         OutputMessage outMsg = new OutputMessage();
         outMsg
                 .setTo(msg.getTo())
-                .setFrom(msg.getFrom())
+                .setFrom(sessionId)
                 .setMessage(msg.getMessage())
                 .setTime(new SimpleDateFormat("HH:mm").format(new Date()));
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
