@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /**
@@ -117,7 +118,7 @@ public class TokenService {
 
     /**
      * Validates that the given reset token exists in our database, has not been used
-     * and is not expired.Returns the email of the user linekd to the above token if successful, otherwise
+     * and is not expired.Returns the email of the user linked to the above token if successful, otherwise
      * an error message
      *
      * @param resetPassToken
@@ -170,5 +171,14 @@ public class TokenService {
         ResetPassToken token = checkResetPassToken(dto.getToken()).get();
         token.setUsed(true);
         resetPassTokenRepository.save(token);
+    }
+
+    public void informPayment(User user) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Rent Paid!");
+        mailMessage.setFrom("homieafdemp@gmail.com");
+        mailMessage.setText("You have successfully paid rent for the month of " + Instant.now().atZone(ZoneOffset.UTC).getMonth());
+        sendEmail(mailMessage);
     }
 }

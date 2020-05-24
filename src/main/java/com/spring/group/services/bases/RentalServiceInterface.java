@@ -41,4 +41,8 @@ public interface RentalServiceInterface {
     List<Rental> getRentalsByTenant(User tenant);
 
     List<Rental> getRentalsByOwner(User owner);
+
+    boolean hasPaidRent(Rental rental);
+
+    void closeRental(Rental rental);
 }
