@@ -25,7 +25,7 @@
                        th:text="#{User.personal.info}"> </a>
                 </li>
                 <li class="nav-item"
-                    th:classappend="${!#lists.isEmpty(userPropertiesOwned) || !#lists.isEmpty(userPropertiesRented)} ? active : ''">
+                    th:classappend="${!#lists.isEmpty(userPropertiesOwned) || !#lists.isEmpty(userRentals)} ? active : ''">
                     <a class="nav-link async-nav-link" id="properties" th:href="@{/my-profile/properties}"
                        th:data-async-href="@{/async/my-profile/properties}"
                        th:text="#{User.properties}"></a>
@@ -55,7 +55,7 @@
         <th:block th:if="!${#lists.isEmpty(userPropertiesOwned)}">
             <div th:replace="control-panel/properties :: userPropertiesOwned"></div>
         </th:block>
-        <th:block th:if="!${#lists.isEmpty(userPropertiesRenting)}">
+        <th:block th:if="!${#lists.isEmpty(userRentals)}">
             <div th:replace="control-panel/properties :: userPropertiesRenting"></div>
         </th:block>
         <th:block th:if="!${#lists.isEmpty(userOffersReceived)}">

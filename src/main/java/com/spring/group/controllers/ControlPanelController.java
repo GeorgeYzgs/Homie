@@ -40,11 +40,11 @@ public class ControlPanelController {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         User currentUser = userService.getUserByID(loggedUser.getId());
         List<Property> propertiesOwned = propertyService.getPropertiesByOwnerUser(currentUser);
-        List<Property> propertiesRenting = propertyService.getPropertiesByTenantUser(currentUser);
+        List<Rental> rentals = rentalService.getRentalsByTenantStartedAndNotEnded(currentUser);
         modelMap.addAttribute("user", currentUser);
         modelMap.addAttribute("userId", currentUser.getId());
         modelMap.addAttribute("userPropertiesOwned", propertiesOwned);
-        modelMap.addAttribute("userPropertiesRenting", propertiesRenting);
+        modelMap.addAttribute("userRentals", rentals);
         return "user-page";
     }
 

@@ -1,10 +1,10 @@
 package com.spring.group.services;
 
 
+import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.dto.property.SortTypes;
 import com.spring.group.dto.property.specifications.PropertySpecificationBuilder;
 import com.spring.group.dto.property.specifications.SearchCriteria;
-import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.property.Property_;
 import com.spring.group.models.rental.Rental;
@@ -23,11 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +56,7 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
 
     @Override
     public List<Property> getPropertiesByTenantUser(User tenantUser) {
-        return propertyRepository.findAllByTenant(tenantUser);
+        return propertyRepository.findAllByTenantStartDateNotNullAndEndDateNull(tenantUser);
     }
 
     @Override

@@ -48,6 +48,11 @@ public class RentalServiceImpl implements RentalServiceInterface {
     }
 
     @Override
+    public List<Rental> getRentalsByTenantStartedAndNotEnded(User tenant) {
+        return rentalRepository.findAllByStartDateNotNullAndEndDateNullAndTenant(tenant);
+    }
+
+    @Override
     public String manageOffers(Rental rental, boolean isAccepted, int userID) {
         if (userID != rental.getResidence().getOwner().getId()) {
             return "Offer.not.of.own.property";

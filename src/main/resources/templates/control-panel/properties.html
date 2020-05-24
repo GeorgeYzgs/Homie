@@ -30,7 +30,7 @@
         </div>
     </div>
 </th:block>
-<th:block th:if="!${#lists.isEmpty(userPropertiesRenting)}">
+<th:block th:if="!${#lists.isEmpty(userRentals)}">
     <div class="border-top pt-4 text-center" th:fragment="userPropertiesRenting">
         <h5 class="text-center" th:text="#{Property.renting}">Property Renting</h5>
         <div class="col-sm-10 offset-1">
@@ -42,26 +42,26 @@
                     <th th:text="#{City} + '/'+ #{Address}"></th>
                     <th th:text="#{Availability}"></th>
                     <th th:text="#{Owner}"></th>
-                    <th class="text-danger">Under construction!</th>
+                    <th class="text-danger" colspan="2">Under construction!</th>
                 </tr>
-                <tr th:each="property : ${userPropertiesRenting}">
-                    <td th:text="${property.category}"></td>
-                    <td th:text="${property.price}"></td>
-                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
-                    <td th:text="${property.available}"></td>
-                    <td th:text="${property.owner.username}"></td>
+                <tr th:each="rental : ${userRentals}">
+                    <td th:text="${rental.residence.category}"></td>
+                    <td th:text="${rental.agreedPrice}"></td>
+                    <td th:text="${rental.residence.address.city} +','+ ${rental.residence.address.street}+' '+ ${rental.residence.address.number}"></td>
+                    <td th:text="${rental.residence.available}"></td>
+                    <td th:text="${rental.residence.owner.username}"></td>
                     <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
                         <td>
                             <form method="post">
-                                <input name="id" th:hidden="hidden" th:value="${property.id}">
-                                <input name="price" th:hidden="hidden" th:value="${property.price}">
+                                <input name="id" th:hidden="hidden" th:value="${rental.id}">
+                                <input name="price" th:hidden="hidden" th:value="${rental.agreedPrice}">
                                 <button class="btn btn-outline-success" th:text="#{Pay.rent}" type="submit">Pay rent
                                 </button>
                             </form>
                         </td>
                         <td>
                             <form method="post" th:action="@{/manage-offers}">
-                                <input name="id" th:hidden="hidden" th:value="${property.id}">
+                                <input name="id" th:hidden="hidden" th:value="${rental.id}">
                                 <input hidden name="isAccepted" type="text" value="false">
                                 <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
                                 </button>
