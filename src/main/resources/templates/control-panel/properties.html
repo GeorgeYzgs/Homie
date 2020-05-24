@@ -52,7 +52,7 @@
                     <td th:text="${rental.residence.owner.username}"></td>
                     <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
                         <td>
-                            <form method="post">
+                            <form method="post" th:action="@{/pay}">
                                 <input name="id" th:hidden="hidden" th:value="${rental.id}">
                                 <input name="price" th:hidden="hidden" th:value="${rental.agreedPrice}">
                                 <button class="btn btn-outline-success" th:text="#{Pay.rent}" type="submit">Pay rent
@@ -60,9 +60,8 @@
                             </form>
                         </td>
                         <td>
-                            <form method="post" th:action="@{/manage-offers}">
+                            <form method="post" th:action="@{/close-contract}">
                                 <input name="id" th:hidden="hidden" th:value="${rental.id}">
-                                <input hidden name="isAccepted" type="text" value="false">
                                 <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
                                 </button>
                             </form>

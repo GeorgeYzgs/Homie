@@ -33,7 +33,6 @@ public class PaymentController {
     @Autowired
     private TokenService tokenService;
 
-    //TODO rewrite this better, change price input to match agreed price, id to match rental id.
     @PostMapping("/pay")
     public String processPayment(@RequestParam("id") String id, @RequestParam("price") Double price,
                                  RedirectAttributes redirectAttributes) throws PayPalRESTException {
