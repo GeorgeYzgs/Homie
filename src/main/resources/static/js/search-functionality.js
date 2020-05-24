@@ -103,6 +103,7 @@ $(document).ready(function () {
         })
 
     $(document).on('click', '.badge_x', function () {
+        city = ""
         $(this).parent().remove();
     })
 
