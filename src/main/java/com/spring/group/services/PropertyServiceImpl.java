@@ -168,6 +168,11 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         return response;
     }
 
+    @Override
+    public List<Property> getPropertiesWithMoreViews() {
+        return propertyRepository.findTop10ByPhotoCollectionNotNullOrderByViews();
+    }
+
     //TODO beatify this fucking SHIT
     @Override
     public Property unWrapUpdatableProperty(PropertyDTO propertyDTO) {

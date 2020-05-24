@@ -48,3 +48,18 @@
     left: 0;
     padding: 1.25rem;
 }
+
+.image-square {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%;
+}
+
+.image-square img {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}

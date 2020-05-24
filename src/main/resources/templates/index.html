@@ -46,11 +46,13 @@
             </h1>
         </div>
     </div>
-    <section class="px-2">
-        <h2 class="font-weight-bold pt-5 pb-2" style="color:#435773" th:text="#{Discover}">Discover</h2>
-        <section class="h-25 " th:include="UtilFragments :: property_carousel"></section>
-        <h5 class="mt-2" style="color: #322F66">Advances one slide at a time</h5>
-    </section>
+    <th:block th:if="${!#lists.isEmpty(topProperties)}">
+        <section class="px-2">
+            <h2 class="font-weight-bold pt-5 pb-2" style="color:#435773" th:text="#{Discover}">Discover</h2>
+            <section class="h-25 " th:include="UtilFragments :: property_carousel"></section>
+            <h5 class="mt-2" style="color: #322F66">Advances one slide at a time</h5>
+        </section>
+    </th:block>
     <div class="parallax" th:style="'background-image:url(' + @{/img/intersection_top_down_2750.jpg} + ');'"></div>
 </main>
 

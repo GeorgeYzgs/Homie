@@ -19,6 +19,8 @@ public interface PropertyRepository extends JpaRepository<Property, Integer>,
 
     List<Property> findAllByOwner(User ownerUser);
 
+    List<Property> findTop10ByPhotoCollectionNotNullOrderByViews();
+
     @Query("SELECT p FROM properties p, rentals r where r member of p.rentalCollection and r.startDate is not null and r.endDate is null and r.tenant = :tenant")
     List<Property> findAllByTenantStartDateNotNullAndEndDateNull(@Param("tenant") User tenantUser);
 }
