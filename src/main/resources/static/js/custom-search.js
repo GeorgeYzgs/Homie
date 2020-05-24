@@ -5,6 +5,7 @@ let url = window.location.href;
 
 let city = "";
 let isCitySidebarSearchClicked = false;
+let sqMeter = $('meta[name=squareMeter]').attr("content");
 
 let category = "ALL";
 let heating = "ALL";
@@ -53,7 +54,7 @@ function getSearchResults() {
 
 function populateResults(property) {
     let html = `
-<div class="btn btn-light pt-4">
+ <a class="btn btn-light pt-4" href="${baseUrl.replace('/search', '/view/' + property.id)}">
                 <div class="row border-top py-3">
                     <div class="col-sm-4">
                         <img class="rounded object-fit_cover img-responsive"
@@ -61,7 +62,7 @@ function populateResults(property) {
                     </div>
                     <div class="col-sm-7 text-left">
                         <h5 class="font-weight-bold">
-                            ${property.category} ${property.area}τ.μ. προς ενοικίαση
+                            ${property.category + ' ' + property.area + sqMeter}
                         </h5>
                         <p class="mb-0" >
                             ${property.address.city}  ${property.address.state}
@@ -74,7 +75,7 @@ function populateResults(property) {
                         ${property.price}&euro;/μήνα
                         </span>
                             <span class="pl-1">${property.area} τμ</span>
-                            <span class="pl-1">${property.price / property.area}<span>&euro;</span>/τμ</span>
+                            <span class="pl-1">${(property.price / property.area).toFixed(2)}<span>&euro;</span>/τμ</span>
                             <span class="pl-1">${property.numberOfRooms} δωμάτια</span>
                         </p>
                     </div>

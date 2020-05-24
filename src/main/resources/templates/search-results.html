@@ -4,6 +4,7 @@
     <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:utext="#{Search.results.page.title}">Search Results</title>
     <link rel="stylesheet" th:href="@{/css/search-style.css}">
+    <meta th:content="#{squareMeter}" th:name="squareMeter">
     <th:block
             th:if="${propertiesResults != null && propertiesResults.currentPage!=null && propertiesResults.currentPage > 0}">
         <meta th:content="${propertiesResults.currentPage}" th:name="currentPage">
@@ -233,7 +234,7 @@
                 <th:block th:if="${propertiesResults != null and not #lists.isEmpty(propertiesResults.properties)}">
                     <th:block th:with="properties=${propertiesResults.properties}">
                         <th:block th:each="property : ${properties}">
-                            <div class="btn btn-light pt-2">
+                            <a class="btn btn-light pt-2" th:href="@{'/view/'+${property.id}}">
                                 <div class="row border-top py-3">
                                     <div class="col-sm-4">
                                         <img class="rounded object-fit_cover img-responsive"
@@ -258,12 +259,13 @@
                         </span>
                                             <span class="pl-1"><span th:text="${property.area}">83</span>τμ</span>
                                             <span class="pl-1"
-                                                  th:text="${property.price/property.area}">2<span>&euro;</span>/τμ</span>
+                                                  th:text="${#numbers.formatDecimal(property.price/property.area,1,2,'POINT')}">2</span><span>&nbsp&euro;/</span><span
+                                                th:text="#{squareMeter}"></span>
                                             <span class="pl-1"><span th:text="${property.numberOfRooms}">4</span>υπνοδωμάτια</span>
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </th:block>
                     </th:block>
                 </th:block>

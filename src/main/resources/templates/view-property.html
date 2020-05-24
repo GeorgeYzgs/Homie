@@ -44,52 +44,52 @@
                     <div class="col-sm-4 text-left">
 
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{City}"></p>
+                            <p class="text-secondary col-8" th:text="#{City}"></p>
                             <p class="mb-0" th:text="${property.address.city}">Αθήνα (Κέντρο)</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Price}"></p>
+                            <p class="text-secondary col-8" th:text="#{Price}"></p>
                             <p class="mb-0"><span
                                     th:text="${(property.price)}+'&euro;&nbsp;/&nbsp;'+#{Per.month}">150</span></p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Price.per.sqm}"></p>
+                            <p class="text-secondary col-8" th:text="#{Price.per.sqm}"></p>
                             <p class="mb-0"><span
                                     th:text="${((property.area!=0)?property.price/property.area:0)}">2</span>&euro;</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Address}"></p>
+                            <p class="text-secondary col-8" th:text="#{Address}"></p>
                             <p class="mb-0">
                                 <span th:text="${property.address.street}">Παπατρέχα</span>
                                 <span th:text="${property.address.number}">199</span>
                             </p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Area}"></p>
+                            <p class="text-secondary col-8" th:text="#{Area}"></p>
                             <p class="mb-0" th:text="${property.numberOfRooms}+'&nbsp;'+#{roomMsg}">155</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Area}"></p>
+                            <p class="text-secondary col-8" th:text="#{Area}"></p>
                             <p class="mb-0"><span th:text="${property.area}">155</span>m²</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{State}"></p>
+                            <p class="text-secondary col-8" th:text="#{State}"></p>
                             <p class="mb-0" th:text="${property.address.state}">Νέα Ιωνία</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Postal.code}"></p>
+                            <p class="text-secondary col-8" th:text="#{Postal.code}"></p>
                             <p class="mb-0" th:text="${property.address.zipCode}">14235</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Category}"></p>
+                            <p class="text-secondary col-8" th:text="#{Category}"></p>
                             <p class="mb-0" th:text="#{'category.'+${property.category.name()}}">Διαμέρισμα</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Heating}"></p>
+                            <p class="text-secondary col-8" th:text="#{Heating}"></p>
                             <p class="mb-0" th:text="#{'heatingType.'+${property.heatingType.name()}}">Πετρέλαιo</p>
                         </div>
                         <div class="row">
-                            <p class="text-secondary col-4" th:text="#{Fuel}"></p>
+                            <p class="text-secondary col-8" th:text="#{Fuel}"></p>
                             <p class="mb-0" th:text="#{'heatingFuel.'+${property.heatingFuel.name()}}">Αυτόνομη</p>
                         </div>
                     </div>
