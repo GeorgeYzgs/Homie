@@ -15,7 +15,6 @@
 </nav>
 <!-- Main body -->
 <main class="bg-light pt-2">
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-scrollable border-bottom justify-content-center mb-4">
         <div class="navbar-expand" id="controlPanelToolbar">
             <ul class="navbar-nav mr-auto">
@@ -45,10 +44,10 @@
             </ul>
         </div>
     </nav>
-    <div class="alert alert-success" th:if="${messageSuccess}">
+    <div class="alert alert-success spring-message" th:if="${messageSuccess}">
         <p class="text text-center" th:text="${messageSuccess}"></p>
     </div>
-    <div class="alert alert-danger" th:if="${messageDanger}">
+    <div class="alert alert-danger spring-message" th:if="${messageDanger}">
         <p class="text text-center" th:text="${messageDanger}"></p>
     </div>
     <div id="mainParent">

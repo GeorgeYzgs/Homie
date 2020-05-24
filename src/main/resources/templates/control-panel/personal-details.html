@@ -25,7 +25,7 @@
                     <h4 class="text-center" th:text="#{Moderator.panel}"></h4>
                 </div>
                 <div sec:authorize-url="/mod/**">
-                    <div class="row pt-4">
+                    <div class="row py-2">
                         <div class="col-6">
                             <p class="col-6 text-secondary mb-0" th:text="#{Status}"></p>
                             <span class="col-6" th:text="${user.nonLocked} ? #{Active} : #{Banned}"></span>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div sec:authorize-url="/admin/**">
-                    <div class="row pt-4">
+                    <div class="row py-2">
                         <div class="col-6">
                             <p class="col-6 text-secondary mb-0" th:text="#{Role}"></p>
                             <span class="col-6" th:text="#{${user.userRole}}"></span>

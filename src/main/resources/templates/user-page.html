@@ -15,7 +15,6 @@
 </nav>
 <!-- Main body -->
 <main class="bg-light pt-2">
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-scrollable border-bottom mb-4 justify-content-center">
         <div class="navbar-expand" id="controlPanelToolbar">
             <ul class="navbar-nav mr-auto">
@@ -36,17 +35,14 @@
                        th:href="@{/my-profile/offers}"
                        th:text="#{User.offers}"></a>
                 </li>
-                <li class="nav-item" th:classappend="!${#lists.isEmpty(userMessages)} ? active : ''">
-                    <a class="nav-link async-nav-link" href="#" th:text="#{User.messages}"></a>
-                </li>
             </ul>
         </div>
     </nav>
     <div id="mainParent">
-        <div class="alert alert-success" th:if="${messageSuccess}">
+        <div class="alert alert-success spring-message" th:if="${messageSuccess}">
             <p class="text text-center" th:text="${messageSuccess}"></p>
         </div>
-        <div class="alert alert-danger" th:if="${messageDanger}">
+        <div class="alert alert-danger spring-message" th:if="${messageDanger}">
             <p class="text text-center" th:text="${messageDanger}"></p>
         </div>
         <th:block th:if="!${#lists.isEmpty(currentUserDetails)}">

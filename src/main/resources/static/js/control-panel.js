@@ -16,6 +16,10 @@ function showPersonalDetails(userDetails, href) {
     $("#mainParent").append(userDetails)
 }
 
+function clearLeftOverMessages() {
+    $(".spring-message").remove();
+}
+
 $(document).ready(function () {
     let currentState = history.state;
     if (currentState == null) {
@@ -36,6 +40,7 @@ $(document).ready(function () {
             url: asyncUrl,
             timeout: 3000,
             success: function (response) {
+                clearLeftOverMessages();
                 clearNavigationActiveClass();
                 showPersonalDetails(response, regularUrl);
             }
