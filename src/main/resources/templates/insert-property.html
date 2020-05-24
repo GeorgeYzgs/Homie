@@ -174,7 +174,6 @@
                     </div>
 
                     <div class="row pt-2">
-
                     </div>
                     <div class="row pt-2">
                         <div class="col-6">
@@ -194,10 +193,13 @@
                                 Please Provide Description of Property</label>
                             <div class="input-group">
                                 <textarea class="form-control" required rows="3" th:field="*{description}"></textarea>
+                            </div>
+                            <div>
                                 <p class="alert alert-danger" th:errors="*{description}"
                                    th:if="${#fields.hasErrors('description')}"> Invalid Description</p>
                             </div>
                         </div>
+
                     </div>
                     <div class="text-center pt-4">
                         <button class="btn btn-green text-white text-center" id="registerButton" th:text="#{Submit}"

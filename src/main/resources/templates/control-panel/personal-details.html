@@ -22,10 +22,6 @@
                     <p class="text-secondary col-4" th:text="#{Last.name}"></p>
                     <p class="col-6" th:text="${userDetails.lastName}"></p>
                 </div>
-                <!--                <div class="row">-->
-                <!--                    <p class="text-secondary col-4" th:text="#{Iban}"></p>-->
-                <!--                    <input class="col-6 form-control" th:value="${userDetails.Iban}"></p>-->
-                <!--                </div>-->
             </div>
         </th:block>
         <th:block th:if="${#authentication.principal.id != user.id}">
