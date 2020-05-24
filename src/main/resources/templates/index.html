@@ -9,6 +9,8 @@
     <link rel="stylesheet" th:href="@{/css/chat.css}">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="chat" th:content="#{Chat}">
+    <meta name="chat_input_placeholder" th:content="#{Chat.input.placeholder}">
 
 </head>
 <body class="bg-light">

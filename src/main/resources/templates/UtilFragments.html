@@ -132,18 +132,20 @@
 
 <a class="badge badge-secondary bottom-right py-1 chat-btn text-white active mr-2 mb-1" id="chatBtn"
    th:fragment="chat_button" type="button">
-    <i class="fa fa-comment"></i><span class="pl-1" id="chat-button-text">Chat</span>
+    <i class="fa fa-comment"></i><span class="pl-1" id="chat-button-text" th:text="#{Chat}">Chat</span>
 </a>
 
 <div class="bottom-right fade-down chat shadow-lg col-xl-3 col-lg-3 col-md-3 cl-sm-3 col-7 mb-4" id="chatContainer"
      th:fragment="chat_popup">
     <div class="chat-bordered">
         <div class="chat-header">
-            <h4 class="chat-title"><strong>Chat</strong></h4> <a class="btn btn-xs btn-secondary" id="minimizeChat">&mdash;</a>
+            <h4 class="chat-title"><strong th:text="#{Chat}">Chat</strong></h4> <a class="btn btn-xs btn-secondary"
+                                                                                   id="minimizeChat">&mdash;</a>
         </div>
         <div class="chat-body px-4 py-1" id="chat-content">
             <div class="row justify-content-center" id="chatStatusMessage">
-                <p class="font-weight-normal text-wrap text-secondary">Chat disconnected</p>
+                <p class="font-weight-normal text-wrap text-secondary text-center"
+                   th:text="#{Chat.currently.not.available}">Chat disconnected</p>
             </div>
         </div>
         <div class="publisher bt-1 border-light">

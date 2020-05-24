@@ -10,13 +10,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 public class WebSocketSecurityConfig
         extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
-//    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-//        messages
-//                .nullDestMatcher().authenticated()
-//                .simpDestMatchers("/chatroom/**").hasAuthority("USER")
-//                .anyMessage().authenticated();
-//    }
-
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
 //                .nullDestMatcher().authenticated()

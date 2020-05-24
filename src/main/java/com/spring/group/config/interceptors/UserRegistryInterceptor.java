@@ -5,6 +5,7 @@ import com.spring.group.pojo.websockets.chat.ConnectedUser;
 import com.spring.group.pojo.websockets.chat.ConnectedUsersRegistry;
 import com.spring.group.pojo.websockets.chat.OutputMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
@@ -24,12 +25,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 // This class intercepts the stomp subscribe messages and informs other users which user connected and the same user who
 // is already online.
 @Component
 @EnableWebSocketMessageBroker
-@Order(Ordered.HIGHEST_PRECEDENCE + 99)
+@Order(Ordered.HIGHEST_PRECEDENCE + 100)
 public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMessageBrokerConfigurer {
 
     @Autowired
@@ -37,6 +40,10 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
 
     @Autowired
     private ConnectedUsersRegistry connectedModeratorsRegistry;
+
+    @Autowired
+    private MessageSource messageSource;
+
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -47,7 +54,8 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor =
                         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
+                Map<String, Object> sessionHeaders = accessor.getSessionAttributes();
+                Locale userLocale = (Locale) sessionHeaders.get("HEADER_HTTP_LOCALE");
                 if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())
                         && accessor.getDestination().equals("/user/queue/specific-user")) {
                     if (isModerator(accessor)) {
@@ -55,11 +63,11 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                                 new ConnectedUser(accessor.getUser().getName(), accessor.getSessionId(), UserRole.MODERATOR.toString());
                         connectedModeratorsRegistry.addUser(connectedUser.getUsername(), connectedUser);
                         sendMessageUserIdentifier(accessor);
-                        sendMessageModeratorConnected(accessor);
+                        sendMessageModeratorConnected(accessor, userLocale);
                     } else {
                         // When someone other than a moderator connects
                         sendMessageUserIdentifier(accessor);
-                        sendMessageChatConnectionStatus(accessor);
+                        sendMessageChatConnectionStatus(accessor, userLocale);
                     }
                 }
 
@@ -67,7 +75,7 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
                     if (isModerator(accessor)) {
                         connectedModeratorsRegistry.removeUser(accessor.getUser().getName());
-                        sendMessageModeratorDisconnected(accessor);
+                        sendMessageModeratorDisconnected(accessor, userLocale);
                     }
                 }
                 return message;
@@ -83,22 +91,22 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 return false;
             }
 
-            private void sendMessageModeratorConnected(StompHeaderAccessor accessor) {
+            private void sendMessageModeratorConnected(StompHeaderAccessor accessor, Locale userLocale) {
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
                 outputMessage
-                        .setMessage(userToken.getName() + " connected")
+                        .setMessage(messageSource.getMessage("User.connected", new Object[]{userToken.getName()}, userLocale))
                         .setStatus(OutputMessage.MODERATOR_CONNECTED)
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
                         .setAssignedModerator(userToken.getName(), accessor.getSessionId());
                 simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
             }
 
-            private void sendMessageModeratorDisconnected(StompHeaderAccessor accessor) {
+            private void sendMessageModeratorDisconnected(StompHeaderAccessor accessor, Locale userLocale) {
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
                 outputMessage
-                        .setMessage(userToken.getName() + " disconnected")
+                        .setMessage(messageSource.getMessage("User.disconnected", new Object[]{userToken.getName()}, userLocale))
                         .setStatus(OutputMessage.MODERATOR_DISCONNECTED)
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()));
 
@@ -121,39 +129,39 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
 
             }
 
-            private void sendMessageChatConnectionStatus(StompHeaderAccessor accessor) {
+            private void sendMessageChatConnectionStatus(StompHeaderAccessor accessor, Locale userLocale) {
                 String sessionId = accessor.getSessionId();
                 SimpMessageHeaderAccessor headerAccessor = getMessageHeaders(sessionId);
                 OutputMessage chatStatusMsg;
                 if (connectedModeratorsRegistry.getConnectedUsers().isEmpty()) {
-                    chatStatusMsg = getMessageChatDisconnected(accessor);
+                    chatStatusMsg = getMessageChatDisconnected(accessor, userLocale);
                 } else {
-                    chatStatusMsg = getMessageChatConnected(accessor);
+                    chatStatusMsg = getMessageChatConnected(accessor, userLocale);
                 }
                 simpMessagingTemplate.convertAndSendToUser(sessionId, "/queue/online",
                         chatStatusMsg,
                         headerAccessor.getMessageHeaders());
             }
 
-            private OutputMessage getMessageChatConnected(StompHeaderAccessor accessor) {
+            private OutputMessage getMessageChatConnected(StompHeaderAccessor accessor, Locale userLocale) {
                 OutputMessage chatStatusMsg = new OutputMessage();
                 ConnectedUser randomMod = connectedModeratorsRegistry.getRandomUser();
                 chatStatusMsg
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
                         .setTo(accessor.getSessionId())
                         .setStatus(OutputMessage.MESSAGE_CONNECTED)
-                        .setMessage(randomMod + " connected")
+                        .setMessage(randomMod + " " + messageSource.getMessage("User.connected", null, userLocale).toLowerCase())
                         .setAssignedModerator(randomMod.getUsername(), randomMod.getUserSession());
                 return chatStatusMsg;
             }
 
-            private OutputMessage getMessageChatDisconnected(StompHeaderAccessor accessor) {
+            private OutputMessage getMessageChatDisconnected(StompHeaderAccessor accessor, Locale userLocale) {
                 OutputMessage chatStatusMsg = new OutputMessage();
                 chatStatusMsg
                         .setTime(new SimpleDateFormat("HH:mm").format(new Date()))
                         .setTo(accessor.getSessionId())
                         .setStatus(OutputMessage.MESSAGE_DISCONNECTED)
-                        .setMessage("The chat is currently unavailable");
+                        .setMessage(messageSource.getMessage("Chat.currently.not.available", null, userLocale));
                 return chatStatusMsg;
             }
 

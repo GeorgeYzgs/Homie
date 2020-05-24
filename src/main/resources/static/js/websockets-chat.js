@@ -20,6 +20,9 @@ let chatInput = $("#chatInput");
 let sendMsgBtn = $("#sendMsgBtn");
 let hasChatMessages = false;
 
+let chatName = $("meta[name='chat']").attr("content");
+let chatPlaceholder = $("meta[name='chat_input_placeholder']").attr("content");
+
 function connectChatWebSocket() {
     socket = new SockJS(pathname + '/chat')
     stompClient = Stomp.over(socket);
@@ -47,28 +50,28 @@ function connectChatWebSocket() {
                         assignedModUsername = metadata["moderator"]["username"];
                         assignedModSessionId = metadata["moderator"]["sessionId"];
                         chatStatusMsg.empty().append(`
-                            <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                            <p class="font-weight-normal text-wrap text-secondary text-center">${payload["message"]}</p>
                             `);
                     } else {
                         chatStatusMsg.empty().append(`
-                            <p class="font-weight-normal text-wrap text-secondary">Chat connected</p>
+                            <p class="font-weight-normal text-wrap text-secondary text-center">${payload["message"]}</p>
                             `);
-                        chatInput.attr("disabled", false);
                     }
+                    chatInput.attr("disabled", false).attr("placeholder", chatPlaceholder);
                     break;
                 case "MOD_DISCONNECTED":
-                case "DISCONNECTED":
+                case "CHAT_DISCONNECTED":
                     if (hasChatMessages) {
                         chatContainer.append(`
                             <div class="row justify-content-center">
-                                <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                                <p class="font-weight-normal text-wrap text-secondary text-center">${payload["message"]}</p>
                             </div>`);
                     } else {
                         chatStatusMsg.empty().append(`
-                            <p class="font-weight-normal text-wrap text-secondary">${payload["message"]}</p>
+                            <p class="font-weight-normal text-wrap text-secondary text-center">${payload["message"]}</p>
                         `);
                     }
-                    chatInput.attr("disabled", true);
+                    chatInput.attr("placeholder", "").attr("disabled", true);
                     break;
 
             }
