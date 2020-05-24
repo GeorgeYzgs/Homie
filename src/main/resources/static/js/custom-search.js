@@ -41,7 +41,7 @@ function getSearchResults() {
         },
         success: function (response) {
             $("#resultsContainer").empty();
-            currentPage = response.currentPage;
+            currentPage = (response.currentPage > 0) ? response.currentPage : 1;
             totalPages = response.totalPages;
             setPagination();
             response.properties.forEach(p => $("#resultsContainer").append(populateResults(p)));
@@ -231,7 +231,9 @@ $(document).ready(function () {
         })
 
     $(document).on('click', '.badge_x', function () {
+        city = ""
         $(this).parent().remove();
+        getSearchResults()
     })
 
 
@@ -337,7 +339,7 @@ $(window).bind('popstate', function (event) {
             timeout: 3000,
             success: function (response) {
                 $("#resultsContainer").empty();
-                currentPage = response.currentPage;
+                currentPage = (response.currentPage > 0) ? response.currentPage : 1;
                 totalPages = response.totalPages;
                 setPagination();
                 response.properties.forEach(p => $("#resultsContainer").append(populateResults(p)));
