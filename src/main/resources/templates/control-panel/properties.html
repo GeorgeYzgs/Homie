@@ -15,14 +15,18 @@
                     <th th:text="#{Category}"></th>
                     <th th:text="#{Price} + '(&euro;)'"></th>
                     <th th:text="#{City} + '/'+ #{Address}"></th>
-                    <th th:text="#{Availability}"></th>
+                    <th th:text="#{Status}"></th>
                     <th th:text="#{Owner}"></th>
                 </tr>
                 <tr th:each="property : ${userPropertiesOwned}">
-                    <td th:text="${property.category}"></td>
+                    <td th:text="#{'category.'+${property.category}}"></td>
                     <td th:text="${property.price}"></td>
-                    <td th:text="${property.address.city} +','+ ${property.address.street}+' '+ ${property.address.number}"></td>
-                    <td th:text="${property.available}"></td>
+                    <td>
+                        <a th:href="@{'/view/'+${property.id}}"
+                           th:text="${property.address.city} +', '+ ${property.address.street}+' '+ ${property.address.number}">
+                        </a>
+                    </td>
+                    <td th:text="${property.available} ? #{Available}:#{Unavailable}"></td>
                     <td th:text="${property.owner.username}"></td>
                 </tr>
                 </tbody>
@@ -40,15 +44,20 @@
                     <th th:text="#{Category}"></th>
                     <th th:text="#{Price} + '(&euro;)'"></th>
                     <th th:text="#{City} + '/'+ #{Address}"></th>
-                    <th th:text="#{Availability}"></th>
+                    <th th:text="#{Status}"></th>
                     <th th:text="#{Owner}"></th>
                     <th class="text-danger" colspan="2">Under construction!</th>
                 </tr>
                 <tr th:each="rental : ${userRentals}">
-                    <td th:text="${rental.residence.category}"></td>
+                    <td th:text="#{'category.'+${rental.residence.category}}"></td>
                     <td th:text="${rental.agreedPrice}"></td>
-                    <td th:text="${rental.residence.address.city} +','+ ${rental.residence.address.street}+' '+ ${rental.residence.address.number}"></td>
-                    <td th:text="${rental.residence.available}"></td>
+                    <td>
+                        <a th:href="@{'/view/'+${rental.id}}"
+                           th:text="${rental.residence.address.city} +', '+ ${rental.residence.address.street}+' '+ ${rental.residence.address.number}">
+
+                        </a>
+                    </td>
+                    <td th:text="${rental.residence.available} ? #{Available}:#{Unavailable}"></td>
                     <td th:text="${rental.residence.owner.username}"></td>
                     <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
                         <td>

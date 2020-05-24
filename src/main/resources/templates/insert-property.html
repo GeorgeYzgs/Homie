@@ -29,12 +29,10 @@
                 <h3 class="text-center" th:text="#{insert.Title}">Insert Entry</h3>
                 <form enctype="multipart/form-data" th:action="@{/list-new-property}" th:method="post"
                       th:object="${propertyDTO}">
-
                     <div class="row justify-content-center pt-4">
                         <p class="alert alert-danger" th:errors="*{global}"
                            th:if="${#fields.hasErrors('global')}">Invalid
                             value</p>
-
                         <div class="form-group col-sm-6">
                             <label class="mb-0" th:for="category" th:text="#{insertForm.category}">
                                 Please Provide Category</label>
@@ -116,11 +114,10 @@
                                th:if="${#fields.hasErrors('heatingType')}">Invalid
                                 value</p>
                         </div>
-
                     </div>
 
                     <div class="row pt-2">
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <label class="mb-0" th:for="address_street" th:text="#{insertForm.street}">Please
                                 Provide street</label>
                             <div class="input-group">
@@ -129,7 +126,7 @@
                                    th:if="${#fields.hasErrors('address_street')}">Invalid value </p>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <label class="mb-0" th:for="address_number" th:text="#{insertForm.streetnumber}">
                                 Please Provide street number</label>
                             <div class="input-group">
@@ -141,7 +138,7 @@
                     </div>
 
                     <div class="row pt-2">
-                        <div class="col-5">
+                        <div class="col-sm-5">
                             <label class="mb-0" th:for="address_city" th:text="#{insertForm.city}">
                                 Please Provide city</label>
                             <div class="input-group">
@@ -152,7 +149,7 @@
                             </div>
                             <div class="p-2 row" id="cityTextArea"></div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-sm-4">
                             <label class="mb-0" th:for="address_state" th:text="#{insertForm.state}">
                                 Please Provide state</label>
                             <div class="input-group">
@@ -161,7 +158,7 @@
                                    th:if="${#fields.hasErrors('address_state')}">Invalid value </p>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-sm-3">
                             <label class="mb-0" th:for="address_zipCode" th:text="#{insertForm.zipcode}">
                                 Please Provide zip code</label>
                             <div class="input-group">
@@ -172,11 +169,8 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row pt-2">
-                    </div>
-                    <div class="row pt-2">
-                        <div class="col-6">
+                        <div class="col-sm-6">
                             <label class="mb-0" th:for="photoCollection" th:text="#{insertForm.photo}">Please
                                 Provide Photos</label>
                             <input class="input-group text-center pt-4" th:accept="'image/*'"
