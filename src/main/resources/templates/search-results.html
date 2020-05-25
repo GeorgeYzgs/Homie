@@ -5,6 +5,8 @@
     <title id="pageTitle" th:utext="#{Search.results.page.title}">Search Results</title>
     <link rel="stylesheet" th:href="@{/css/search-style.css}">
     <meta th:content="#{squareMeter}" th:name="squareMeter">
+    <meta th:content="#{Per.month}" th:name="month">
+    <meta th:content="#{Rooms}" th:name="rooms">
     <th:block
             th:if="${propertiesResults != null && propertiesResults.currentPage!=null && propertiesResults.currentPage > 0}">
         <meta th:content="${propertiesResults.currentPage}" th:name="currentPage">
@@ -32,7 +34,7 @@
             <p class="text text-center" th:text="${messageSuccess}"></p>
         </div>
     </section>
-    <div class="row container pt-4">
+    <div class="row px-4 pt-4 col-sm-10">
         <!-- Sidebar -->
         <nav class="col-sm-3 border-right pl-4" id="sidebar">
             <div class="sidebar-header pb-2 border-bottom">
@@ -230,18 +232,25 @@
             </div>
             <nav aria-label="Page navigation" class="pt-4 bg-light" id="pageNavContainer">
             </nav>
-            <div id="resultsContainer">
+            <div class="row" id="resultsContainer">
                 <th:block th:if="${propertiesResults != null and not #lists.isEmpty(propertiesResults.properties)}">
                     <th:block th:with="properties=${propertiesResults.properties}">
                         <th:block th:each="property : ${properties}">
-                            <a class="btn btn-light pt-2" th:href="@{'/view/'+${property.id}}">
+                            <a class="btn btn-light pt-2 col-sm-12" th:href="@{'/view/'+${property.id}}">
                                 <div class="row border-top py-3">
                                     <div class="col-sm-4">
-                                        <img class="rounded object-fit_cover img-responsive"
-                                             height="250"
-                                             src="https://q-cf.bstatic.com/images/hotel/max1024x768/189/189426432.jpg">
+                                        <div class="image-square">
+                                            <img class="rounded object-fit_cover img-responsive"
+                                                 height="250"
+                                                 th:if="${!#lists.isEmpty(property.photosUrlList)}"
+                                                 th:src="${property.photosUrlList[0]}">
+                                            <img class="rounded object-fit_cover img-responsive"
+                                                 height="250"
+                                                 src="http://placehold.it/380?text=No_photo"
+                                                 th:if="${#lists.isEmpty(property.photosUrlList)}">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-7 text-left">
+                                    <div class="col-sm-8 text-left">
                                         <h5 class="font-weight-bold">
                                             <span th:text="${property.category}"></span> <span
                                                 th:text="${property.area}"></span> τ.μ. προς ενοικίαση

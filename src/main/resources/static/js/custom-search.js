@@ -6,6 +6,8 @@ let url = window.location.href;
 let city = "";
 let isCitySidebarSearchClicked = false;
 let sqMeter = $('meta[name=squareMeter]').attr("content");
+let perMonth = $('meta[name=month]').attr("content");
+let rooms = $('meta[name=rooms]').attr("content");
 
 let category = "ALL";
 let heating = "ALL";
@@ -54,13 +56,16 @@ function getSearchResults() {
 
 function populateResults(property) {
     let html = `
- <a class="btn btn-light pt-4" href="${baseUrl.replace('/search', '/view/' + property.id)}">
+ <a class="btn btn-light pt-4 col-sm-12" href="${baseUrl.replace('/search', '/view/' + property.id)}">
                 <div class="row border-top py-3">
                     <div class="col-sm-4">
-                        <img class="rounded object-fit_cover img-responsive"
-                             height="250" src="https://q-cf.bstatic.com/images/hotel/max1024x768/189/189426432.jpg">
+                        <div class="image-square">
+                            <img class="rounded object-fit_cover img-responsive"
+                                 height="250" 
+                                 src=${(property.photosUrlList.length) ? property.photosUrlList[0] : 'http://placehold.it/380?text=No_photo'}>
+                        </div>
                     </div>
-                    <div class="col-sm-7 text-left">
+                    <div class="col-sm-8 text-left">
                         <h5 class="font-weight-bold">
                             ${property.category + ' ' + property.area + sqMeter}
                         </h5>
@@ -72,11 +77,11 @@ function populateResults(property) {
                         </p>
                         <p class="pt-1">
                         <span class="border rounded bg-green text-white p-1 font-weight-bold">
-                        ${property.price}&euro;/μήνα
+                        ${property.price}&euro;/${perMonth}
                         </span>
-                            <span class="pl-1">${property.area} τμ</span>
-                            <span class="pl-1">${(property.price / property.area).toFixed(2)}<span>&euro;</span>/τμ</span>
-                            <span class="pl-1">${property.numberOfRooms} δωμάτια</span>
+                            <span class="pl-1">${property.area} ${sqMeter}</span>
+                            <span class="pl-1">${(property.price / property.area).toFixed(2)}<span>&euro;</span>/${sqMeter}</span>
+                            <span class="pl-1">${property.numberOfRooms + " " + rooms} </span>
                         </p>
                     </div>
                 </div>
