@@ -50,9 +50,8 @@
                     <th th:text="#{Category}"></th>
                     <th th:text="#{Price} + '(&euro;)'"></th>
                     <th th:text="#{City} + '/'+ #{Address}"></th>
-                    <th th:text="#{Status}"></th>
                     <th th:text="#{Owner}"></th>
-                    <th class="text-danger" colspan="2">Under construction!</th>
+                    <th colspan="2"></th>
                 </tr>
                 <tr th:each="rental : ${userRentals}">
                     <td th:text="#{'category.'+${rental.residence.category}}"></td>
@@ -63,7 +62,6 @@
 
                         </a>
                     </td>
-                    <td th:text="${rental.residence.available} ? #{Available}:#{Unavailable}"></td>
                     <td th:text="${rental.residence.owner.username}"></td>
                     <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id == userId}">
                         <td>
@@ -90,7 +88,7 @@
     </div>
 </th:block>
 
-<th:block th:if="${#lists.isEmpty(userPropertiesOwned) and #lists.isEmpty(userPropertiesRenting)}">
+<th:block th:if="${#lists.isEmpty(userPropertiesOwned) and #lists.isEmpty(userRentals)}">
     <p class="text-center text-secondary" th:text="#{Nothing.found}">
     </p>
 </th:block>

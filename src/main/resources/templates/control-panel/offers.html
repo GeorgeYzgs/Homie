@@ -18,7 +18,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="offer : ${userOffersReceived}">
-                    <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+' '+ ${offer.residence.address.number}"></td>
+                    <td>
+                        <a th:href="@{'/view/'+${offer.residence.id}}"
+                           th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+' '+ ${offer.residence.address.number}"></a>
+                    </td>
                     <td th:text="${offer.agreedPrice}"></td>
                     <td th:text="${offer.pending}? #{Pending}: #{Complete}"></td>
                     <td th:text="${offer.tenant.username}"></td>
@@ -62,7 +65,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="offer : ${userOffersSent}">
-                    <td th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+' '+ ${offer.residence.address.number}"></td>
+                    <td>
+                        <a th:href="@{'/view/'+${offer.residence.id}}"
+                           th:text="${offer.residence.address.city} +', '+ ${offer.residence.address.street}+' '+ ${offer.residence.address.number}"></a>
+                    </td>
                     <td th:text="${offer.agreedPrice}"></td>
                     <td th:text="${offer.pending}? #{Pending}: #{Complete}"></td>
                     <td th:text="${offer.residence.owner.username}"></td>

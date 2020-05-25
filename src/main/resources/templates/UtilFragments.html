@@ -28,7 +28,7 @@
                                         <h5 class="card-title mb-1 text-left text-secondary"><span
                                                 th:text="${property.price}">250</span>&euro;</h5>
                                         <p class="card-text text-truncate mb-0 text-left text-secondary"
-                                           th:text="${property.category}">Ενοικίαση,
+                                           th:text="#{'Category.'+${property.category}}">Ενοικίαση,
                                             Διαμέρισμα 100τ.μ.</p>
                                         <p class="card-text text-secondary text-left"
                                            th:text="${property.address.city + ', ' + property.address.state}">Ζωφράφος,

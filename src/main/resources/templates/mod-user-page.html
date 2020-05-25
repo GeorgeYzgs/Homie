@@ -38,9 +38,6 @@
                        th:href="@{/mod/user/{id}/offers (id=${userId})}"
                        th:text="#{User.offers}"></a>
                 </li>
-                <li class="nav-item" th:classappend="!${#lists.isEmpty(userMessages)} ? active : ''">
-                    <a class="nav-link async-nav-link" href="#" th:text="#{User.messages}"></a>
-                </li>
             </ul>
         </div>
     </nav>
