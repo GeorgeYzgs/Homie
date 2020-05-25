@@ -53,10 +53,6 @@ public interface PropertyServiceInterface {
      */
     String submitOffer(Property property, int userID);
 
-    List<Property> searchProperties(List<SearchCriteria> searchCriteria);
-
-    List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications);
-
     PropertyCollectionResponse getAllPropertiesByUserCriteria(List<SearchCriteria> searchCriteria,
                                                               List<Specification> specifications,
                                                               int pageNumber,

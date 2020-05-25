@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Homie Register</title>
+</head>
+<body>
+
+
+<div th:text="#{mail.dearUser}+${userName}"><p>Dear [[${userName}]],</p></div>
+
+
+<div th:text="#{mail.reset.toResetMessage}">To reset your Password click here :
+</div>
+<div><a th:href="@{${tokenLink}}" th:text="${tokenLink}"/></div>
+<p th:text="#{mail.token.valid(${expirationHours})}">Token is valid for 24 hours</p>
+<br/>
+
+
+<div>
+    <p th:text="#{mail.BR}">Best Regards,</p>
+    <p th:text="#{mail.theTeam}">The Administration Team</p>
+    <p id="logo"><img height="50" src="cid:logo.png" width="80"/></p>
+    <label for="logo" th:text="#{mail.moto}">Wherever there is Land there is also Homie</label>
+
+</div>
+
+
+</body>
+</html>

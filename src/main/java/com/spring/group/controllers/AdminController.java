@@ -25,10 +25,8 @@ public class AdminController {
 
     @Autowired
     private UserServiceInterface userService;
-
     @Autowired
     private PropertyServiceInterface propertyService;
-
     @Autowired
     private MessageSource messageSource;
 

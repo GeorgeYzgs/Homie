@@ -23,7 +23,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,9 +38,8 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
 
     @Autowired
     private PropertyRepository propertyRepository;
-
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @Override
     public Property insertProperty(Property property) {
@@ -100,24 +102,6 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public List<Property> searchProperties(List<SearchCriteria> searchCriteria) {
-        PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
-        searchCriteria.forEach(psb::with);
-        final Specification<Property> spec = psb.build();
-        return propertyRepository.findAll(spec);
-    }
-
-    @Override
-    public List<Property> searchProperties(List<SearchCriteria> searchCriteria, List<Specification> specifications) {
-        PropertySpecificationBuilder psb = new PropertySpecificationBuilder();
-        searchCriteria.forEach(psb::with);
-        specifications.forEach(psb::with);
-        final Specification<Property> spec = psb.build();
-        if (spec == null) return new ArrayList<>();
-        return propertyRepository.findAll(spec);
-    }
-
-    @Override
     public PropertyCollectionResponse getAllPropertiesByUserCriteria(List<SearchCriteria> searchCriteria,
                                                                      List<Specification> specifications,
                                                                      int pageNumber,
@@ -173,7 +157,7 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         return propertyRepository.findTop10ByPhotoCollectionNotNullOrderByViews();
     }
 
-    //TODO beatify this fucking SHIT
+
     @Override
     public Property unWrapUpdatableProperty(PropertyDTO propertyDTO) {
         Property persistent = getPropertyByID(propertyDTO.getPropertyID());
