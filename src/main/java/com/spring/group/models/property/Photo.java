@@ -1,5 +1,7 @@
 package com.spring.group.models.property;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 
 /**
@@ -11,9 +13,10 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "photo_id")
-    private int id;
+    private Integer id;
     private String imageUrl;
     @ManyToOne()
+    @Nullable
     private Property property;
 
     public Photo() {
@@ -24,9 +27,13 @@ public class Photo {
         this.property = property;
     }
 
-    public int getId() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getImageUrl() { return imageUrl; }
 

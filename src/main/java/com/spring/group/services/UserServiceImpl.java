@@ -10,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserServiceInterface {
      * @param dto the data access object to be unwrapped
      * @return "SUCCESS" or an error message
      */
-    public String registerUser(RegisterUserDto dto) {
+    public String registerUser(RegisterUserDto dto, Locale userLocale) throws MessagingException {
         if (checkUserName(dto.getUsername()).isPresent()) {
             return "Username.unavailable";
         }
@@ -90,7 +92,7 @@ public class UserServiceImpl implements UserServiceInterface {
         }
         User user = dto.unwrapDTO();
         insertUser(user);
-        tokenService.createConfirmEmail(user);
+        tokenService.createConfirmEmail(user, userLocale);
         return "SUCCESS";
     }
 

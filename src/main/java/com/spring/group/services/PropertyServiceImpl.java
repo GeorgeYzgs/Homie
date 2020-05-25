@@ -5,12 +5,14 @@ import com.spring.group.dto.property.PropertyDTO;
 import com.spring.group.dto.property.SortTypes;
 import com.spring.group.dto.property.specifications.PropertySpecificationBuilder;
 import com.spring.group.dto.property.specifications.SearchCriteria;
+import com.spring.group.models.property.Photo;
 import com.spring.group.models.property.Property;
 import com.spring.group.models.property.Property_;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 import com.spring.group.pojo.PropertyCollectionResponse;
 import com.spring.group.pojo.PropertyResponse;
+import com.spring.group.repos.PhotoRepository;
 import com.spring.group.repos.PropertyRepository;
 import com.spring.group.services.bases.PropertyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +42,12 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     private PropertyRepository propertyRepository;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private PhotoRepository photoRepository;
 
     @Override
     public Property insertProperty(Property property) {
-        return propertyRepository.save(property);
+        return propertyRepository.saveAndFlush(property);
     }
 
     @Override
@@ -157,7 +161,6 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         return propertyRepository.findTop10ByPhotoCollectionNotNullOrderByViews();
     }
 
-
     @Override
     public Property unWrapUpdatableProperty(PropertyDTO propertyDTO) {
         Property persistent = getPropertyByID(propertyDTO.getPropertyID());
@@ -174,6 +177,10 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
         persistent.getAddress().setState(propertyDTO.getAddress_state());
         persistent.getAddress().setStreet(propertyDTO.getAddress_street());
         persistent.getAddress().setZipCode(propertyDTO.getAddress_zipCode());
+        if (propertyDTO.getPhotoViewCollection() != null) {
+            persistent.getPhotoCollection().retainAll(photoRepository.findAllById(
+                    propertyDTO.getPhotoViewCollection().stream().map(Photo::getId).collect(Collectors.toList())));
+        }
         return persistent;
     }
 }

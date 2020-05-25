@@ -3,16 +3,21 @@ package com.spring.group.models.property;
 import com.spring.group.models.Address;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author George.Giazitzis
  */
 @Entity(name = "properties")
+@EntityListeners(AuditingEntityListener.class)
 public class Property {
 
     @Id
@@ -32,8 +37,8 @@ public class Property {
     private int searchValue;
     @Enumerated(EnumType.STRING)
     private Category category;
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
-    private Collection<Photo> photoCollection;
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photoCollection;
     @OneToMany(mappedBy = "residence", cascade = CascadeType.ALL)
     private Collection<Rental> rentalCollection;
 
@@ -55,12 +60,15 @@ public class Property {
     @ManyToOne
     private User owner;
     @Basic
+    @CreatedDate
+    @Column(name = "creationDate")
     private Instant creationDate;
     @Basic
+    @LastModifiedDate
+    @Column(name = "updatedDate")
     private Instant updatedDate;
 
     public Property() {
-        this.updatedDate = Instant.now();
     }
 
     public Property(String description, int price, Address address, Category category, int numberOfRooms,
@@ -78,7 +86,7 @@ public class Property {
         this.owner = owner;
         this.searchValue = 2;
         this.isNonLocked = true;
-        this.updatedDate = Instant.now();
+
     }
 
     public boolean isNonLocked() {
@@ -153,11 +161,11 @@ public class Property {
         this.category = category;
     }
 
-    public Collection<Photo> getPhotoCollection() {
+    public List<Photo> getPhotoCollection() {
         return photoCollection;
     }
 
-    public void setPhotoCollection(Collection<Photo> photoCollection) {
+    public void setPhotoCollection(List<Photo> photoCollection) {
         this.photoCollection = photoCollection;
     }
 

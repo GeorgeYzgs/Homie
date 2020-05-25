@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import java.util.Locale;
 
 /**
@@ -74,11 +75,11 @@ public class UserController {
     public ModelAndView registerUser(@Validated({RegistrationValidator.class})
                                      @ModelAttribute("registerUser") RegisterUserDto dto,
                                      BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                                     Locale userLocale) {
+                                     Locale userLocale) throws MessagingException {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("register");
         }
-        String attempt = userServiceImpl.registerUser(dto);
+        String attempt = userServiceImpl.registerUser(dto, userLocale);
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("register", "messageDanger",
                     messageSource.getMessage(attempt, null, userLocale));
@@ -95,8 +96,8 @@ public class UserController {
      * @return the login page, informs the user if the confirmation was successful.
      */
     @GetMapping("/confirm-account/{token}")
-    public ModelAndView confirmUserAccount(@PathVariable String token, Locale userLocale) {
-        String attempt = tokenService.validateConfirmationToken(token);
+    public ModelAndView confirmUserAccount(@PathVariable String token, Locale userLocale) throws MessagingException {
+        String attempt = tokenService.validateConfirmationToken(token, userLocale);
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("login", "messageDanger",
                     messageSource.getMessage(attempt, null, userLocale));
@@ -168,11 +169,11 @@ public class UserController {
     public ModelAndView resetPass(@Validated({RegistrationEmailValidator.class})
                                   @ModelAttribute("forgotUserPass") RegisterUserDto dto,
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                                  Locale userLocale) {
+                                  Locale userLocale) throws MessagingException {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("forgot-pass");
         }
-        String attempt = tokenService.forgotPass(dto.getEmail());
+        String attempt = tokenService.forgotPass(dto.getEmail(), userLocale);
         if (!attempt.equals("SUCCESS")) {
             return new ModelAndView("forgot-pass", "messageDanger",
                     messageSource.getMessage(attempt, null, userLocale));

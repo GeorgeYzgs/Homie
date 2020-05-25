@@ -211,16 +211,24 @@
                         </div>
                     </div>
                     <div class="row pt-2">
-                        <div id="presentPhotos" th:if="${!photosCollection.isEmpty()}">
+                        <div id="presentPhotos" th:unless="${#bools.isTrue(propertyDTO.getPhotoViewCollection()==null)
+                        ||#bools.isTrue(propertyDTO.getPhotoViewCollection().isEmpty())}">
                             <label class="col-12" for="presentPhotos"><h4 th:text="#{update.remove.photos}">Please
                                 Select Photos to Remove :</h4>
                             </label>
-                            <th:block th:each="ph : ${photosCollection}">
-                                <input class=col-1 th:id="${#ids.seq('ph')}" th:name="photoToBeDel"
-                                       th:value="${ph.getId()}"
-                                       type="checkbox"/>
-                                <label id="imgLabel" th:for="${#ids.prev('ph')}"><img alt="Bad Url"
-                                                                                      th:src="${ph.getImageUrl()}"/></label>
+                            <th:block th:each="ph, itemStat : *{photoViewCollection}">
+                                <p id="myP">
+                                    <input class=col-1 th:checked="checked"
+                                           th:field="${propertyDTO.photoViewCollection[__${itemStat.index}__].id}"
+                                           th:id="${#ids.seq('ph')}"
+                                           th:value="${ph.getId()}" type="checkbox"/>
+                                    <label id="imgLabel" th:for="${#ids.prev('ph')}">
+                                        <img alt="Bad Url" id="checkImg" th:src="@{${ph.getImageUrl()}}"/>
+                                    </label></p>
+                                <input th:field="${propertyDTO.photoViewCollection[__${itemStat.index}__].imageUrl}"
+                                       th:hidden="hidden"
+                                       th:id="${#ids.prev('ph')}" th:value="${ph.getImageUrl()}"
+                                       type="checkbox">
                             </th:block>
                         </div>
                     </div>

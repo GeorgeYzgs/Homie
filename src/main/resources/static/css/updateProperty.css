@@ -1,17 +1,14 @@
-/*ul {*/
-/*    list-style-type: none;*/
-/*}*/
 
-/*li {*/
-/*    display: inline-block;*/
-/*}*/
+#myP {
+    display: inline-block;
+}
 
 input[type="checkbox"][id^="ph"] {
     display: none;
 }
 
 #imgLabel {
-    border: 1px solid #fff;
+    border: 1px solid #ddd;
     padding: 10px;
     display: block;
     position: relative;
@@ -20,9 +17,9 @@ input[type="checkbox"][id^="ph"] {
 }
 
 #imgLabel:before {
-    background-color: white;
+    background-color: grey;
     color: white;
-    content: " ";
+    content: "✓";
     display: block;
     border-radius: 50%;
     border: 1px solid grey;
@@ -34,28 +31,27 @@ input[type="checkbox"][id^="ph"] {
     text-align: center;
     line-height: 28px;
     transition-duration: 0.4s;
-    transform: scale(0);
+    transform: scale(1);
 }
 
-#imgLabel img {
+#imgLabel #checkImg {
     height: 100px;
     width: 100px;
     transition-duration: 0.2s;
     transform-origin: 50% 50%;
-}
-
-:checked + #imgLabel {
-    border-color: #ddd;
-}
-
-:checked + #imgLabel:before {
-    content: "✓";
-    background-color: grey;
-    transform: scale(1);
-}
-
-:checked + #imgLabel img {
     transform: scale(0.9);
     box-shadow: 0 0 5px #333;
     z-index: -1;
 }
+
+:checked ~ #imgLabel {
+    border-color: #fff;
+}
+
+:checked ~ #imgLabel:before {
+    content: " ";
+    background-color: white;
+    transform: scale(0);
+}
+
+

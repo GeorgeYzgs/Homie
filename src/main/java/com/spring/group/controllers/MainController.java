@@ -175,18 +175,25 @@ public class MainController {
     /**
      * A controller that returns the page of a property including the Collection of photos as updatable input
      *
-     * @param id the target property id
+     * @param id                 the target property id
+     * @param auth               the logged user
+     * @param redirectAttributes informs the user of the result of his attempt
      * @return the target property page
      */
     @GetMapping("/update/{id}")
-    public String updateProperty(@PathVariable Integer id, ModelMap modelMap) {
+    public ModelAndView updateProperty(@PathVariable Integer id, Authentication auth,
+                                       RedirectAttributes redirectAttributes, Locale userLocale) {
+        MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
         Optional<Property> property = propertyService.findPropertyByID(id);
         if (!property.isPresent()) {
-            return "error/404";
+            return new ModelAndView("error/404");
         }
-        modelMap.addAttribute("propertyDTO", new PropertyDTO(property.get()));
-        modelMap.addAttribute("photosCollection", property.get().getPhotoCollection());
-        return "update-property";
+        if (property.get().getOwner().getId() != loggedUser.getId()) {
+            redirectAttributes.addFlashAttribute("messageDanger",
+                    messageSource.getMessage("Property.not.owned", null, userLocale));
+            return new ModelAndView("redirect:/");
+        }
+        return new ModelAndView("update-property", "propertyDTO", new PropertyDTO(property.get()));
     }
 
     /**
@@ -194,21 +201,17 @@ public class MainController {
      *
      * @param propertyDTO        the object to be validated
      * @param bindingResult      validates the object for errors
-     * @param auth               the logged user
      * @param redirectAttributes informs the user of the result of his attempt
      * @return redirects to the home page if successful, otherwise returns the insert property
      * @throws IOException if the parsing of the provided photos of the property fails.
      */
     @PostMapping("/update-property")
     public ModelAndView updateProperty(@Valid @ModelAttribute("propertyDTO") PropertyDTO propertyDTO,
-                                       BindingResult bindingResult, Authentication auth,
-                                       RedirectAttributes redirectAttributes,
-                                       @RequestParam("photoToBeDel") Optional<List<Integer>> photoToBeDel,
+                                       BindingResult bindingResult, RedirectAttributes redirectAttributes,
                                        Locale userLocale) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("update-property");
         }
-        photoToBeDel.ifPresent(photoServiceImpl::removePhotosById);
         Property property = propertyService.insertProperty(propertyService.unWrapUpdatableProperty(propertyDTO));
         photoServiceImpl.uploadPhotos(propertyDTO.getPhotoCollection(), property);
         redirectAttributes.addFlashAttribute("messageSuccess",

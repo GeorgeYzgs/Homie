@@ -1,10 +1,7 @@
 package com.spring.group.dto.property;
 
 import com.spring.group.models.Address;
-import com.spring.group.models.property.Category;
-import com.spring.group.models.property.HeatingFuel;
-import com.spring.group.models.property.HeatingType;
-import com.spring.group.models.property.Property;
+import com.spring.group.models.property.*;
 import com.spring.group.models.rental.Rental;
 import com.spring.group.models.user.User;
 import org.hibernate.validator.constraints.Range;
@@ -14,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The main property data transfer object that unwraps into a property entity
@@ -24,33 +22,26 @@ public class PropertyDTO {
 
     private int propertyID;
     @NotNull(message = "{Not.blank}")
-    @Size(min = 4, max = 25, message = "{Size}")
+    @Size(min = 4, max = 255, message = "{Size}")
     private String description;
-
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 9999, message = "{Range}")
     private int price;
-
     @NotBlank(message = "{Not.blank}")
     private String address_street;
-
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 999, message = "{Range}")
     private int address_number;
-
     @NotBlank(message = "{Not.blank}")
     private String address_city;
-
     @NotBlank(message = "{Not.blank}")
     private String address_state;
-
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 99999, message = "{Range}")
     private int address_zipCode;
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 999, message = "{Range}")
     private int numberOfRooms;
-
     @NotNull(message = "{Not.blank}")
     @Range(min = 0, max = 99999, message = "{Range}")
     private int area;
@@ -63,6 +54,7 @@ public class PropertyDTO {
     private Category category;
     private Collection<MultipartFile> photoCollection;
 
+    private List<Photo> photoViewCollection;
 
     private Collection<Rental> rentalCollection;
 
@@ -86,7 +78,7 @@ public class PropertyDTO {
         this.heatingFuel = property.getHeatingFuel();
         this.heatingType = property.getHeatingType();
         this.numberOfRooms = property.getNumberOfRooms();
-//        this.photoCollection=property.getPhotoCollection();
+        this.photoViewCollection = property.getPhotoCollection();
     }
 
     //TODO to beatify these shit with the reflection BEAN methods
@@ -222,5 +214,13 @@ public class PropertyDTO {
 
     public void setFloor(int floor) {
         this.floor = floor;
+    }
+
+    public List<Photo> getPhotoViewCollection() {
+        return photoViewCollection;
+    }
+
+    public void setPhotoViewCollection(List<Photo> photoViewCollection) {
+        this.photoViewCollection = photoViewCollection;
     }
 }

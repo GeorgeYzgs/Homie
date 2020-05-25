@@ -8,14 +8,23 @@ import com.spring.group.models.user.User;
 import com.spring.group.repos.ConfirmationTokenRepository;
 import com.spring.group.repos.ResetPassTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -33,6 +42,8 @@ public class TokenService {
     private ResetPassTokenRepository resetPassTokenRepository;
     @Autowired
     private UserServiceImpl userServiceImpl;
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
     /**
      * Utilizes java mail sender to send an async, yes java async, email.
@@ -43,6 +54,17 @@ public class TokenService {
     public void sendEmail(SimpleMailMessage email) {
         javaMailSender.send(email);
     }
+
+    /**
+     * Utilizes java mail sender to send an async, yes java async, email.
+     *
+     * @param email the email to be sent.
+     */
+    @Async
+    public void sendEmail(MimeMessage email) {
+        javaMailSender.send(email);
+    }
+
 
     public Optional<ConfirmationToken> checkConfirmationToken(String token) {
         return confirmationTokenRepository.findByConfirmationToken(token);
@@ -58,18 +80,26 @@ public class TokenService {
      *
      * @param user the user the created confirmation token and email will be linked to
      */
-    // TODO Make a thymeleaf template for email
-    public void createConfirmEmail(User user) {
+    public void createConfirmEmail(User user, Locale userLocale) throws MessagingException {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         confirmationTokenRepository.save(confirmationToken);
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setFrom("homieafdemp@gmail.com");
-        mailMessage.setText("To confirm your account, please click here: "
-                + "http://localhost:8080/GroupProject/confirm-account/" + confirmationToken.getConfirmationToken()
-                + "\nThis token expires in " + ConfirmationToken.getExpirationHours() + " hour(s)");
-        sendEmail(mailMessage);
+        MimeMessage emailMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(emailMessage,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        helper.setTo(user.getEmail());
+        helper.setSubject("Complete Registration!");
+        helper.setFrom("homieafdemp@gmail.com");
+        Context ctx = new Context(userLocale);
+        String tokenString =
+                ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+                        + "/confirm-account/" + confirmationToken.getConfirmationToken();
+        ctx.setVariable("userName", user.getUsername());
+        ctx.setVariable("tokenLink", tokenString);
+        String mailBody = templateEngine.process("mail/register-mail", ctx);
+        helper.setText(mailBody, true);
+        helper.addInline("logo.png",
+                new ClassPathResource("static/img/logo-house-green.png"));
+        sendEmail(emailMessage);
     }
 
     /**
@@ -78,18 +108,27 @@ public class TokenService {
      *
      * @param user the user the created reset token and email will be linked to
      */
-    // TODO Make a thymeleaf template for email
-    public void createResetEmail(User user) {
+    public void createResetEmail(User user, Locale userLocale) throws MessagingException {
         ResetPassToken resetPassToken = new ResetPassToken(user);
         resetPassTokenRepository.save(resetPassToken);
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Reset Password!");
-        mailMessage.setFrom("homieafdemp@gmail.com");
-        mailMessage.setText("To reset your password, please click here: "
-                + "http://localhost:8080/GroupProject/reset-password/" + resetPassToken.getResetPassToken()
-                + "\nThis token expires in " + ResetPassToken.getExpirationHours() + " hour(s)");
-        sendEmail(mailMessage);
+        MimeMessage emailMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(emailMessage,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        helper.setTo(user.getEmail());
+        helper.setSubject("Reset Password!");
+        helper.setFrom("homieafdemp@gmail.com");
+        Context ctx = new Context(userLocale);
+        String tokenString = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+                + "/reset-password/" + resetPassToken.getResetPassToken();
+        ctx.setVariable("userName", user.getUsername());
+        ctx.setVariable("tokenLink", tokenString);
+        ctx.setVariable("expirationHours", ResetPassToken.getExpirationHours());
+        String mailBody = templateEngine.process("mail/reset-mail", ctx);
+        helper.setText(mailBody, true);
+        helper.addInline("logo.png",
+                new ClassPathResource("static/img/logo-house-green.png"));
+        sendEmail(emailMessage);
+
     }
 
     /**
@@ -100,7 +139,7 @@ public class TokenService {
      * @param confirmationToken the token to be validated
      * @return "SUCCESS" or an error message as a string
      */
-    public String validateConfirmationToken(String confirmationToken) {
+    public String validateConfirmationToken(String confirmationToken, Locale userLocale) throws MessagingException {
         Optional<ConfirmationToken> token = checkConfirmationToken(confirmationToken);
         if (!token.isPresent()) {
             return "token.invalid";
@@ -108,7 +147,7 @@ public class TokenService {
         ConfirmationToken validToken = token.get();
         User user = userServiceImpl.checkEmail(validToken.getUser().getEmail()).get();
         if (validToken.getExpirationDate().isBefore(Instant.now())) {
-            createConfirmEmail(user);
+            createConfirmEmail(user, userLocale);
             return "token.expired.mail";
         }
         user.setEnabled(true);
@@ -146,7 +185,7 @@ public class TokenService {
      * @param email the email provided
      * @return "SUCCESS" if above criteria are met, otherwise an error message
      */
-    public String forgotPass(String email) {
+    public String forgotPass(String email, Locale userLocale) throws MessagingException {
         Optional<User> user = userServiceImpl.checkEmail(email);
         if (!user.isPresent()) {
             return "token.noAccount";
@@ -154,7 +193,7 @@ public class TokenService {
         if (!user.get().getAuthProvider().equals(AuthProvider.Homie)) {
             return "token.noReset";
         }
-        createResetEmail(user.get());
+        createResetEmail(user.get(), userLocale);
         return "SUCCESS";
     }
 
@@ -173,6 +212,7 @@ public class TokenService {
         resetPassTokenRepository.save(token);
     }
 
+    //TODO payment template.
     public void informPayment(User user) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());

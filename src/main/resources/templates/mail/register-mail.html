@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 
-<html lang="en"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
 >
 <head>
     <meta charset="UTF-8">
     <title>Homie Register</title>
 </head>
 <body>
+
+
+<div th:text="#{mail.dearUser}+${userName}"><p>Dear [[${userName}]],</p></div>
+
+<div th:text="#{mail.greeting}">Prongs, Padfoot and Loony Welcomes you to Homie family, your personal Land
+    Companion.
+</div>
+
+
+<div th:text="#{mail.register.toConfirmMessage}">In order to confirm your registration please click the following link
+</div>
+<div><a th:href="@{${tokenLink}}" th:text="${tokenLink}"/></div>
+<p th:text="#{mail.token.valid('24')}">Token is valid for 48 hours</p>
+<br/>
+
+
+<div>
+    <p th:text="#{mail.BR}">Best Regards,</p>
+    <p th:text="#{mail.theTeam}">The Administration Team</p>
+    <p id="logo"><img height="50" src="cid:logo.png" width="80"/></p>
+    <label for="logo" th:text="#{mail.moto}">Wherever there is Land there is also Homie</label>
+
+</div>
 
 
 </body>
