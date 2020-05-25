@@ -62,7 +62,8 @@
                         <td>
                             <form method="post" th:action="@{/close-contract}">
                                 <input name="id" th:hidden="hidden" th:value="${rental.id}">
-                                <button class="btn btn-outline-danger" th:text="#{Decline}" type="submit">Decline
+                                <button class="btn btn-outline-danger" th:text="#{Close.contract}" type="submit">Close
+                                    contract
                                 </button>
                             </form>
                         </td>
