@@ -62,7 +62,6 @@ public class PropertyDTO {
     public PropertyDTO() {
     }
 
-    //TODO to beatify these shit with the reflection BEAN methods
     public PropertyDTO(Property property) {
         this.propertyID = property.getId();
         this.description = property.getDescription();
@@ -81,7 +80,6 @@ public class PropertyDTO {
         this.photoViewCollection = property.getPhotoCollection();
     }
 
-    //TODO to beatify these shit with the reflection BEAN methods
     public Property unWrapProperty(User owner) {
         Address tempAddress = new Address(address_street, address_number, address_city, address_state, address_zipCode);
         return new Property(description, price, tempAddress, category, numberOfRooms, area, floor, heatingType, heatingFuel, owner);

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import java.util.Locale;
 
 /**
@@ -70,10 +71,10 @@ public class PaymentController {
     //Cannot change the two param names, they are from the paypal json.
     @GetMapping("/pay/success")
     public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId,
-                             RedirectAttributes redirectAttributes, Locale userLocale) throws PayPalRESTException {
+                             RedirectAttributes redirectAttributes, Locale userLocale) throws PayPalRESTException, MessagingException {
         Payment payment = paypalService.executePayment(paymentId, payerId);
         if (payment.getState().equals("approved")) {
-            parsePaypalResponse(payment);
+            parsePaypalResponse(payment, userLocale);
             redirectAttributes.addFlashAttribute("messageSuccess",
                     messageSource.getMessage("Payment.accepted", null, userLocale));
             return "redirect:/my-profile/properties";
@@ -105,12 +106,12 @@ public class PaymentController {
         return "redirect:/my-profile/properties";
     }
 
-    private void parsePaypalResponse(Payment payment) {
+    private void parsePaypalResponse(Payment payment, Locale userLocale) throws MessagingException {
         int rentalID = Integer.parseInt(payment.getTransactions().get(0).getDescription());
         Rental rental = rentalService.getRentalByID(rentalID);
         Double amount = Double.parseDouble(payment.getTransactions().get(0).getAmount().getTotal());
         PaymentLog paymentLog = new PaymentLog(amount, rental);
-        tokenService.informPayment(rental.getTenant());
+        tokenService.informPayment(rental.getTenant(), userLocale);
         paymentLogService.insertPaymentLog(paymentLog);
     }
 }

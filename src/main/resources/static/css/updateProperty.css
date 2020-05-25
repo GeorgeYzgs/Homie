@@ -41,7 +41,6 @@ input[type="checkbox"][id^="ph"] {
     transform-origin: 50% 50%;
     transform: scale(0.9);
     box-shadow: 0 0 5px #333;
-    z-index: -1;
 }
 
 :checked ~ #imgLabel {

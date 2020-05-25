@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Homie Register</title>
+</head>
+<body>
+
+
+<div th:text="#{mail.dearUser}+${userName}"><p>Dear [[${userName}]],</p></div>
+
+<div th:text="#{mail.pay(${#temporals.monthName(payDate)})}"></div>
+
+<div>
+    <p th:text="#{mail.BR}">Best Regards,</p>
+    <p th:text="#{mail.theTeam}">The Administration Team</p>
+    <p id="logo"><img height="50" src="cid:logo.png" width="80"/></p>
+    <label for="logo" th:text="#{mail.moto}">Wherever there is Land there is also Homie</label>
+
+</div>
+
+
+</body>
+</html>

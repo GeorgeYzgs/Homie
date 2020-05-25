@@ -23,7 +23,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      #            ddl-auto: create-drop
+#      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:

@@ -9,7 +9,6 @@ import com.spring.group.repos.ConfirmationTokenRepository;
 import com.spring.group.repos.ResetPassTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -23,7 +22,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -44,16 +42,6 @@ public class TokenService {
     private UserServiceImpl userServiceImpl;
     @Autowired
     private SpringTemplateEngine templateEngine;
-
-    /**
-     * Utilizes java mail sender to send an async, yes java async, email.
-     *
-     * @param email the email to be sent.
-     */
-    @Async
-    public void sendEmail(SimpleMailMessage email) {
-        javaMailSender.send(email);
-    }
 
     /**
      * Utilizes java mail sender to send an async, yes java async, email.
@@ -97,8 +85,7 @@ public class TokenService {
         ctx.setVariable("tokenLink", tokenString);
         String mailBody = templateEngine.process("mail/register-mail", ctx);
         helper.setText(mailBody, true);
-        helper.addInline("logo.png",
-                new ClassPathResource("static/img/logo-house-green.png"));
+        helper.addInline("logo.png", new ClassPathResource("static/img/logo-house-green.png"));
         sendEmail(emailMessage);
     }
 
@@ -125,8 +112,7 @@ public class TokenService {
         ctx.setVariable("expirationHours", ResetPassToken.getExpirationHours());
         String mailBody = templateEngine.process("mail/reset-mail", ctx);
         helper.setText(mailBody, true);
-        helper.addInline("logo.png",
-                new ClassPathResource("static/img/logo-house-green.png"));
+        helper.addInline("logo.png", new ClassPathResource("static/img/logo-house-green.png"));
         sendEmail(emailMessage);
 
     }
@@ -212,13 +198,27 @@ public class TokenService {
         resetPassTokenRepository.save(token);
     }
 
-    //TODO payment template.
-    public void informPayment(User user) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Rent Paid!");
-        mailMessage.setFrom("homieafdemp@gmail.com");
-        mailMessage.setText("You have successfully paid rent for the month of " + Instant.now().atZone(ZoneOffset.UTC).getMonth());
-        sendEmail(mailMessage);
+    /**
+     * Informs the tenant of a rented property via email about his successful payment of the rent of the month,
+     * in the chosen locale
+     *
+     * @param user       the tenant of a property
+     * @param userLocale the chosen locale for our message
+     * @throws MessagingException
+     */
+    public void informPayment(User user, Locale userLocale) throws MessagingException {
+        MimeMessage emailMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(emailMessage,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        helper.setTo(user.getEmail());
+        helper.setSubject("Rent Paid");
+        helper.setFrom("homieafdemp@gmail.com");
+        Context ctx = new Context(userLocale);
+        ctx.setVariable("userName", user.getUsername());
+        ctx.setVariable("payDate", Instant.now());
+        String mailBody = templateEngine.process("mail/payment-mail", ctx);
+        helper.setText(mailBody, true);
+        helper.addInline("logo.png", new ClassPathResource("static/img/logo-house-green.png"));
+        sendEmail(emailMessage);
     }
 }
