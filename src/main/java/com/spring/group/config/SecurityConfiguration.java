@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * An array of all the endpoints the user can only access upon being authenticated
      */
-    private static final String[] LOGGED_USER_URLS = {"/manage-offers", "/submit-offer", "/my-profile", "/async/my-profile/**",
+    private static final String[] LOGGED_USER_URLS = {"/manage-offers", "/submit-offer", "/my-profile/**", "/async/my-profile/**",
             "/async/mod/**", "/change-pass", "/list-new-property", "/pay/**", "/close-contract", "/update", "/update-property"};
 
     /**
@@ -70,7 +70,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/login?logout")
                 .logoutSuccessUrl("/")
                 .and().rememberMe();
 

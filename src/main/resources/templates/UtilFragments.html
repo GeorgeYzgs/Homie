@@ -8,123 +8,49 @@
 </head>
 <body>
 <section th:fragment="property_carousel">
+
     <div class="px-4 text-center my-3">
         <div class="row mx-auto my-auto">
             <div class="carousel slide w-100" data-interval="false" data-pause="hover"
                  data-ride="carousel"
                  id="recipeCarousel">
                 <div class="carousel-inner w-100 pb-4" role="listbox">
-                    <div class="carousel-item active">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=1">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
+                    <th:block th:each="property, i : ${topProperties}">
+                        <a class="carousel-item text-decoration-none" th:classappend="${i.index == 0} ? 'active' : ''"
+                           th:href="@{'/view/'+${property.id}}">
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-12">
+                                <div class="card border-0 bg-light">
+                                    <div class="image-square">
+                                        <img class="card-img-top img-fluid"
+                                             th:src="${property.photoCollection[0].imageUrl}">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1 text-left text-secondary"><span
+                                                th:text="${property.price}">250</span>&euro;</h5>
+                                        <p class="card-text text-truncate mb-0 text-left text-secondary"
+                                           th:text="${property.category}">Ενοικίαση,
+                                            Διαμέρισμα 100τ.μ.</p>
+                                        <p class="card-text text-secondary text-left"
+                                           th:text="${property.address.city + ', ' + property.address.state}">Ζωφράφος,
+                                            Αττική</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=2">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=3">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=4">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=5">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=6">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="col-lg-2 col-md-2 col-sm-3 col-12">
-                            <div class="card border-0 bg-light">
-                                <img class="card-img-top img-fluid"
-                                     src="http://placehold.it/380?text=7">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-1 text-left">250 &euro;</h5>
-                                    <p class="card-text text-truncate mb-0 text-left">Ενοικίαση,
-                                        Διαμέρισμα 100τ.μ.</p>
-                                    <p class="card-text text-secondary text-left">Ζωφράφος, Αττική</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="carousel-control-prev w-auto" data-slide="prev" href="#recipeCarousel"
-                   role="button">
+                        </a>
+                    </th:block>
+                    <a class="carousel-control-prev w-auto" data-slide="prev" href="#recipeCarousel"
+                       role="button">
                             <span aria-hidden="true"
                                   class="carousel-control-prev-icon bg-dark border border-dark rounded-circle"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next w-auto" data-slide="next" href="#recipeCarousel"
-                   role="button">
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next w-auto" data-slide="next" href="#recipeCarousel"
+                       role="button">
                             <span aria-hidden="true"
                                   class="carousel-control-next-icon bg-dark border border-dark rounded-circle"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

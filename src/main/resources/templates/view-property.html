@@ -2,10 +2,9 @@
 <html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <th:block th:include="fragments :: headerfiles">
-    </th:block>
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
     <title id="pageTitle" th:text="#{view.Title}">View Property</title>
+    <link rel="stylesheet" th:href="@{/css/search-style.css}">
 </head>
 
 <!--//TODO-Test-->
@@ -24,105 +23,176 @@
 <div class="alert alert-danger" th:if="${messageDanger}">
     <p class="text text-center" th:text="${messageDanger}"></p>
 </div>
+<main class="bg-light py-4 row justify-content-center" id="mainParent">
+    <div class="container pt-4">
+        <h3 class="text-center" th:text="#{view.Title}">View Property</h3>
 
-<h2 th:text="#{view.Title}">View Property</h2>
+        <div class="row container pt-4">
 
-<div class="row container pt-4">
-
-    <div class="btn btn-light ">
-        <div class="row border-top py-3">
-            <div class="col-sm-4">
-
-                <img alt="Property Entry photo" class="rounded object-fit_cover img-responsive"
-                     height="250"
-                     th:id="imageView" th:src="@{${!#bools.isTrue(property.getPhotoCollection().isEmpty())  ?
-                     property.getPhotoCollectionURL().toArray()[0]
-                     : 'http://placehold.it/250?text=No%20Image'}} "/>
-            </div>
-            <div class="col-sm-7 text-left">
-                <h5 class="font-weight-bold" th:text="${property.description}">
-                    Διαμέρισμα 90 τ.μ. προς ενοικίαση
+            <div class="col-sm-12">
+                <h5 class="font-weight-bold text-center"><span
+                        th:text="#{'category.'+${property.category.name()}}"></span>&nbsp;
+                    <span th:text="${property.area + 'm², ' + property.address.city + ' '+ property.address.state}"></span>
                 </h5>
-                <p class="mb-0" th:text="#{'category.'+${property.category.name()}}">
-                    Κατηγορία
-                </p>
+                <div class="row py-3">
+                    <div class="col-sm-4">
+                        <img alt="Property Entry photo" class="rounded object-fit_cover img-responsive"
+                             height="250"
+                             th:id="imageView"
+                             th:src="@{${!property.getPhotoCollection().isEmpty() ? property.getPhotoCollectionURL().toArray()[0]: 'http://placehold.it/250?text=No%20Image'}} "/>
+                    </div>
+                    <div class="col-sm-4 text-left">
 
-                <p class="mb-0" th:text="${property.address.city}">
-                    Αθήνα (Κέντρο)
-                </p>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{City}"></p>
+                            <p class="mb-0" th:text="${property.address.city}">Αθήνα (Κέντρο)</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Price}"></p>
+                            <p class="mb-0"><span
+                                    th:text="${(property.price)}+'&euro;&nbsp;/&nbsp;'+#{Per.month}">150</span></p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Price.per.sqm}"></p>
+                            <p class="mb-0"><span
+                                    th:text="${((property.area!=0)?property.price/property.area:0)}">2</span>&euro;</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Address}"></p>
+                            <p class="mb-0">
+                                <span th:text="${property.address.street}">Παπατρέχα</span>
+                                <span th:text="${property.address.number}">199</span>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Area}"></p>
+                            <p class="mb-0" th:text="${property.numberOfRooms}+'&nbsp;'+#{roomMsg}">155</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Area}"></p>
+                            <p class="mb-0"><span th:text="${property.area}">155</span>m²</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{State}"></p>
+                            <p class="mb-0" th:text="${property.address.state}">Νέα Ιωνία</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Postal.code}"></p>
+                            <p class="mb-0" th:text="${property.address.zipCode}">14235</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Category}"></p>
+                            <p class="mb-0" th:text="#{'category.'+${property.category.name()}}">Διαμέρισμα</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Heating}"></p>
+                            <p class="mb-0" th:text="#{'heatingType.'+${property.heatingType.name()}}">Πετρέλαιo</p>
+                        </div>
+                        <div class="row">
+                            <p class="text-secondary col-8" th:text="#{Fuel}"></p>
+                            <p class="mb-0" th:text="#{'heatingFuel.'+${property.heatingFuel.name()}}">Αυτόνομη</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" sec:authorize="hasAuthority('ADMIN') or hasAuthority('MODERATOR')">
+                        <div class="border border-danger p-4">
+                            <div sec:authorize="hasAuthority('ADMIN')">
+                                <h4 class="text-center" th:text="#{Admin.panel}"></h4>
+                            </div>
+                            <div sec:authorize="hasAuthority('MODERATOR')">
+                                <h4 class="text-center" th:text="#{Moderator.panel}"></h4>
+                            </div>
 
-                <p class="mb-0">
-                    <span th:text="${property.address.street}">Παπατρέχα</span> &nbsp;
-                    <span th:text="${property.address.number}">199</span>
-                </p>
-                <p class="mb-0" th:text="${property.address.state}">
-                    Νέα Ιωνία
-                </p>
-                <p class="mb-0" th:text="${property.address.zipCode}">
-                    14235
-                </p>
-                <p class="pt-0" th:text="#{view.since}+${#dates.format(property.updatedDate,'dd/MMM/yyyy')}">
-                    03-05-2020
-                </p>
-                <p class="pt-1">
-                    <span th:text="#{'heatingFuel.'+${property.heatingFuel.name()}}">Αυτόνομη</span> &nbsp;
-                    <span th:text="#{'heatingType.'+${property.heatingType.name()}}">Πετρέλαιο</span>
-                </p>
-                <p class="pt-1">
-                        <span class="border rounded bg-green text-white p-1 font-weight-bold"
-                              th:text="${property.price}+'&nbsp;&euro;/'+#{monthMsg}">
-                        200&euro;/μήνα
-                        </span>
-                    <span class="pl-1" th:utext="${property.area}+'&nbsp;'+#{squareMeter}">90 τμ</span>
-                    <span class="pl-1"
-                          th:utext="${((property.area!=0)?property.price/property.area:0)}+'&nbsp;&euro;/'+#{squareMeter}">2&euro;/τμ</span>
-                    <span class="pl-1" th:text="${property.numberOfRooms}+'&nbsp;'+#{roomMsg}">3 υπνοδωμάτια</span>
-                </p>
+                            <div sec:authorize-url="/mod/**">
+                                <div class="row pt-4">
+                                    <div class="col-6">
+                                        <p class="col-6 text-secondary mb-0" th:text="#{Status}"></p>
+                                        <span class="col-6"
+                                              th:text="${property.nonLocked} ? #{Active} : #{Banned}"></span>
+                                    </div>
+                                    <form method="post" th:action="@{/mod/lock-property}">
+                                        <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                                        <button class="btn btn-danger"
+                                                th:text="${property.nonLocked} ? #{Ban}: #{Unban}"
+                                                type="submit">Lock/UnLock
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div sec:authorize-url="/admin/**">
+                                <div class="row pt-4">
+                                    <div class="col-6">
+                                        <p class="col-10" th:text="#{Set.search.weight.for.property}"></p>
+                                    </div>
+                                    <form class="col-4 align-self-center" method="post"
+                                          th:action="@{/admin/change-property-value}">
+                                        <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                                        <div class="d-flex justify-content-around πβ-4">
+                                            <select name="value">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                            </select>
+                                            <button class="btn btn-primary" th:text="#{Set}" type="submit">Set
+                                                Search
+                                                Value
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-10">
 
-            <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id != property.owner.id}">
-                <form method="post" th:action="@{/submit-offer}">
-                    <input min="0" name="price" type="number"/>
-                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
-                    <button class="btn btn-primary" type="submit">Submit Offer</button>
-                </form>
+                <div class="row">
+                    <p class="text-secondary" th:text="#{Description}">Περιγραφή</p>
+                </div>
+                <div class="row">
+                    <p class="" th:text="${property.description}">Περιγραφή...</p>
+                </div>
+                <div class="row d-flex justify-content-end">
+                    <p class="pt-0 text-secondary"
+                       th:text="#{view.since}+${#dates.format(property.updatedDate,'dd/MMM/yyyy')}">
+                        03-05-2020
+                    </p>
+                </div>
             </div>
-            <div sec:authorize-url="/mod/**">
-                <form method="post" th:action="@{/mod/lock-property}">
-                    Active:
-                    <div th:text="${property.nonLocked}"></div>
-                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
-                    <button class="btn btn-danger" type="submit">Lock/UnLock</button>
-                </form>
-            </div>
-            <div sec:authorize-url="/admin/**">
-                <br>
-                <form method="post" th:action="@{/admin/change-property-value}">
-                    Set Search Value of this Property:
-                    <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
-                    <select name="value">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                    <button class="btn btn-primary" type="submit">Set Search Value</button>
-                </form>
+        </div>
+
+        <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.id != property.owner.id}">
+            <div class="border p-4">
+                <h5 class="text-center" th:text="#{Submit.offer}"></h5>
+                <div class="d-flex justify-content-center">
+                    <form method="post" th:action="@{/submit-offer}">
+                        <div class="pt-4 input-group">
+                            <input class="form-control" min="0" name="price" type="number">
+                            <input name="propertyID" th:hidden="hidden" th:value="${property.id}">
+                        </div>
+                        <div class="text-center pt-4">
+                            <button class="btn btn-green text-white text-center" id="submitOffer"
+                                    th:text="#{Submit}" type="submit"></button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    </div>
+    </div>
+</main>
+</div>
 </div>
 
-<a th:replace="UtilFragments :: chat_button"></a>
-<div th:replace="UtilFragments :: chat_popup">
-</div>
 
-
-<div th:include="fragments :: scripts" th:remove="tag"></div>
 <footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 <script th:src="@{/js/carousel.js}"></script>
-<script th:src="@{/js/chat.js}"></script>
 
 <script th:if="${!#bools.isTrue(property.getPhotoCollection().isEmpty())}" th:inline="javascript">
     $(document).ready(function () {

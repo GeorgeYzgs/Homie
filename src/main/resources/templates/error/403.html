@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Forbidden</title>
+    <div th:include="fragments :: headerfiles" th:remove="tag"></div>
+    <title th:text="#{Forbidden.page.title}">Forbidden</title>
 </head>
-<body>
-You are not supposed to be here!
-<br>
-<a th:href="@{/}">Back to Home Page</a>
+<body class="bg-light">
+<nav class="pt-4 px-3 navigation">
+    <!-- Logo Band    -->
+    <nav class="" th:include="fragments :: logo_band"></nav>
+</nav>
+<main class="bg-light py-2 px-5 conainer" id="mainParent">
+    <div class="row">
+        <div class="col-sm-6 text-center offset-1 align-self-center  py-2">
+            <h1 class="display-1 text-center text-secondary ">403</h1>
+            <h2 th:text="#{Whoops}">Whoops</h2>
+            <h2 th:text="#{Should.not.be.here}">You shouldn't be here.</h2>
+            <p class="pt-4 text-secondary" th:text="#{Lets.start.over}">Lets start over.</p>
+            <a class="btn btn-green text-white" th:href="@{/}" th:text="#{Home.page.title}">Back home</a>
+        </div>
+        <img alt="Man searching graphic" class="col-sm-4 py-2" th:src="@{/img/graphics/403-taking-bath.svg}">
+    </div>
+</main>
+<footer th:replace="fragments :: body_footer"></footer>
+<div th:include="fragments :: scripts" th:remove="tag"></div>
 </body>
 </html>

@@ -64,6 +64,8 @@ public interface PropertyServiceInterface {
                                                               String sortType,
                                                               Locale userLocale);
 
+    List<Property> getPropertiesWithMoreViews();
+
 
     /**
      * Queries the database to return an optional property by searching with ID

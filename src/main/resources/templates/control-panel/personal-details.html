@@ -14,18 +14,6 @@
                     <p class="text-secondary col-4" th:text="#{Username}"></p>
                     <p class="col-6" th:text="${userDetails.username}"></p>
                 </div>
-                <div class="row form-group">
-                    <p class="text-secondary col-4" th:text="#{First.name}"></p>
-                    <p class="col-6" th:text="${userDetails.firstName}"></p>
-                </div>
-                <div class="row form-group">
-                    <p class="text-secondary col-4" th:text="#{Last.name}"></p>
-                    <p class="col-6" th:text="${userDetails.lastName}"></p>
-                </div>
-                <!--                <div class="row">-->
-                <!--                    <p class="text-secondary col-4" th:text="#{Iban}"></p>-->
-                <!--                    <input class="col-6 form-control" th:value="${userDetails.Iban}"></p>-->
-                <!--                </div>-->
             </div>
         </th:block>
         <th:block th:if="${#authentication.principal.id != user.id}">
@@ -37,7 +25,7 @@
                     <h4 class="text-center" th:text="#{Moderator.panel}"></h4>
                 </div>
                 <div sec:authorize-url="/mod/**">
-                    <div class="row pt-4">
+                    <div class="row py-2">
                         <div class="col-6">
                             <p class="col-6 text-secondary mb-0" th:text="#{Status}"></p>
                             <span class="col-6" th:text="${user.nonLocked} ? #{Active} : #{Banned}"></span>
@@ -51,7 +39,7 @@
                     </div>
                 </div>
                 <div sec:authorize-url="/admin/**">
-                    <div class="row pt-4">
+                    <div class="row py-2">
                         <div class="col-6">
                             <p class="col-6 text-secondary mb-0" th:text="#{Role}"></p>
                             <span class="col-6" th:text="#{${user.userRole}}"></span>
@@ -101,17 +89,6 @@
                 <p class="text-secondary col-4" th:text="#{Username}"></p>
                 <p class="col-6" th:text="${userDetails.username}"></p>
             </div>
-            <div class="row">
-                <p class="text-secondary col-4" th:text="#{First.name}"></p>
-                <p class="col-6" th:text="${userDetails.firstName}"></p>
-            </div>
-            <div class="row">
-                <p class="text-secondary col-4" th:text="#{Last.name}"></p>
-                <p class="col-6" th:text="${userDetails.lastName}"></p>
-            </div>
-            <div class="row">
-                <p class="text-secondary col-4" th:text="#{Iban}"></p>
-                <p class="col-6" th:text="${userDetails.Iban}"></p>
             </div>
         </th:block>
     </div>

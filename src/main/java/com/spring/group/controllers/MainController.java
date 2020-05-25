@@ -47,6 +47,16 @@ public class MainController {
     private MessageSource messageSource;
 
     /**
+     * @return the main page.
+     */
+    @GetMapping("/")
+    public String index(ModelMap modelMap) {
+        List<Property> properties = propertyService.getPropertiesWithMoreViews();
+        modelMap.addAttribute("topProperties", properties);
+        return "index";
+    }
+
+    /**
      * A controller that allows users to list a new property
      *
      * @return the insert property page

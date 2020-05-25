@@ -48,14 +48,6 @@ public class UserController {
     }
 
     /**
-     * @return the main page.
-     */
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-    /**
      * A controller that returns the registration page, or the main page if the user is already logged in
      *
      * @param auth the logged user
