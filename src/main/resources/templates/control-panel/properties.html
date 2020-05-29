@@ -57,7 +57,7 @@
                     <td th:text="#{'category.'+${rental.residence.category}}"></td>
                     <td th:text="${rental.agreedPrice}"></td>
                     <td>
-                        <a th:href="@{'/view/'+${rental.id}}"
+                        <a th:href="@{'/view/'+${rental.residence.id}}"
                            th:text="${rental.residence.address.city} +', '+ ${rental.residence.address.street}+' '+ ${rental.residence.address.number}">
 
                         </a>
