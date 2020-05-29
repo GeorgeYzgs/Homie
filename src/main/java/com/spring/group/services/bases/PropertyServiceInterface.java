@@ -53,6 +53,17 @@ public interface PropertyServiceInterface {
      */
     String submitOffer(Property property, int userID);
 
+    /**
+     * Queries the database to get the properties that agree with search criteria and returns them
+     *
+     * @param searchCriteria all search criteria submitted bu the user
+     * @param specifications any extra and already constructed specifications to add to the newly created ones
+     * @param pageNumber     the current page number
+     * @param pageLimit      the items per page limit
+     * @param sortType       the sorting type
+     * @param userLocale     the user locale
+     * @return the collection of the properties found as a pojo to be serialized as a json.
+     */
     PropertyCollectionResponse getAllPropertiesByUserCriteria(List<SearchCriteria> searchCriteria,
                                                               List<Specification> specifications,
                                                               int pageNumber,
@@ -60,7 +71,12 @@ public interface PropertyServiceInterface {
                                                               String sortType,
                                                               Locale userLocale);
 
-    List<Property> getPropertiesWithMoreViews();
+    /**
+     * Queries the database to get the properties with most views
+     *
+     * @return the List of the properties found
+     */
+    List<Property> getPropertiesWithMostViews();
 
 
     /**
@@ -73,8 +89,20 @@ public interface PropertyServiceInterface {
      */
     Optional<Property> findPropertyByID(Integer propertyID);
 
+    /**
+     * Queries the database to get the properties by owner
+     *
+     * @param ownerUser the owner of the properties
+     * @return the List of the properties found
+     */
     List<Property> getPropertiesByOwnerUser(User ownerUser);
 
+    /**
+     * Queries the database to get the properties by tenant
+     *
+     * @param tenantUser the tenant of the properties
+     * @return the List of the properties found
+     */
     List<Property> getPropertiesByTenantUser(User tenantUser);
 
     Property unWrapUpdatableProperty(PropertyDTO propertyDTO);

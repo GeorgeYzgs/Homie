@@ -5,11 +5,19 @@ import org.springframework.security.config.annotation.web.messaging.MessageSecur
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
+/**
+ * This class is used for setting up websocket security and manage access to endpoints for authenticated users.
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketSecurityConfig
         extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
+    /**
+     * Method to manage access to inbound messages and connection attempts
+     *
+     * @param messages the MessageSecurityMetadataSourceRegistry
+     */
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages
 //                .nullDestMatcher().authenticated()

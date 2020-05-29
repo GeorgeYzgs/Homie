@@ -7,10 +7,19 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+/**
+ * Websocket main configuration of endpoints and destination prefixes. Stomp protocol is used for messages.
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    /**
+     * Method to register stomp protocol endpoints. We also add the interceptor we set up for localization purposes.
+     * We also add SockS support for http or pooling fallback on older browsers without websocket functionality.
+     *
+     * @param registry the StompEndpointRegistry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
@@ -19,6 +28,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     }
 
+    /**
+     * Method to register simple broker prefixes, application destination prefixes and user specific destination prefixes
+     *
+     * @param registry the MessageBrokerRegistry
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");

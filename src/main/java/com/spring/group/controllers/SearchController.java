@@ -18,12 +18,26 @@ import java.util.Locale;
 
 import static com.spring.group.dto.property.specifications.PropertySpecificationsCustom.getPropertiesByCity;
 
+/**
+ * Controller class that handles the search functionality
+ */
 @Controller
 public class SearchController {
 
     @Autowired
     PropertyServiceInterface propertyService;
 
+    /**
+     * Controller responsible of getting the parameters of the url request and returns the results. It handles the ajax
+     * calls of the search page
+     *
+     * @param searchParamsPojo grouped parameters to a pojo for easier handling
+     * @param city             the city the user want to find properties
+     * @param pageNumber       the number of page the user is currently in the result page
+     * @param sortType         the type of sorting the results
+     * @param userLocale       the locale of the user
+     * @return the properties found for the specified criteria
+     */
     @GetMapping("/async/search")
     @ResponseBody
     public PropertyCollectionResponse getAsyncSearchResults(SearchParamsPojo searchParamsPojo,
@@ -42,6 +56,16 @@ public class SearchController {
         return propertiesRes;
     }
 
+    /**
+     * Controller responsible of getting the parameters of the url request and returns the results.
+     *
+     * @param searchParamsPojo grouped parameters to a pojo for easier handling
+     * @param city             the city the user want to find properties
+     * @param pageNumber       the number of page the user is currently in the result page
+     * @param sortType         the type of sorting the results
+     * @param userLocale       the locale of the user
+     * @return the search-results view with all the properties found for the specified criteria
+     */
     @GetMapping("/search")
     public String getSearchResults(SearchParamsPojo searchParamsPojo,
                                    @RequestParam(name = "city", defaultValue = "") String city,

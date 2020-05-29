@@ -26,6 +26,10 @@ import java.util.Optional;
 /**
  * @author George.Giazitzis
  */
+
+/**
+ * Controller class that handles all regular calls made for the moderator's control panel pages
+ */
 @Controller
 @RequestMapping("/mod")
 public class ModeratorController {
@@ -68,6 +72,12 @@ public class ModeratorController {
         return "error/404";
     }
 
+    /**
+     * A controller to access a user's profile
+     *
+     * @param id the user's id provided as a path variable
+     * @return the mod-user-page view with the user's details
+     */
     @GetMapping("/user/{id}/personal-details")
     public String displayUserDetails(@PathVariable Integer id, ModelMap modelMap) {
         modelMap.addAttribute("userId", id);
@@ -75,6 +85,12 @@ public class ModeratorController {
         return "mod-user-page";
     }
 
+    /**
+     * A controller to access a user's properties and rentals
+     *
+     * @param id the user's id provided as a path variable
+     * @return the mod-user-page view with the user's properties and rentals
+     */
     @GetMapping("/user/{id}/properties")
     public String displayProperties(@PathVariable Integer id, ModelMap modelMap) {
         List<Property> propertiesOwned = propertyService.getPropertiesByOwnerUser(userService.getUserByID(id));
@@ -85,6 +101,12 @@ public class ModeratorController {
         return "mod-user-page";
     }
 
+    /**
+     * A controller to access a user's offers sent and received
+     *
+     * @param id the user's id provided as a path variable
+     * @return the mod-user-page view with the user's offers sent and received
+     */
     @GetMapping("/user/{id}/offers")
     public String displayOffers(@PathVariable Integer id, ModelMap modelMap) {
         List<Rental> offersSent = rentalService.getRentalsByTenant(userService.getUserByID(id));

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ * Controller class that handles all regular calls made for the user's control panel pages
+ */
 @Controller
 @RequestMapping("/my-profile")
 public class ControlPanelController {
@@ -28,6 +31,13 @@ public class ControlPanelController {
     @Autowired
     private RentalServiceInterface rentalService;
 
+    /**
+     * Controller to display the personal details tab in the the user's control panel
+     *
+     * @param auth     Authentication object of user
+     * @param modelMap the user details added sent to the view as attributes
+     * @return the user page with the current user details
+     */
     @GetMapping("/personal-details")
     public String displayPersonalDetails(Authentication auth, ModelMap modelMap) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
@@ -35,6 +45,13 @@ public class ControlPanelController {
         return "user-page";
     }
 
+    /**
+     * Controller to display the properties and rental of a user
+     *
+     * @param auth     Authentication object of the user
+     * @param modelMap the current user, the properties, the rentals sent to the view as attributes
+     * @return the user page with the properties page
+     */
     @GetMapping("/properties")
     public String displayProperties(Authentication auth, ModelMap modelMap) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();
@@ -48,6 +65,13 @@ public class ControlPanelController {
         return "user-page";
     }
 
+    /**
+     * Controller to display the offers sent and received of a user
+     *
+     * @param auth     Authentication object of the user
+     * @param modelMap the current user, the offers sent, the offers received to the view as attributes
+     * @return the user page with the offers page
+     */
     @GetMapping("/offers")
     public String displayOffers(Authentication auth, ModelMap modelMap) {
         MyUserDetails loggedUser = (MyUserDetails) auth.getPrincipal();

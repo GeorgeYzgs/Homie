@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-
+/**
+ * Controller class that handles all ajax calls made for the moderator's control panel pages
+ */
 @Controller
 @RequestMapping("/async/mod")
 public class ModeratorAsyncControlPanel {
@@ -31,7 +33,7 @@ public class ModeratorAsyncControlPanel {
      * A controller to access a user's profile
      *
      * @param id the user's id provided as a path variable
-     * @return the user page of that user
+     * @return the personal details fragment view with the user's details
      */
     @GetMapping("/user/{id}/personal-details")
     public String displayUser(@PathVariable Integer id, ModelMap modelMap) {
@@ -40,6 +42,12 @@ public class ModeratorAsyncControlPanel {
         return "control-panel/personal-details";
     }
 
+    /**
+     * A controller to access a user's properties and rentals
+     *
+     * @param id the user's id provided as a path variable
+     * @return the properties fragment view with the user's properties and rentals
+     */
     @GetMapping("/user/{id}/properties")
     public String displayProperties(@PathVariable Integer id, ModelMap modelMap) {
         List<Property> propertiesOwned = propertyService.getPropertiesByOwnerUser(userService.getUserByID(id));
@@ -50,6 +58,12 @@ public class ModeratorAsyncControlPanel {
         return "control-panel/properties";
     }
 
+    /**
+     * A controller to access a user's offers sent and received
+     *
+     * @param id the user's id provided as a path variable
+     * @return the offers fragment view with the user's offers sent and received
+     */
     @GetMapping("/user/{id}/offers")
     public String displayOffers(@PathVariable Integer id, ModelMap modelMap) {
         List<Rental> offersSent = rentalService.getRentalsByTenant(userService.getUserByID(id));

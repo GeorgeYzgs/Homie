@@ -1,10 +1,8 @@
 package com.spring.group.controllers;
 
-import com.spring.group.pojo.websockets.chat.ConnectedUsersRegistry;
 import com.spring.group.pojo.websockets.chat.Message;
 import com.spring.group.pojo.websockets.chat.OutputMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -14,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,18 +21,22 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    //    Getting users subscribed
+    /**
+     * Subscribed users registry
+     */
     @Autowired
     private SimpUserRegistry userRegistry;
 
-    @Autowired
-    private ConnectedUsersRegistry connectedUsersRegistry;
 
+    /**
+     * Controller that reformats incoming messages and sends them to the respective recipient
+     *
+     * @param msg       the incoming message payload
+     * @param sessionId the sessionId of the user that send the message
+     */
     @MessageMapping("/chat")
     public void sendSpecific(
             @Payload Message msg,
-            MessageHeaders messageHeaders,
-            Principal principal,
             @Header("simpSessionId") String sessionId
     ) {
         OutputMessage outMsg = new OutputMessage();

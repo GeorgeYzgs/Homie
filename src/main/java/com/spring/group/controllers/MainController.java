@@ -51,7 +51,7 @@ public class MainController {
      */
     @GetMapping("/")
     public String index(ModelMap modelMap) {
-        List<Property> properties = propertyService.getPropertiesWithMoreViews();
+        List<Property> properties = propertyService.getPropertiesWithMostViews();
         modelMap.addAttribute("topProperties", properties);
         return "index";
     }

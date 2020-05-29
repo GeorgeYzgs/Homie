@@ -18,6 +18,12 @@ public class AutocompleteController {
     @Autowired
     private CityServiceInterface cityService;
 
+    /**
+     * Controller that returns autocomplete recommendations of cities based on user's input
+     *
+     * @param query the user's input
+     * @return List<AutocompleteResponse> that contains all suggestions based on user's input
+     */
     @GetMapping("/city/{query}")
     public List<AutocompleteResponse> getCityAutocomplete(@PathVariable String query) {
         ArrayList<AutocompleteResponse> autocompleteAL = new ArrayList<>();

@@ -9,5 +9,12 @@ import java.util.List;
 @Repository
 public interface CityRepository extends JpaRepository<City, Integer> {
 
+
+    /**
+     * Fetches the top 10 cities that contain a substring in their name
+     *
+     * @param query the substring to be checked
+     * @return the List<City> of the Cities
+     */
     List<City> findTop10CitiesByCityNameContainingIgnoreCase(String query);
 }

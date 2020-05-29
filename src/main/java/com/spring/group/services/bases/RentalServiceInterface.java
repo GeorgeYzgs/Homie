@@ -36,10 +36,28 @@ public interface RentalServiceInterface {
      */
     String manageOffers(Rental rental, boolean isAccepted, int userID);
 
+    /**
+     * Queries the database to get the rentals by tenant that are ongoing
+     *
+     * @param tenant the tenant of the rentals
+     * @return the List of the rentals found
+     */
     List<Rental> getRentalsByTenantStartedAndNotEnded(User tenant);
 
+    /**
+     * Queries the database to get all rentals by tenant
+     *
+     * @param tenant the tenant of the rentals
+     * @return the List of the rentals found
+     */
     List<Rental> getRentalsByTenant(User tenant);
 
+    /**
+     * Queries the database to get the rentals by the owner
+     *
+     * @param owner the owner of the rentals
+     * @return the List of the rentals found
+     */
     List<Rental> getRentalsByOwner(User owner);
 
     boolean hasPaidRent(Rental rental);

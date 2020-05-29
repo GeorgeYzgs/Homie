@@ -28,8 +28,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-// This class intercepts the stomp subscribe messages and informs other users which user connected and the same user who
-// is already online.
+/**
+ * Class to intercept the stomp messages.
+ * Here we intercept the subscribe messages and infrorm others when a MODERATOR has connected. Next they can start
+ * chatting
+ */
 @Component
 @EnableWebSocketMessageBroker
 @Order(Ordered.HIGHEST_PRECEDENCE + 100)
@@ -44,12 +47,23 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
     @Autowired
     private MessageSource messageSource;
 
-
+    /**
+     * Add interceptor to the registry to manipulate incoming messages or inform other users when someone gets online
+     *
+     * @param registration the ChannelRegistration
+     */
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
 
-
+            /**
+             * Overriding this method lets us detect when a moderator sends a Subscribe message we inform
+             * others already subscribed that the moderator is online. Here we have two channels that the user subscribes
+             * one for online status of other users and one for messages.
+             * @param message the message intercepted
+             * @param channel the MessageChannel functional interface
+             * @return
+             */
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor =
@@ -81,6 +95,12 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 return message;
             }
 
+            /**
+             * Check if the sender of the message is a moderator
+             *
+             * @param accessor the StompHeaderAccessor of the messsage sent
+             * @return boolean whether the sender is a moderator or not
+             */
             private boolean isModerator(StompHeaderAccessor accessor) {
                 if (accessor.getHeader("simpUser") != null
                         && accessor.getHeader("simpUser") instanceof AbstractAuthenticationToken) {
@@ -91,6 +111,13 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 return false;
             }
 
+            /**
+             * Method to inform others connected to the websocket that a moderator has CONNECTED.
+             *
+             * @param accessor   the StompHeaderAccessor of the Moderator, who sends the Subscribe message
+             * @param userLocale the user Locale used for choosing the language (the moderator's one is used for all
+             *                   the users)
+             */
             private void sendMessageModeratorConnected(StompHeaderAccessor accessor, Locale userLocale) {
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
@@ -102,6 +129,13 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
             }
 
+            /**
+             * Method to inform others connected to the websocket that a moderator has DISCONNECTED.
+             *
+             * @param accessor   the StompHeaderAccessor of the Moderator who is disconnecting
+             * @param userLocale the user Locale used for choosing the language (the moderator's one is used for all
+             *                   the users)
+             */
             private void sendMessageModeratorDisconnected(StompHeaderAccessor accessor, Locale userLocale) {
                 AbstractAuthenticationToken userToken = (AbstractAuthenticationToken) accessor.getHeader("simpUser");
                 OutputMessage outputMessage = new OutputMessage();
@@ -113,6 +147,12 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 simpMessagingTemplate.convertAndSend("/user/queue/online", outputMessage);
             }
 
+            /**
+             * Method to send to the user currently subscribing their identification - username(if logged-in) and
+             * sessionId
+             *
+             * @param accessor the StompHeaderAccessor of the user who is subscribing
+             */
             private void sendMessageUserIdentifier(StompHeaderAccessor accessor) {
                 String sessionId = accessor.getSessionId();
                 // SessionId has to go to the HEADERS as well
@@ -129,6 +169,14 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
 
             }
 
+            /**
+             * Method to inform users connected to the websocket endpoint if the chat is available. If there are no
+             * moderators connected then it sends a messages that the chat is unavailable. If there is at least one then
+             * then it sends a messages that the chat is available.
+             *
+             * @param accessor   the StompHeaderAccessor of the user who is subscribing
+             * @param userLocale the Locale of the user subscribing in order to choose the language of sending messages
+             */
             private void sendMessageChatConnectionStatus(StompHeaderAccessor accessor, Locale userLocale) {
                 String sessionId = accessor.getSessionId();
                 SimpMessageHeaderAccessor headerAccessor = getMessageHeaders(sessionId);
@@ -143,6 +191,13 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                         headerAccessor.getMessageHeaders());
             }
 
+            /**
+             * Method that constructs the message when the chat in available
+             *
+             * @param accessor   the StompHeaderAccessor of the user who is subscribing
+             * @param userLocale the Locale of the user subscribing in order to choose the language of sending message
+             * @return the constructed OutputMessage message to be sent
+             */
             private OutputMessage getMessageChatConnected(StompHeaderAccessor accessor, Locale userLocale) {
                 OutputMessage chatStatusMsg = new OutputMessage();
                 ConnectedUser randomMod = connectedModeratorsRegistry.getRandomUser();
@@ -155,6 +210,13 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 return chatStatusMsg;
             }
 
+            /**
+             * Method that constructs the message when the chat in unavailable
+             *
+             * @param accessor   the StompHeaderAccessor of the user who is subscribing
+             * @param userLocale the Locale of the user subscribing in order to choose the language of sending message
+             * @return the constructed OutputMessage message to be sent
+             */
             private OutputMessage getMessageChatDisconnected(StompHeaderAccessor accessor, Locale userLocale) {
                 OutputMessage chatStatusMsg = new OutputMessage();
                 chatStatusMsg
@@ -165,6 +227,13 @@ public class UserRegistryInterceptor implements ChannelInterceptor, WebSocketMes
                 return chatStatusMsg;
             }
 
+            /**
+             * Create message Header with specific sessionId as a target. Needed for the websocket underline mechanism
+             * to send the message to the intended recipient
+             *
+             * @param sessionId of the recipient of the message
+             * @return SimpMessageHeaderAccessor object of the headers needed to send the message
+             */
             private SimpMessageHeaderAccessor getMessageHeaders(String sessionId) {
                 SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
                         .create(SimpMessageType.MESSAGE);

@@ -157,7 +157,7 @@ public class PropertyServiceImpl implements PropertyServiceInterface {
     }
 
     @Override
-    public List<Property> getPropertiesWithMoreViews() {
+    public List<Property> getPropertiesWithMostViews() {
         return propertyRepository.findTop10ByPhotoCollectionNotNullOrderByViews();
     }
 

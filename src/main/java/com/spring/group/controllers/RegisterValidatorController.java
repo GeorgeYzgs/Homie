@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class user for registration validation ajax calls
+ */
 @RestController
 @RequestMapping("/validate")
 public class RegisterValidatorController {
@@ -30,8 +33,16 @@ public class RegisterValidatorController {
     @Autowired
     private MessageSource messageSource;
 
-    //    Method used to merge two lists into one. It is used in case the Collectors.toMap function encounters multiple
-    //    occurrences of the same key. It adds all values to the key that they correspond.
+
+    /**
+     * Method used to merge two lists into one. It is used in case the Collectors.toMap function encounters multiple
+     * occurrences of the same key. It adds all values to the key that they correspond.
+     *
+     * @param existingResults List<String> with existing results to be merged
+     * @param newResults      List<String> of new results to be merged
+     * @return the merged results
+     */
+    //
     private static List<String> mergeEntriesWithDuplicatedKeys(List<String> existingResults, List<String> newResults) {
         List<String> mergedResults = new ArrayList<>();
         mergedResults.addAll(existingResults);
@@ -39,6 +50,15 @@ public class RegisterValidatorController {
         return mergedResults;
     }
 
+    /**
+     * Controller to validate the email. First we check if it is a valid email and then if it is already registered to
+     * a user
+     *
+     * @param user          the user DTO from the form in the front-end
+     * @param bindingResult the results of the validation
+     * @param userLocale    the user's locale
+     * @return json response that contains all errors
+     */
     @PostMapping("/check-email")
     public RegisterJsonResponse validateEmail(@Validated({RegistrationEmailValidator.class})
                                               @ModelAttribute("user") RegisterUserDto user,
@@ -60,6 +80,15 @@ public class RegisterValidatorController {
         return getRegisterJsonResponse(bindingResult, response);
     }
 
+    /**
+     * Controller to validate the username. First we check if it is a valid username and then if it is already
+     * registered to a user
+     *
+     * @param user          the user DTO from the form in the front-end
+     * @param bindingResult the results of the validation
+     * @param userLocale    the user's locale
+     * @return json response that contains all errors
+     */
     @PostMapping("/check-username")
     public RegisterJsonResponse validateUsername(@Validated({RegistrationUsernameValidator.class})
                                                  @ModelAttribute("user") RegisterUserDto user,
@@ -82,19 +111,31 @@ public class RegisterValidatorController {
         return getRegisterJsonResponse(bindingResult, response);
     }
 
+    /**
+     * Controller to validate the password.
+     *
+     * @param user          the user DTO from the form in the front-end
+     * @param bindingResult the results of the validation
+     * @return json response that contains all errors
+     */
     @PostMapping("/check-password")
     public RegisterJsonResponse validatePassword(@Validated({RegistrationPasswordValidator.class})
                                                  @ModelAttribute("user") RegisterUserDto user,
-                                                 BindingResult bindingResult,
-                                                 Locale userLocale) {
+                                                 BindingResult bindingResult) {
         return getRegisterJsonResponse(bindingResult, new RegisterJsonResponse());
     }
 
+    /**
+     * Controller to check if the two passwords entered match.
+     *
+     * @param user          the user DTO from the form in the front-end
+     * @param bindingResult the results of the validation
+     * @return json response that contains all errors
+     */
     @PostMapping("/check-password-match")
     public RegisterJsonResponse validatePasswordMatch(@Validated({RegistrationPassMatchValidator.class})
                                                       @ModelAttribute("user") RegisterUserDto user,
-                                                      BindingResult bindingResult,
-                                                      Locale userLocale) {
+                                                      BindingResult bindingResult) {
         RegisterJsonResponse response = new RegisterJsonResponse();
         if (!bindingResult.hasErrors()) {
             response.setStatus(response.SUCCESS);
@@ -107,6 +148,13 @@ public class RegisterValidatorController {
         return response;
     }
 
+    /**
+     * Method to construct the RegisterJsonResponse object to be sent as a json response with all the errors and messages
+     *
+     * @param bindingResult the results of the validation
+     * @param response      the RegisterJsonResponse object
+     * @return the constructed RegisterJsonResponse object
+     */
     private RegisterJsonResponse getRegisterJsonResponse(BindingResult bindingResult, RegisterJsonResponse response) {
         if (!bindingResult.hasErrors()) {
             response.setStatus(response.SUCCESS);
