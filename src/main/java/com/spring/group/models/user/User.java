@@ -2,6 +2,9 @@ package com.spring.group.models.user;
 
 import com.spring.group.models.property.Property;
 import com.spring.group.models.rental.Rental;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,6 +15,7 @@ import java.util.Objects;
  * @author George.Giazitzis
  */
 @Entity(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -33,7 +37,9 @@ public class User {
     @Basic
     @Column(length = 25)
     private String lastName;
+    @CreatedDate
     private Instant creationDate;
+    @LastModifiedDate
     private Instant updatedDate;
     @Basic
     @Column(length = 27)
@@ -57,7 +63,6 @@ public class User {
         this.password = password;
         this.email = email.toLowerCase().trim();
         this.userRole = UserRole.USER;
-        this.creationDate = Instant.now();
         this.isNonLocked = true;
         this.authProvider = AuthProvider.Homie;
     }
@@ -66,7 +71,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.userRole = UserRole.USER;
-        this.creationDate = Instant.now();
         this.isNonLocked = true;
         this.isEnabled = true;
         this.authProvider = authProvider;
