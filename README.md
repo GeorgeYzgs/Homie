@@ -26,25 +26,24 @@ Strong validation in each layer (front, back, database) and through different sc
 Serve large data object (eg images) through cloud file server
 
 ##Technologies 
-Java SE 8
-Java EE 8
->JPA
->Web Sockets
->JavaMail
-Spring MVC/ Spring Boot (Tomcat Server)
->Actuator Development tool
-Spring Security
-Oauth API [Facebook, GitHub, Google]
-JPA/Hibernate/Spring Data
->JPA configuration
->JPA Auditing
->Naming Strategy
-SQL/mySQL
-Thymeleaf
-Html 5/ CSS 3
-JQuery
-History API
-Built with Maven tool
-
-##License
+* Java SE 8
+* Java EE 8
+  * JPA
+  * Web Sockets
+  * JavaMail
+* Spring MVC/ Spring Boot (Tomcat Server)
+  * Actuator Development tool
+* Spring Security
+* Oauth API (Facebook, GitHub, Google)
+* JPA/Hibernate/Spring Data
+  * JPA configuration
+  * JPA Auditing
+  * Naming Strategy
+* SQL/mySQL
+* Thymeleaf
+* Html 5/ CSS 3
+* JQuery
+* History API
+* Built with Maven tool
+## License
 Under GNU License
