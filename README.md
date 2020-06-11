@@ -25,7 +25,7 @@ Optimize services
 Strong validation in each layer (front, back, database) and through different scenarios of manipulation
 Serve large data object (eg images) through cloud file server
 
-##Technologies 
+## Technologies 
 * Java SE 8
 * Java EE 8
   * JPA
